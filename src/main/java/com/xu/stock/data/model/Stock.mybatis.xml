@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.stock.data.model.Stock">
+
+	<resultMap type="com.xu.stock.data.model.Stock" id="Stock">
+		<id property="stockId" column="stock_id"></id>
+		<id property="exchange" column="exchange"></id>
+		<id property="stockCode" column="stock_code"></id>
+		<id property="stockName" column="stock_name"></id>
+		<id property="asset" column="asset"></id>
+		<id property="lastDate" column="last_date"></id>
+		<id property="lastClose" column="last_close"></id>
+		<id property="created" column="created"></id>
+		<id property="updated" column="updated"></id>
+	</resultMap>
+
+	<select id="getStock" resultMap="Stock">
+		SELECT * FROM t_stock WHERE stock_code=#{stockCode};
+	</select>
+
+	<select id="getAllStock" resultMap="Stock">
+		SELECT * FROM t_stock ORDER BY stock_code;
+	</select>
+	
+	<select id="getOldStock" resultMap="Stock">
+		SELECT * FROM t_stock WHERE last_date = (SELECT MIN(last_date) FROM t_stock) ORDER BY stock_code;
+	</select>
+
+	<insert id="insertStock" flushCache="true">
+		INSERT INTO t_stock (exchange,stock_code,stock_name,asset,created,updated)
+		VALUES (#{exchange},#{stockCode},#{stockName},#{asset},sysdate(),sysdate());
+	</insert>
+	
+	<update id="updateStock" flushCache="true">
+		UPDATE t_stock 
+		SET asset = #{asset} , last_date = #{lastDate}, last_close = #{lastClose}, updated=sysdate()
+		WHERE stock_id = #{stockId} ;
+	</update>
+
+</mapper> 

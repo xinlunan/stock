@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.stock.data.model.StockIndex">
+
+	<resultMap type="com.xu.stock.data.model.StockIndex" id="StockIndex">
+		<id property="indexId" column="index_id"></id>
+		<id property="stockId" column="stock_id"></id>
+		<id property="stockCode" column="stock_code"></id>
+		<id property="stockName" column="stock_name"></id>
+		<id property="date" column="date"></id>
+		<id property="lastClose" column="last_close"></id>
+		<id property="open" column="open"></id>
+		<id property="close" column="close"></id>
+		<id property="closeGap" column="close_gap"></id>
+		<id property="closeGapRate" column="close_gap_rate"></id>
+		<id property="high" column="high"></id>
+		<id property="low" column="low"></id>
+		<id property="highGap" column="high_gap"></id>
+		<id property="highGapRate" column="high_gap_rate"></id>
+		<id property="lowGap" column="low_gap"></id>
+		<id property="lowGapRate" column="low_gap_rate"></id>
+		<id property="amount" column="amount"></id>
+		<id property="volume" column="volume"></id>
+		<id property="asset" column="asset"></id>
+		<id property="created" column="created"></id>
+		<id property="updated" column="updated"></id>
+	</resultMap>
+	
+	<select id="getStockIndex" resultMap="StockIndex">
+		SELECT 	index_id, stock_id, stock_code, stock_name, DATE, last_close, OPEN, CLOSE, close_gap, close_gap_rate, 
+			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, created, updated
+	 	FROM t_stock_index 
+	 	WHERE stock_code=#{stockCode} and date=#{date};
+	</select>
+		
+	<select id="getLastStockIndex" resultMap="StockIndex">
+		SELECT 	index_id, stock_id, stock_code, stock_name, DATE, last_close, OPEN, CLOSE, close_gap, close_gap_rate, 
+			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, created, updated
+	 	FROM t_stock_index 
+	 	WHERE stock_code=#{stockCode} and date &lt; #{date}
+	 	ORDER BY date DESC
+	 	LIMIT 1 ;
+	</select>
+	
+	<select id="getStockIndexs" resultMap="StockIndex">
+		SELECT 	index_id, stock_id, stock_code, stock_name, DATE, last_close, OPEN, CLOSE, close_gap, close_gap_rate, 
+			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, created, updated
+	 	FROM t_stock_index 
+	 	WHERE stock_code=#{stockCode};
+	</select>
+
+	<insert id="insertStockIndex" flushCache="true">
+		INSERT INTO t_stock_index (stock_id, stock_code, stock_name, DATE, last_close, OPEN, CLOSE, close_gap, close_gap_rate, 
+			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, created, updated)
+		VALUES (#{stockId}, #{stockCode}, #{stockName}, #{date}, #{lastClose}, #{open}, #{close}, #{closeGap}, #{closeGapRate}, 
+			#{high}, #{low}, #{highGap}, #{highGapRate}, #{lowGap}, #{lowGapRate}, #{amount}, #{volume}, #{asset},sysdate(),sysdate());
+	</insert>
+	
+	<insert id="updateStockIndex" flushCache="true">
+		UPDATE t_stock_index 
+		SET updated = sysdate(), last_close=#{lastClose}, close_gap=#{closeGap}, close_gap_rate=#{closeGapRate}, 
+			high_gap=#{highGap}, high_gap_rate=#{highGapRate}, low_gap=#{lowGap}, low_gap_rate=#{lowGapRate}
+		WHERE stock_code=#{stockCode} and date=#{date};
+	</insert>
+	
+	<insert id="deleteStockIndex" flushCache="true">
+		DELETE FROM t_stock_index WHERE stock_code=#{stockCode} and date=#{date};
+	</insert>
+	
+</mapper> 

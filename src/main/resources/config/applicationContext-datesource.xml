@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+
+	<context:property-placeholder location="classpath*:config/jdbc.properties" />
+
+	<!-- 配置session工厂 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath*:com/**/model/*.mybatis.xml" />
+	</bean>
+
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
+		<constructor-arg index="0" name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- 自动扫描映射器 -->
+	<!-- spring与mybatis整合配置，扫描所有dao -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.winit.*;com.xu.*" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+
+
+	<!-- 生产数据源(JNDI)(生产环境、UAT环境、测试环境用) 
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>java:comp/env/jdbc/DepDB</value>
+		</property>
+	</bean>
+	-->
+
+	<!-- 配置数据源 -->
+	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="driverClassName" value="org.gjt.mm.mysql.Driver" />
+		<property name="url" value="jdbc:mysql://127.0.0.1:3306/xu_stock?useUnicode=true&amp;characterEncoding=UTF-8" />
+		<property name="username" value="root" />
+		<property name="password" value="123456" />
+		<property name="initialSize" value="1" />
+		<property name="minIdle" value="1" />
+		<property name="maxActive" value="20" />
+ 		<property name="maxWait" value="60000" /> 
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="filters" value="stat" />
+	</bean>
+	
+	<!-- 事物驱动器 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!-- 配置事物管理器,对数据源进行事务管理 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 采用数据库读取配置 -->
+	<bean id="propertyConfigurer" class="com.winit.framework.config.ExtPropertyPlaceholderConfigurer">
+		<property name="properties" ref="dataBaseProperties" />
+		<!-- 文件会覆盖数据库配置 -->
+		<property name="locations">
+			<list>
+				<value>classpath*:config/jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 从数据库读取property属性 -->
+	<bean id="dataBaseProperties" class="com.winit.framework.config.DatabaseProperties" autowire="byName">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="propertySql" 
+			value="SELECT ID, IP, PORT, NAME, VALUE, REMARK FROM T_SYS_CONFIG WHERE ENABLE='Y'">
+			<!-- SQL格式：SELECT ID, IP, PORT, NAME, VALUE, REMARK FROM T_SYS_CONFIG WHERE ENABLE=1 ORDER BY ID -->
+		</property>
+	</bean>
+
+	<aop:config>
+		<aop:pointcut id="winitServiceMethods" expression="execution(* com.xu.stock.**.service.impl.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="winitServiceMethods" />
+	</aop:config>
+	
+	<aop:config>
+		<aop:pointcut id="winitFrameworkMethods" expression="execution(* com.winit.framework.service.impl.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="winitFrameworkMethods" />
+	</aop:config>
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="load*" read-only="true" />
+			<tx:method name="get*" read-only="true" />
+			
+			<tx:method name="addTransportLog" propagation="REQUIRES_NEW" rollback-for="Exception" />
+			<tx:method name="tryLock" propagation="REQUIRES_NEW" rollback-for="Exception" />
+			<tx:method name="unLock" propagation="REQUIRES_NEW" rollback-for="Exception" />
+
+			<tx:method name="*" rollback-for="Exception" />
+		</tx:attributes>
+	</tx:advice>
+
+</beans>

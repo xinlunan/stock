@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.winit.framework.model.SyncLock">
+
+	<select id="getLock" resultType="com.winit.framework.model.SyncLock">
+		select WT_SYNC_LOCK_ID id,lock_id lockId,lock_table lockTable,status,operator,
+			ip,port,remark,created,updated
+		from ${table}
+		where lock_id =#{lockId}
+		<if test="lockTable != null and lockTable != ''">  
+			and lock_table =#{lockTable}   
+		</if>
+	</select>
+	
+	<update id="lock"   flushCache="true" >
+		update ${table} 
+		set status = #{status}, updated=sysdate
+		<if test="operator != null and operator != ''">  
+			,operator = #{operator}
+		</if>
+		
+		<if test="operator != null and operator != ''">  
+			,remark = #{remark}
+		</if>
+		
+		where lock_id =#{lockId}
+		<if test="lockTable != null and lockTable != ''">  
+			and lock_table =#{lockTable}   
+		</if>
+	</update>
+	
+	
+	<insert id="createLock" parameterType="com.winit.framework.model.SyncLock">
+		
+		INSERT INTO ${table}
+		(WT_SYNC_LOCK_ID,lock_id,lock_table,status,operator,
+			ip,port,remark,created,updated)
+		values
+		(WT_SYNC_LOCK_seq.nextval,#{lockId} , #{lockTable},#{status},#{operator},
+		#{ip} , #{port},#{remark},#{created},#{updated})
+	</insert>
+	
+	<update id="unLock"  flushCache="true">
+		update ${table} 
+		set status = #{status}, updated = sysdate
+		<if test="operator != null and operator != ''">  
+			,operator = #{operator}
+		</if>
+		
+		<if test="operator != null and operator != ''">  
+			,remark = #{remark}
+		</if>
+		
+		where lock_id =#{lockId}
+		<if test="lockTable != null and lockTable != ''">  
+			and lock_table =#{lockTable}   
+		</if>
+	</update>
+	
+
+</mapper> 

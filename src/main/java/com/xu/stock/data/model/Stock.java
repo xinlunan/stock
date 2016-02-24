@@ -1,0 +1,127 @@
+package com.xu.stock.data.model;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 股票
+ * 
+ * @version Revision History
+ * 
+ *          <pre>
+ * Author     Version       Date        Changes
+ * lunan.xu    1.0           2015-5-23     Created
+ * 
+ * </pre>
+ * @since 1.
+ */
+public class Stock implements Serializable, Comparable<Stock> {
+	private static final long serialVersionUID = -1928043971469861083L;
+	// 股票Id
+	private Integer stockId;
+	// 交易所
+	private String exchange;
+	// 股票代码
+	private String stockCode;
+	// 股票名称
+	private String stockName;
+	// 总资产
+	private Long asset;
+	// 最后同步日期
+	private Date lastDate;
+	// 最后收盘价
+	private Integer lastClose;
+	// 创建日期
+	private Date created;
+	// 更新日期
+	private Date updated;
+
+	private List<StockIndex> stockIndexs;
+
+	public Integer getStockId() {
+		return stockId;
+	}
+
+	public void setStockId(Integer stockId) {
+		this.stockId = stockId;
+	}
+
+	public String getExchange() {
+		return exchange;
+	}
+
+	public void setExchange(String exchange) {
+		this.exchange = exchange;
+	}
+
+	public String getStockCode() {
+		return stockCode;
+	}
+
+	public void setStockCode(String stockCode) {
+		this.stockCode = stockCode;
+	}
+
+	public String getStockName() {
+		return stockName;
+	}
+
+	public void setStockName(String stockName) {
+		this.stockName = stockName;
+	}
+
+	public Long getAsset() {
+		return asset;
+	}
+
+	public void setAsset(Long asset) {
+		this.asset = asset;
+	}
+
+	public Date getLastDate() {
+		return lastDate;
+	}
+
+	public void setLastDate(Date lastDate) {
+		this.lastDate = lastDate;
+	}
+
+	public Integer getLastClose() {
+		return lastClose;
+	}
+
+	public void setLastClose(Integer lastClose) {
+		this.lastClose = lastClose;
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
+	public Date getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Date updated) {
+		this.updated = updated;
+	}
+
+	public void setStockIndexs(List<StockIndex> stockIndexs) {
+		this.stockIndexs = stockIndexs;
+	}
+
+	public List<StockIndex> getStockIndexs() {
+		return stockIndexs;
+	}
+
+	@Override
+	public int compareTo(Stock stock) {
+		return this.getStockCode().compareTo(stock.getStockCode());
+	}
+
+}
