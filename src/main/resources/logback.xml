@@ -18,10 +18,11 @@
 
     <!-- project default level -->
     <logger name="com.winit.cwm" level="DEBUG"/>
+    <logger name="com.xu" level="DEBUG"/>
 	<logger name="org.springframework" level="info"/>
 	<logger name="com.alibaba.druid" level="info"/>
 	<logger name="org.springframework.amqp.rabbit" level="error"/>
-    <root level="DEBUG">
+    <root level="info">
            <appender-ref ref="console"/> 
         <appender-ref ref="rollingFile"/>
     </root>
