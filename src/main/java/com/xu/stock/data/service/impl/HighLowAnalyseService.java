@@ -4,7 +4,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.data.dao.IStockDao;
@@ -27,14 +28,13 @@ import com.xu.stock.data.service.IStockAnalyseService;
  */
 @Service("highLowAnalyseService")
 public class HighLowAnalyseService implements IStockAnalyseService {
-	static Logger log = Logger.getLogger(HighLowAnalyseService.class);
+	static Logger log = LoggerFactory.getLogger(HighLowAnalyseService.class);
 
 	@Resource
 	private IStockDao stockDao;
 	@Resource
 	private IStockIndexDao stockIndexDao;
 
-	@Override
 	public int analyse() {
 		List<Stock> stocks = stockDao.getAllStocks();
 

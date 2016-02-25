@@ -1,6 +1,7 @@
 package com.winit.framework.log;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 基础日志类，记录日志时输出SessionId
@@ -12,16 +13,15 @@ import org.apache.log4j.Logger;
  * xulunan    1.0           Sep 25, 2012     Created
  * 
  * 
- * </pre>
+ *          </pre>
  * 
  * @since 1.
  */
-public class BaseLog extends Logger {
+public class BaseLog {
 	Logger log = null;
 
 	private BaseLog(Class<?> clazz) {
-		super(clazz.getName());
-		log = Logger.getLogger(clazz);
+		log = LoggerFactory.getLogger(clazz);
 	}
 
 	public static BaseLog getLogger(Class<?> clazz) {
@@ -29,67 +29,51 @@ public class BaseLog extends Logger {
 	}
 
 	public void debug(String str) {
-		log.debug(getTreadId().append(str));
+		log.debug(getTreadId().append(str).toString());
 	}
 
 	public void debug(Throwable e) {
-		log.debug(getTreadId(), e);
+		log.debug(getTreadId().toString(), e);
 	}
 
 	public void debug(String str, Throwable e) {
-		log.debug(getTreadId().append(str), e);
+		log.debug(getTreadId().append(str).toString(), e);
 	}
 
 	public void info(String str) {
-		log.info(getTreadId().append(str));
+		log.info(getTreadId().append(str).toString());
 	}
 
 	public void info(Throwable e) {
-		log.info(getTreadId(), e);
+		log.info(getTreadId().toString(), e);
 	}
 
 	public void info(String str, Throwable e) {
-		log.info(getTreadId().append(str), e);
+		log.info(getTreadId().append(str).toString(), e);
 	}
 
 	public void warn(String str) {
-		log.warn(getTreadId().append(str));
+		log.warn(getTreadId().append(str).toString());
 	}
 
 	public void warn(Throwable e) {
-		log.warn(getTreadId(), e);
+		log.warn(getTreadId().toString(), e);
 	}
 
 	public void warn(String str, Throwable e) {
-		log.warn(getTreadId().append(str), e);
+		log.warn(getTreadId().append(str).toString(), e);
 	}
 
 	public void error(String str) {
-		log.error(getTreadId().append(str));
+		log.error(getTreadId().append(str).toString());
 	}
 
 	public void error(Throwable e) {
-		log.error(getTreadId(), e);
+		log.error(getTreadId().toString(), e);
 	}
 
 	public void error(String str, Throwable e) {
-		log.error(getTreadId().append(str), e);
-	}
-
-	public void fatal(String str) {
-		log.fatal(getTreadId().append(str));
-	}
-
-	public void fatal(Throwable e) {
-		log.fatal(getTreadId(), e);
-	}
-
-	public void fatal(String str, Throwable e) {
-		log.fatal(getTreadId().append(str), e);
-	}
-
-	public boolean isDebugEnabled() {
-		return log.isDebugEnabled();
+		log.error(getTreadId().append(str).toString(), e);
 	}
 
 	private StringBuffer getTreadId() {

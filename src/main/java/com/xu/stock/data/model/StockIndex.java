@@ -230,7 +230,6 @@ public class StockIndex implements Serializable, Comparable<StockIndex> {
 				+ created + ", updated=" + updated + "]";
 	}
 
-	@Override
 	public int compareTo(StockIndex stockIndex) {
 		return this.getDate().compareTo(stockIndex.getDate());
 	}

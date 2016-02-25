@@ -7,9 +7,12 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
+
+import com.xu.stock.command.StockAnalyse;
 
 /**
  * 从数据库里读取配置
@@ -18,7 +21,7 @@ import org.springframework.beans.factory.InitializingBean;
  */
 @SuppressWarnings("rawtypes")
 public class DatabaseProperties implements InitializingBean, FactoryBean {
-	static Logger log = Logger.getLogger(DatabaseProperties.class);
+	protected static final Logger log = LoggerFactory.getLogger(DatabaseProperties.class);
 
 	private String propertySql;
 	private DataSource dataSource;
@@ -86,7 +89,7 @@ public class DatabaseProperties implements InitializingBean, FactoryBean {
 				connection.close();
 			} catch (Exception e) {
 				connection = null;
-				log.error(e);
+				log.error("",e);
 			}
 		}
 	}

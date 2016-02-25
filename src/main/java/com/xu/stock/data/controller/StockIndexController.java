@@ -10,10 +10,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import net.sf.ezmorph.bean.MorphDynaBean;
-import net.sf.json.JSONObject;
-
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.data.model.Stock;
@@ -23,6 +21,9 @@ import com.xu.stock.data.service.IStockService;
 import com.xu.util.DateDiffUtil;
 import com.xu.util.DateUtil;
 import com.xu.util.HttpClientHandle;
+
+import net.sf.ezmorph.bean.MorphDynaBean;
+import net.sf.json.JSONObject;
 
 /**
  * 股票指数控制层
@@ -38,7 +39,7 @@ import com.xu.util.HttpClientHandle;
  */
 @Service("stockIndexController")
 public class StockIndexController {
-	static Logger log = Logger.getLogger(StockIndexController.class);
+	static Logger log = LoggerFactory.getLogger(StockIndexController.class);
 
 	private static final int NUM_300 = 300;
 
@@ -89,7 +90,7 @@ public class StockIndexController {
 
 			repairStockIndex();
 		} catch (Exception e) {
-			log.error(e);
+			log.error("",e);
 			updateStockIndex();
 		}
 

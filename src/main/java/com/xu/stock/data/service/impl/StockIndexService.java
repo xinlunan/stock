@@ -5,7 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.data.dao.IStockIndexDao;
@@ -26,17 +27,15 @@ import com.xu.stock.data.service.IStockIndexService;
  */
 @Service("stockIndexService")
 public class StockIndexService implements IStockIndexService {
-	static Logger log = Logger.getLogger(StockIndexService.class);
+	static Logger log = LoggerFactory.getLogger(StockIndexService.class);
 
 	@Resource
 	private IStockIndexDao stockIndexDao;
 
-	@Override
 	public List<StockIndex> getStockIndex(String stockCode) {
 		return stockIndexDao.getStockIndexs(stockCode);
 	}
 
-	@Override
 	public void repairStockIndex(StockIndex index, List<StockIndex> repairIndexs) {
 		if (repairIndexs.size() > 0) {
 			StockIndex lastIdex = stockIndexDao.getLastStockIndex(repairIndexs.get(0).getStockCode(),

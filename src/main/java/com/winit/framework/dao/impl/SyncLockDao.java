@@ -16,7 +16,6 @@ public class SyncLockDao extends BaseDao<SyncLock> implements ISyncLockDao {
 	private final String SQL_UNLOCK = getNameSpace() + "unLock";
 	public static final String BASE_TABLE_NAME = "WT_SYNC_LOCK";
 
-	@Override
 	public SyncLock getLock(String lockTable, String lockId) {
 		Map<String, Object> paras = new HashMap<String, Object>();
 		paras.put("lockTable", lockTable);
@@ -26,7 +25,6 @@ public class SyncLockDao extends BaseDao<SyncLock> implements ISyncLockDao {
 		return getSqlSession().selectOne(SQL_GET_LOCK, paras);
 	}
 
-	@Override
 	public Integer Lock(String lockTable, String lockId, String operator, String remark) {
 		Map<String, Object> paras = new HashMap<String, Object>();
 		paras.put("lockTable", lockTable);
@@ -39,12 +37,10 @@ public class SyncLockDao extends BaseDao<SyncLock> implements ISyncLockDao {
 		return getSqlSession().update(SQL_LOCK, paras);
 	}
 
-	@Override
 	public Integer createLock(SyncLock syncLock) {
 		return getSqlSession().insert(SQL_CREATELOCK, syncLock);
 	}
 
-	@Override
 	public Integer unLock(String lockTable, String lockId, String operator, String remark) {
 		Map<String, Object> paras = new HashMap<String, Object>();
 		paras.put("lockTable", lockTable);

@@ -2,7 +2,8 @@ package com.xu.stock.data.controller;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.data.service.IStockAnalyseService;
@@ -21,7 +22,7 @@ import com.xu.stock.data.service.IStockAnalyseService;
  */
 @Service("stockAnalyseController")
 public class StockAnalyseController {
-	static Logger log = Logger.getLogger(StockAnalyseController.class);
+	static Logger log = LoggerFactory.getLogger(StockAnalyseController.class);
 
 	@Resource
 	private IStockAnalyseService highLowAnalyseService;

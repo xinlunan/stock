@@ -16,13 +16,12 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
-import net.sf.ezmorph.bean.MorphDynaBean;
-
-import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -34,6 +33,8 @@ import com.xu.stock.data.service.impl.StockServiceHelper;
 import com.xu.util.DateUtil;
 import com.xu.util.DocumentUtil;
 import com.xu.util.HttpClientHandle;
+
+import net.sf.ezmorph.bean.MorphDynaBean;
 
 /**
  * 股票指数控制层辅助类
@@ -48,7 +49,7 @@ import com.xu.util.HttpClientHandle;
  * @since 1.
  */
 public class StockIndexControllerHepler {
-	static Logger log = Logger.getLogger(StockIndexControllerHepler.class);
+	static Logger log = LoggerFactory.getLogger(StockIndexControllerHepler.class);
 
 	/**
 	 * 构建初始化Url
