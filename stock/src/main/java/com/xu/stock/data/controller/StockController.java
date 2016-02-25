@@ -4,7 +4,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.StockApiConstant;
@@ -27,7 +28,7 @@ import com.xu.util.HttpClientHandle;
  */
 @Service("stockController")
 public class StockController {
-	static Logger log = Logger.getLogger(StockController.class);
+	static Logger log = LoggerFactory.getLogger(StockController.class);
 
 	@Resource
 	IStockService stockService;

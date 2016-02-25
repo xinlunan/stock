@@ -50,38 +50,31 @@ public abstract class BaseDao<T extends Serializable> implements IBaseDao<T> {
 		return entityClass.getName() + ".";
 	}
 
-	@Override
 	public int add(T entity) {
 		return getSqlSession().insert(entityClass.getName() + SUFFIX_INSERT, entity);
 	}
 
-	@Override
 	public int delete(Serializable id) {
 		return getSqlSession().delete(entityClass.getName() + SUFFIX_DELETE_BY_ID, id);
 	}
 
-	@Override
 	public int update(T entity) {
 		return getSqlSession().update(entityClass.getName() + SUFFIX_UPDATE, entity);
 	}
 
-	@Override
 	@SuppressWarnings("unchecked")
 	public T get(Serializable id) {
 		return (T) getSqlSession().selectOne(entityClass.getName() + SUFFIX_GET_BY_ID, id);
 	}
 
-	@Override
 	public Pager<T> find(Map<String, Object> parameterMap) {
 		return this.find(entityClass.getName() + SUFFIX_FIND, parameterMap);
 	}
 
-	@Override
 	public Pager<T> find(String sqlId, Map<String, Object> parameterMap) {
 		return find(sqlId, parameterMap, PageContext.getStartIndex(), PageContext.getPageSize());
 	}
 
-	@Override
 	public Pager<T> find(String sqlId, Map<String, Object> parameterMap, int startIndex, int pageSize) {
 		pageSize = pageSize == 0 ? 20 : pageSize;
 		if (parameterMap == null) {
@@ -102,12 +95,10 @@ public abstract class BaseDao<T extends Serializable> implements IBaseDao<T> {
 		return pager;
 	}
 
-	@Override
 	public Map<Serializable, T> getMap(String sqlId, Map<String, Object> parameterMap, String mapKeyField) {
 		return getSqlSession().selectMap(sqlId, parameterMap, mapKeyField);
 	}
 
-	@Override
 	public List<T> getList(String sqlId, Object parameters) {
 		return getSqlSession().selectList(sqlId, parameters);
 	}

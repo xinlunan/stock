@@ -5,13 +5,14 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 public class DeployProperties {
 
-	private Logger logger = Logger.getLogger(DeployProperties.class);
+	protected static final Logger logger = LoggerFactory.getLogger(DeployProperties.class);
 	
 	private static List<String> propertyFileNames;// "config/deploy_config.properties";
 

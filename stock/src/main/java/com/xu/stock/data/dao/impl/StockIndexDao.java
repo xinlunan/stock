@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.winit.framework.dao.impl.BaseDao;
@@ -26,7 +27,7 @@ import com.xu.stock.data.model.StockIndex;
  */
 @Repository("stockIndexDao")
 public class StockIndexDao extends BaseDao<StockIndex> implements IStockIndexDao {
-	static Logger log = Logger.getLogger(StockIndexDao.class);
+	static Logger log = LoggerFactory.getLogger(StockIndexDao.class);
 
 	public final String SQL_GET_STOCK_INDEX = getNameSpace() + "getStockIndex";
 	public final String SQL_GET_LAST_STOCK_INDEX = getNameSpace() + "getLastStockIndex";
@@ -35,23 +36,20 @@ public class StockIndexDao extends BaseDao<StockIndex> implements IStockIndexDao
 	public final String SQL_UPDATE_STOCK_INDEX = getNameSpace() + "updateStockIndex";
 	public final String SQL_DELETE_STOCK_INDEX = getNameSpace() + "deleteStockIndex";
 
-	@Override
 	public Integer saveStockIndexs(List<StockIndex> stockIndexs) {
 		Integer result = 0;
 		for (StockIndex stockIndex : stockIndexs) {
-			log.info(stockIndex);
+			log.info(stockIndex.toString());
 			getSqlSession().insert(SQL_INSERT_STOCK_INDEX, stockIndex);
 			result++;
 		}
 		return result;
 	}
 
-	@Override
 	public List<StockIndex> getStockIndexs(String stockCode) {
 		return getSqlSession().selectList(SQL_GET_STOCK_INDEXS, stockCode);
 	}
 
-	@Override
 	public StockIndex getLastStockIndex(String stockCode, Date date) {
 		Map<String, Object> paras = new HashMap<String, Object>();
 		paras.put("stockCode", stockCode);
@@ -59,7 +57,6 @@ public class StockIndexDao extends BaseDao<StockIndex> implements IStockIndexDao
 		return getSqlSession().selectOne(SQL_GET_LAST_STOCK_INDEX, paras);
 	}
 
-	@Override
 	public StockIndex getStockIndex(String stockCode, Date date) {
 		Map<String, Object> paras = new HashMap<String, Object>();
 		paras.put("stockCode", stockCode);
@@ -67,12 +64,10 @@ public class StockIndexDao extends BaseDao<StockIndex> implements IStockIndexDao
 		return getSqlSession().selectOne(SQL_GET_STOCK_INDEX, paras);
 	}
 
-	@Override
 	public void updateStockIndex(StockIndex stockIndex) {
 		getSqlSession().update(SQL_UPDATE_STOCK_INDEX, stockIndex);
 	}
 
-	@Override
 	public void deleteStockIndex(String stockCode, Date date) {
 		Map<String, Object> paras = new HashMap<String, Object>();
 		paras.put("stockCode", stockCode);

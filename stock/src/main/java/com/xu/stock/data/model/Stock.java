@@ -119,7 +119,6 @@ public class Stock implements Serializable, Comparable<Stock> {
 		return stockIndexs;
 	}
 
-	@Override
 	public int compareTo(Stock stock) {
 		return this.getStockCode().compareTo(stock.getStockCode());
 	}

@@ -19,11 +19,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpClientHandle {
-	static Logger log = Logger.getLogger(HttpClientHandle.class);
+	static Logger log = LoggerFactory.getLogger(HttpClientHandle.class);
 
 	@Test
 	public void jUnitTest() {

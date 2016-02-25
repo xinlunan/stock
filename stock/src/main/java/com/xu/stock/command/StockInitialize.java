@@ -9,9 +9,10 @@ package com.xu.stock.command;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -33,7 +34,7 @@ import com.xu.stock.data.controller.StockIndexController;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath*:config/applicationContext.xml")
 public class StockInitialize {
-	static Logger log = Logger.getLogger(StockInitialize.class);
+	protected static final Logger log = LoggerFactory.getLogger(StockInitialize.class);
 
 	@Resource
 	private StockController stockController;
@@ -44,10 +45,13 @@ public class StockInitialize {
 	 * 获取股票指数启动命令
 	 */
 	@Test
-	public void initStock() {
+	public void initStock() {try{
 		log.info("开始初始化股票...");
 		stockController.initStock();
 		log.info("获取股票完成.");
+	}catch(Exception e){
+		e.printStackTrace();
+	} 	
 	}
 
 	/**

@@ -19,7 +19,7 @@ public class SyncLockService extends BaseService implements ISyncLockService {
 	private BaseLog log = BaseLog.getLogger(SyncLockService.class);
 	@Resource
 	ISyncLockDao syncLockDao;
-	@Override
+
 	public boolean tryLock(String lockTable, String lockId, String operator, String remark) {
 		boolean isLocked = false;
 		try {
@@ -58,7 +58,6 @@ public class SyncLockService extends BaseService implements ISyncLockService {
 		return syncLock;
 	}
 
-	@Override
 	public boolean unLock(String lockTable, String lockId, String operator, String remark) {
 		Integer count = syncLockDao.unLock(lockTable, lockId, operator, remark);
 		return (count == null || count < 1) ? false : true;
