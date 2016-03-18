@@ -22,9 +22,8 @@ public class Base64 {
 			byte[] inputData = (new BASE64Decoder()).decodeBuffer(s);
 			return new String(inputData);
 		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
-		return "";
-		
 	}
 	
 }

@@ -8,6 +8,7 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
@@ -117,7 +118,8 @@ public class DateUtil {
 	}
 
 	/**
-	 * @param pattern 格式
+	 * @param pattern
+	 *            格式
 	 * @return
 	 */
 	public static String getDate(Date date, String pattern) {
@@ -224,8 +226,7 @@ public class DateUtil {
 			long d = l / (CONSTANT_TWENTYFOUR * CONSTANT_SIXTY * CONSTANT_SIXTY * CONSTANT_THOUSAND);
 			return d;
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			return -1;
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -239,9 +240,7 @@ public class DateUtil {
 		try {
 			strTo = Integer.parseInt(Days);
 		} catch (Exception e) {
-			log.error("日期标识转换出错! : \n:::" + Days + "不能转为数字型");
-			log.error(e.getMessage(), e);
-			strTo = 0;
+			throw new RuntimeException(e);
 		}
 		Calendar strDate = Calendar.getInstance(); // java.util包
 		strDate.add(Calendar.DATE, strTo); // 日期减 如果不够减会将月变动
@@ -318,7 +317,7 @@ public class DateUtil {
 			ParsePosition pos = new ParsePosition(0);
 			Mydate = formatter.parse(MyString, pos);
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 		if (null == Mydate) {
 			return new Date();
@@ -334,7 +333,7 @@ public class DateUtil {
 			ParsePosition pos = new ParsePosition(0);
 			Mydate = formatter.parse(MyString, pos);
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 		if (null == Mydate) {
 			return new Date();
@@ -355,7 +354,7 @@ public class DateUtil {
 			ParsePosition pos = new ParsePosition(0);
 			ret = formatter.parse(s, pos);
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}
@@ -368,7 +367,7 @@ public class DateUtil {
 			ParsePosition pos = new ParsePosition(0);
 			Mydate = formatter.parse(MyString, pos);
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 		if (null == Mydate) {
 			return new Date();
@@ -388,7 +387,7 @@ public class DateUtil {
 			SimpleDateFormat formatter = new SimpleDateFormat(parrten, Locale.getDefault());
 			ret = formatter.format(MyDate);
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}
@@ -405,7 +404,7 @@ public class DateUtil {
 			SimpleDateFormat formatter = new SimpleDateFormat(parrten, Locale.getDefault());
 			ret = formatter.format(MyDate);
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}
@@ -427,7 +426,7 @@ public class DateUtil {
 			}
 			ret = str2[2] + "-" + str2[1].trim();
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}
@@ -437,7 +436,7 @@ public class DateUtil {
 			SimpleDateFormat formatter = new SimpleDateFormat(parrten, Locale.getDefault());
 			return formatter.format(myDate);
 		} catch (Exception e) {
-			return "";
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -461,7 +460,7 @@ public class DateUtil {
 			SimpleDateFormat formatter = new SimpleDateFormat(parrten, Locale.getDefault());
 			ret = formatter.format(MyDate);
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}
@@ -472,8 +471,9 @@ public class DateUtil {
 	 *返回 ： 真 假
 	 */
 	public static boolean isLeapYear(int year) {
-		return year >= GREGORIANCUTOVERYEAR ? ((0 == year % 4) && ((0 != year % CONSTANT_HUNDRED) || (0 == year
-				% CONSTANT_4HUNDRED))) : (0 == year % 4);
+		return year >= GREGORIANCUTOVERYEAR
+				? ((0 == year % 4) && ((0 != year % CONSTANT_HUNDRED) || (0 == year % CONSTANT_4HUNDRED)))
+				: (0 == year % 4);
 	}
 
 	/**
@@ -517,15 +517,21 @@ public class DateUtil {
 		/*
 		 * validate(date); ymd = splitYMD(date);
 		 * 
-		 * if( isLeapYear( ymd[Y] ) ){ ymd[D] += days; if( ymd[D] > DAYS_P_MONTH_LY[ymd[M] -1 ] ){ ymd[M] ++; ymd[D] =
-		 * ymd[D] - DAYS_P_MONTH_LY[ymd[M] -1-1 ]; if(ymd[M] > 12){ ymd[M] -= 12; ymd[Y]++; } if( ymd[D] >
-		 * DAYS_P_MONTH_LY[ymd[M] -1 ] ){ addDays(formatYear(ymd[Y])+ formatMonthDay(ymd[M])+
-		 * formatMonthDay(DAYS_P_MONTH_LY[ymd[M] -1 ]), ymd[D] - DAYS_P_MONTH_LY[ymd[M] -1 ]); } } }else{ ymd[D] +=
-		 * days; if( ymd[D] > DAYS_P_MONTH_CY[ymd[M] -1 ] ){ ymd[M] ++; ymd[D] = ymd[D] - DAYS_P_MONTH_CY[ymd[M] -1-1 ];
-		 * if(ymd[M] > 12){ ymd[M] -= 12; ymd[Y]++; } if( ymd[D] > DAYS_P_MONTH_CY[ymd[M] -1 ] ){
-		 * addDays(formatYear(ymd[Y])+ formatMonthDay(ymd[M])+ formatMonthDay(DAYS_P_MONTH_CY[ymd[M] -1 ]), ymd[D] -
-		 * DAYS_P_MONTH_CY[ymd[M] -1 ]); } } } String returnString = ""; return formatYear(ymd[Y])+ "-"+
-		 * formatMonthDay(ymd[M])+ "-"+ formatMonthDay(ymd[D]);
+		 * if( isLeapYear( ymd[Y] ) ){ ymd[D] += days; if( ymd[D] >
+		 * DAYS_P_MONTH_LY[ymd[M] -1 ] ){ ymd[M] ++; ymd[D] = ymd[D] -
+		 * DAYS_P_MONTH_LY[ymd[M] -1-1 ]; if(ymd[M] > 12){ ymd[M] -= 12;
+		 * ymd[Y]++; } if( ymd[D] > DAYS_P_MONTH_LY[ymd[M] -1 ] ){
+		 * addDays(formatYear(ymd[Y])+ formatMonthDay(ymd[M])+
+		 * formatMonthDay(DAYS_P_MONTH_LY[ymd[M] -1 ]), ymd[D] -
+		 * DAYS_P_MONTH_LY[ymd[M] -1 ]); } } }else{ ymd[D] += days; if( ymd[D] >
+		 * DAYS_P_MONTH_CY[ymd[M] -1 ] ){ ymd[M] ++; ymd[D] = ymd[D] -
+		 * DAYS_P_MONTH_CY[ymd[M] -1-1 ]; if(ymd[M] > 12){ ymd[M] -= 12;
+		 * ymd[Y]++; } if( ymd[D] > DAYS_P_MONTH_CY[ymd[M] -1 ] ){
+		 * addDays(formatYear(ymd[Y])+ formatMonthDay(ymd[M])+
+		 * formatMonthDay(DAYS_P_MONTH_CY[ymd[M] -1 ]), ymd[D] -
+		 * DAYS_P_MONTH_CY[ymd[M] -1 ]); } } } String returnString = ""; return
+		 * formatYear(ymd[Y])+ "-"+ formatMonthDay(ymd[M])+ "-"+
+		 * formatMonthDay(ymd[D]);
 		 */
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(Mydate(date));
@@ -550,33 +556,36 @@ public class DateUtil {
 			c.add(Calendar.DAY_OF_MONTH, days);
 			s = MyString(c.getTime());
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 		return s;
 	}
 
 	// public static void main(String[] str) {
-	//  
+	//
 	// // String da = "2006-05-12 0840";
-	//  
+	//
 	// SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddHHmm");
-	//  
+	//
 	// System.out.println(sdf.format(new Date()));
-	//  
+	//
 	// Calendar cal = Calendar.getInstance();
-	//  
+	//
 	// cal.add(Calendar.DATE, 1);
-	//  
+	//
 	// System.out.println(cal.get(Calendar.DATE));
-	//  
+	//
 	// }
 
 	/*
-	 * public static String addDay(String date, int days) { String s = ""; Date dates = null; SimpleDateFormat sdf = new
-	 * SimpleDateFormat("yyyy-MM-dd"); try { dates = sdf.parse(date); long d = dates.getTime(); if(days==1) { dates =
-	 * new Date(d+1000*60*60*24); } if(days==-1) { dates = new Date(d-1000*60*60*24); } s =
-	 * dates.getYear()+"-"+dates.getMonth()+1+"-"+dates.getDay(); } catch (ParseException e) { // Auto-generated catch
-	 * block e.printStackTrace(); } return s; }
+	 * public static String addDay(String date, int days) { String s = ""; Date
+	 * dates = null; SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	 * try { dates = sdf.parse(date); long d = dates.getTime(); if(days==1) {
+	 * dates = new Date(d+1000*60*60*24); } if(days==-1) { dates = new
+	 * Date(d-1000*60*60*24); } s =
+	 * dates.getYear()+"-"+dates.getMonth()+1+"-"+dates.getDay(); } catch
+	 * (ParseException e) { // Auto-generated catch block e.printStackTrace(); }
+	 * return s; }
 	 */
 
 	/*-------------------------------------------------------------------------
@@ -617,7 +626,9 @@ public class DateUtil {
 	/**
 	 * 字符串转日期 示例:stringToDate("2005-5-2 0:0:10");
 	 * 
-	 * @param str String 输入字符串日期可用三种格式 yyyy-MM-dd HH:mm:ss完整式 yyyy-MM-dd HH:mm不含秒 yyyy-MM-dd只有日期不含时间
+	 * @param str
+	 *            String 输入字符串日期可用三种格式 yyyy-MM-dd HH:mm:ss完整式 yyyy-MM-dd
+	 *            HH:mm不含秒 yyyy-MM-dd只有日期不含时间
 	 * @return Date
 	 * @throws Exception
 	 */
@@ -640,9 +651,7 @@ public class DateUtil {
 			SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
 			return_date = sdf.parse(str);
 		} catch (ParseException e) {
-			// throw new Exception(
-			// "输入字符串的格式出错(格式为yyyy-MM-dd/yyyy-MM-dd HH:mm/yyyy-MM-dd HH:mm:ss)：" +
-			e.getMessage();
+			throw new RuntimeException(e);
 		}
 		return return_date;
 	}
@@ -651,7 +660,8 @@ public class DateUtil {
 	 * 生成日期的超链接供快速查询机票
 	 * 
 	 * @param myDate
-	 * @param dateNum rule 如早于当前日期最多显示三天
+	 * @param dateNum
+	 *            rule 如早于当前日期最多显示三天
 	 * @return 包含日期超链接的字符串供页面上显示
 	 * @throws Exception
 	 */
@@ -664,7 +674,7 @@ public class DateUtil {
 		try {
 			d = dateDiff(nowDate, myDate);
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 
 		SimpleDateFormat myFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -791,7 +801,8 @@ public class DateUtil {
 	 * 时期加上小时数
 	 * 
 	 * @param date
-	 * @param days 2007-07-27 0750
+	 * @param days
+	 *            2007-07-27 0750
 	 * @return
 	 */
 	public static String addHours_li(String date, int hours) {
@@ -823,7 +834,7 @@ public class DateUtil {
 			// +(hour<10?"0"+hour:String.valueOf(hour)) + ":"
 			// + (minute<10?"0"+minute:String.valueOf(minute));
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 		return s;
 	}
@@ -842,7 +853,7 @@ public class DateUtil {
 			calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE) + minutes);
 			return calendar.getTime();
 		} catch (Exception e) {
-			return null;
+			throw new RuntimeException(e);
 		}
 
 	}
@@ -850,7 +861,8 @@ public class DateUtil {
 	/**
 	 * 判断当前时间是否在时间date之前
 	 * 
-	 * @param date 要比较的时间
+	 * @param date
+	 *            要比较的时间
 	 * @return
 	 */
 	public static boolean isDateBefore(Date date) {
@@ -859,7 +871,8 @@ public class DateUtil {
 	}
 
 	/**
-	 * <code>dateA</code>是否大于等于<code>dateB</code> <li>Greater-than-or-equal (>= or ge)</li>
+	 * <code>dateA</code>是否大于等于<code>dateB</code>
+	 * <li>Greater-than-or-equal (>= or ge)</li>
 	 * 
 	 * @param date
 	 * @return
@@ -896,8 +909,7 @@ public class DateUtil {
 		try {
 			return endDate.getTime() - startDate.getTime();
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			return -1;
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -930,7 +942,7 @@ public class DateUtil {
 			}
 			Mydate = formatter.parse(dateString, pos);
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 		return Mydate;
 	}
@@ -949,8 +961,10 @@ public class DateUtil {
 	 * 
 	 * 日期转换，比如把2006-09-20转换成20SEP06
 	 * 
-	 * @param queryDate 查询航班的日期
-	 * @param yearNeed 是否需要年份信息
+	 * @param queryDate
+	 *            查询航班的日期
+	 * @param yearNeed
+	 *            是否需要年份信息
 	 * @return dateStr 处理后的日期格式
 	 */
 	public static String formatQueryDate(String queryDate, boolean yearNeed) {
@@ -977,9 +991,7 @@ public class DateUtil {
 				dateStr = day + monthEn;
 			}
 		} catch (Exception e) {
-			dateStr = "20NOV08";
-			log.error("ERROR:date" + e.toString());
-			log.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 		return dateStr;
 	}
@@ -988,7 +1000,8 @@ public class DateUtil {
 	 * 
 	 * 日期转换 比如把20SEP转换成2009-09-20
 	 * 
-	 * @param queryDate 查询航班的日期
+	 * @param queryDate
+	 *            查询航班的日期
 	 * @return dateStr 处理后的日期格式
 	 */
 	public static String formatQueryDate(String Str) {
@@ -1018,7 +1031,7 @@ public class DateUtil {
 
 			DateStr = yInt + "-" + mStr + "-" + dStr;
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 
 		return DateStr;
@@ -1035,7 +1048,7 @@ public class DateUtil {
 			dttDate = oFormatter.parse(pstrValue);
 			oFormatter = null;
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 
 		return dttDate;
@@ -1063,7 +1076,8 @@ public class DateUtil {
 	 * 
 	 * 日期转换 比如把20SEP09转换成2009-09-20
 	 * 
-	 * @param queryDate 查询航班的日期
+	 * @param queryDate
+	 *            查询航班的日期
 	 * @return dateStr 处理后的日期格式
 	 */
 	public static String formatQueryDate2(String Str) {
@@ -1087,7 +1101,7 @@ public class DateUtil {
 			}
 			DateStr = "20" + yInt + "-" + mStr + "-" + dStr;
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			throw new RuntimeException(e);
 		}
 
 		return DateStr;
@@ -1100,8 +1114,7 @@ public class DateUtil {
 
 		return sys_time;
 	}
-	
-	
+
 	@SuppressWarnings("deprecation")
 	public static int getYear(Date date) {
 		return date.getYear() + 1900;
@@ -1111,6 +1124,20 @@ public class DateUtil {
 		@SuppressWarnings("deprecation")
 		int m = date.getMonth() + 1;
 		return m % 3 == 0 ? m / 3 : m / 3 + 1;
+	}
+
+	public static Date getNextWorkDay(Date date) {
+		if (date.getDay() < 5) {
+			date = DateUtil.addDay(date, 1);
+		} else {
+			for (; true;) {
+				date = DateUtil.addDay(date, 1);
+				if (date.getDay() == 1) {
+					break;
+				}
+			}
+		}
+		return date;
 	}
 
 }

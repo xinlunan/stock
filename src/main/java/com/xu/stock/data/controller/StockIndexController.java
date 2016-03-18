@@ -54,8 +54,14 @@ public class StockIndexController {
 			worker.setStockIndexService(stockIndexService);
 			worker.setStockService(stockService);
 			worker.start();
-
 			workers.add(worker);
+
+			try {
+				Thread.sleep(1000);
+				//Thread.sleep(Double.valueOf(Math.random() * 10000).intValue());
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
 		}
 
 		ThreadJoin(workers);
@@ -67,7 +73,7 @@ public class StockIndexController {
 			try {
 				stockIndexWorker.join();
 			} catch (InterruptedException e) {
-				log.error("", e);
+				throw new RuntimeException(e);
 			}
 		}
 

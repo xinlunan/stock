@@ -7,7 +7,7 @@
     </appender>
 
     <appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/tmp/logs/cwm.log</file>
+        <file>/tmp/logs/stock.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>/tmp/logs/cwm.%d{yyyy-MM-dd}.log</fileNamePattern>
         </rollingPolicy>
@@ -17,8 +17,9 @@
     </appender>
 
     <!-- project default level -->
-    <logger name="com.winit.cwm" level="DEBUG"/>
-    <logger name="com.xu" level="DEBUG"/>
+    <logger name="com.winit.cwm" level="info"/>
+    <logger name="com.xu" level="info"/>
+    <logger name="com.xu.util.HttpClientHandle" level="info"/>
 	<logger name="org.springframework" level="info"/>
 	<logger name="com.alibaba.druid" level="info"/>
 	<logger name="org.springframework.amqp.rabbit" level="error"/>

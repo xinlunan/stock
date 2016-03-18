@@ -30,7 +30,7 @@ import com.xu.test.BaseTestCase;
 @SuppressWarnings("restriction")
 public class StockIndexInitializtion extends BaseTestCase {
 
-	public static final int NUM_THREADS = 1;
+	public static final int NUM_THREADS = 10;
 
 	@Resource
 	private StockIndexController stockIndexController;
@@ -44,5 +44,4 @@ public class StockIndexInitializtion extends BaseTestCase {
 		stockIndexController.downloadStockIndex(NUM_THREADS);
 		log.info("获取股票指数完成.");
 	}
-
 }

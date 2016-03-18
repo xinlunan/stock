@@ -22,7 +22,8 @@ import com.xu.util.DateUtil;
  * Author     Version       Date        Changes
  * lunan.xu    1.0           2015-5-28     Created
  * 
- * </pre>
+ *          </pre>
+ * 
  * @since 1.
  */
 public class StockServiceHelper {
@@ -30,6 +31,8 @@ public class StockServiceHelper {
 	public static final String DATE_PARRTEN_YYYY_MM_DD = "yyyy-MM-dd";
 	public static final String DATE_PARRTEN_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 	public static final Double NUM_100 = new Double(100);
+	public static final Integer INT_100 = 100;
+	public static final String STR_100 = "100";
 
 	/**
 	 * 将返回的json结果转换成实体对象
@@ -59,9 +62,10 @@ public class StockServiceHelper {
 			stocks.add(stock);
 		}
 
-		Collections.sort(stocks);//排序 
+		Collections.sort(stocks);// 排序
 		return stocks;
 	}
+
 	protected boolean isUpdated(Date lastDate) {
 		Date currentDate = new Date();
 		int diff = DateDiffUtil.getWorkDay(DateUtil.date2String(lastDate, StockServiceHelper.DATE_PARRTEN_YYYY_MM_DD),
@@ -77,10 +81,13 @@ public class StockServiceHelper {
 	@SuppressWarnings("deprecation")
 	public static Date getLastDate() {
 		Date date = new Date();
-		if ((date.getHours() == 15 && date.getMinutes() >= 5) || date.getHours() > 15) {
+		if ((date.getHours() == 15 && date.getMinutes() >= 30) || date.getHours() > 15) {
 			return date;
 		} else {
-			return DateUtil.addDay(date, -1);
+			date = DateUtil.addDay(date, -1);
+			date.setHours(15);
+			date.setMinutes(30);
+			return date;
 		}
 	}
 }

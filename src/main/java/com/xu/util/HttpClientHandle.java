@@ -39,7 +39,7 @@ public class HttpClientHandle {
 	 * 发送 get请求
 	 */
 	public static String get(String url, String charset) {
-		log.info("http get url: " + url);
+		log.debug("http get url: " + url);
 		String result = null;
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		try {
@@ -55,7 +55,7 @@ public class HttpClientHandle {
 				HttpEntity entity = response.getEntity();
 				if (entity != null) {
 					result = EntityUtils.toString(entity, charset);
-					log.info("http get completed. url: " + url);
+					log.debug("http get completed. url: " + url);
 					log.debug(result);
 				}
 			} finally {
@@ -86,7 +86,7 @@ public class HttpClientHandle {
 	 * 发送 post请求访问本地应用并根据传递参数不同返回不同结果
 	 */
 	public static String post(String url, List<NameValuePair> formparams, String encoded) {
-		log.info("http post url: " + url);
+		log.debug("http post url: " + url);
 		String result = "";
 		// 创建默认的httpClient实例.
 		CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -101,7 +101,7 @@ public class HttpClientHandle {
 				HttpEntity entity = response.getEntity();
 				if (entity != null) {
 					result = EntityUtils.toString(entity);
-					log.info("http get result: " + result);
+					log.debug("http get result: " + result);
 				}
 			} finally {
 				response.close();
@@ -123,7 +123,7 @@ public class HttpClientHandle {
 	 * 发送 post请求访问本地应用并根据传递参数不同返回不同结果
 	 */
 	public static boolean download(String url, String path) {
-		log.info("http post url: " + url);
+		log.debug("http post url: " + url);
 		// 创建默认的httpClient实例.
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		try {

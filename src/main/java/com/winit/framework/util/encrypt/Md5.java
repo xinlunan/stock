@@ -25,8 +25,7 @@ public class Md5 {
 
 
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block 
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		
 		return buf.toString();

@@ -22,7 +22,8 @@ import com.xu.stock.data.model.StockIndex;
  * Author     Version       Date        Changes
  * lunan.xu    1.0           2015-5-23     Created
  * 
- * </pre>
+ *          </pre>
+ * 
  * @since 1.
  */
 @Repository("stockIndexDao")
@@ -39,7 +40,7 @@ public class StockIndexDao extends BaseDao<StockIndex> implements IStockIndexDao
 	public Integer saveStockIndexs(List<StockIndex> stockIndexs) {
 		Integer result = 0;
 		for (StockIndex stockIndex : stockIndexs) {
-			log.info(stockIndex.toString());
+			// log.debug(stockIndex.toString());
 			getSqlSession().insert(SQL_INSERT_STOCK_INDEX, stockIndex);
 			result++;
 		}

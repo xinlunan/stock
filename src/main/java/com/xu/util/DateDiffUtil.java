@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import com.xu.stock.data.service.impl.StockServiceHelper;
+
 /**
  * 计算任意2个日期内的工作日，可扩展法假节假日
  * 
@@ -34,6 +36,11 @@ public class DateDiffUtil {
 				DateUtil.stringToDate("2015-05-26 10:00:00")));
 		System.out.println(DateDiffUtil.getWorkDay(DateUtil.stringToDate("2015-05-25 09:00:00"),
 				DateUtil.stringToDate("2015-05-26 10:00:00")));
+		
+		System.out.println(DateUtil.date2String(DateUtil.getNextWorkDay(DateUtil.stringToDate("2016-03-21")),"yyyy-MM-dd"));
+		
+		
+		System.out.println(DateUtil.stringToDate("2015-05-24").compareTo(DateUtil.stringToDate("2015-05-24 09:00:00")) );
 	}
 
 	/**
@@ -48,7 +55,7 @@ public class DateDiffUtil {
 			Date endDate = sdf.parse(endDateStr);
 			return getWorkDay(beginDate, endDate);
 		} catch (ParseException e) {
-			return -10000;
+			throw new RuntimeException(e);
 		}
 	}
 
