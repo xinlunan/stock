@@ -3,6 +3,7 @@ package com.xu.util;
 public class StringUtil {
 	/**
 	 * 将Unicode转换成汉字
+	 * 
 	 * @param utfString
 	 * @return
 	 */
@@ -20,5 +21,15 @@ public class StringUtil {
 		}
 
 		return sb.toString();
+	}
+
+	/**
+	 * 正则
+	 */
+	public static String replaceBlank(String str) {
+		if (str != null) {
+			return str.replaceAll("[\b\r\n\t]*", "");
+		}
+		return null;
 	}
 }

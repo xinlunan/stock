@@ -26,16 +26,17 @@ import com.xu.util.HttpClientHandle;
  * </pre>
  * @since 1.
  */
+@SuppressWarnings("restriction")
 @Service("stockController")
 public class StockController {
 	static Logger log = LoggerFactory.getLogger(StockController.class);
 
 	@Resource
-	IStockService stockService;
+	private IStockService stockService;
 
 	public void initStock() {
 		//通过API获取股票信息
-		String jsonStr = HttpClientHandle.get(StockApiConstant.API_URL_GET_ALL_STOCKS);
+		String jsonStr = HttpClientHandle.get(StockApiConstant.EqbQuant.API_URL_GET_ALL_STOCKS);
 
 		//封装股票对象
 		List<Stock> stocks = StockServiceHelper.converStocks(jsonStr);

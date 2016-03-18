@@ -1,4 +1,4 @@
-package com.xu.stock.data.controller;
+package com.xu.stock.data.service;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.xpath.XPath;
@@ -28,11 +29,12 @@ import org.w3c.dom.NodeList;
 import com.xu.stock.StockApiConstant;
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.model.StockIndex;
-import com.xu.stock.data.service.IStockService;
 import com.xu.stock.data.service.impl.StockServiceHelper;
 import com.xu.util.DateUtil;
 import com.xu.util.DocumentUtil;
 import com.xu.util.HttpClientHandle;
+import com.xu.util.StringUtil;
+import com.xu.util.XPathUtil;
 
 import net.sf.ezmorph.bean.MorphDynaBean;
 
@@ -45,35 +47,61 @@ import net.sf.ezmorph.bean.MorphDynaBean;
  * Author     Version       Date        Changes
  * lunan.xu    1.0           2015-5-29     Created
  * 
- * </pre>
+ *          </pre>
+ * 
  * @since 1.
  */
-public class StockIndexControllerHepler {
-	static Logger log = LoggerFactory.getLogger(StockIndexControllerHepler.class);
+public class SinaStockIndexDownloador {
+	static Logger log = LoggerFactory.getLogger(SinaStockIndexDownloador.class);
+	static XPath xPath = XPathFactory.newInstance().newXPath();
 
 	/**
-	 * 构建初始化Url
+	 * 构建URL
 	 * 
 	 * @param stock
-	 * @return http://ctxalgo.com/api/ohlc/sz000001,sh600001,sz000004?start-date=2015-05-20&end-date=2015-05-24
+	 * @return "http://money.finance.sina.com.cn/corp/go.php/vMS_MarketHistory/stockid/601006.phtml?year=2015&jidu=2"
 	 */
-	public static String buildInitUrl(Stock stock) {
-		String fullCode = stock.getExchange() + stock.getStockCode();
-		String startDate = "2005-01-01";
-		String endDate = DateUtil.getSrvDate();
+	public static List<String> buildUrls(Stock stock) {
+		List<String> urls = new ArrayList<String>();
+		List<String> seasons = new ArrayList<String>();
+		Date today = new Date();
+		int beginYear = 2005;
+		int beginJidu = 1;
+		if (stock.getLastDate() != null) {
+			beginYear = DateUtil.getYear(stock.getLastDate());
+			beginJidu = DateUtil.getSeason(stock.getLastDate());
+		}
 
-		StringBuffer url = new StringBuffer();
-		url.append(StockApiConstant.EqbQuant.API_URL_GET_STOCK_INDEX).append(fullCode);
-		url.append("?start-date=").append(startDate).append("&end-date=").append(endDate);
-		// url.append("&exright=true");// 前复权
+		for (; beginYear <= DateUtil.getYear(today); beginYear++) {
+			if (beginYear < DateUtil.getYear(today)) {
+				for (; beginJidu <= 4; beginJidu++) {
+					seasons.add("year=" + beginYear + "&jidu=" + beginJidu);
+					if (beginJidu == 4) {
+						beginJidu = 0;
+						break;
+					}
+				}
+			} else {
+				for (; beginJidu <= DateUtil.getSeason(today); beginJidu++) {
+					seasons.add("year=" + beginYear + "&jidu=" + beginJidu);
+				}
+			}
+		}
 
-		return url.toString();
+		for (String season : seasons) {
+			StringBuilder url = new StringBuilder(StockApiConstant.Sina.API_URL_GET_STOCK_INDEX)
+					.append(stock.getStockCode()).append(".phtml?").append(season);
+			urls.add(url.toString());
+		}
+
+		return urls;
 	}
 
 	/**
 	 * 获取修复股票指数的数据
 	 * 
-	 * http://market.finance.sina.com.cn/pricehis.php?symbol=sh600900&startdate=2011-08-17&enddate=2011-08-17
+	 * http://market.finance.sina.com.cn/pricehis.php?symbol=sh600900&startdate=
+	 * 2011-08-17&enddate=2011-08-17
 	 * 
 	 * @param fullCode
 	 * @param date
@@ -130,7 +158,8 @@ public class StockIndexControllerHepler {
 	/**
 	 * 修复股票数据库地址
 	 * 
-	 * http://market.finance.sina.com.cn/downxls.php?date=2011-07-08&symbol=sh600900
+	 * http://market.finance.sina.com.cn/downxls.php?date=2011-07-08&symbol=
+	 * sh600900
 	 * 
 	 * @param fullCode
 	 * @param nextDate
@@ -385,7 +414,8 @@ public class StockIndexControllerHepler {
 	/**
 	 * 得到Excel表中的值
 	 * 
-	 * @param hssfCell Excel中的每一个格子
+	 * @param hssfCell
+	 *            Excel中的每一个格子
 	 * @return Excel中每一个格子中的值
 	 */
 	@SuppressWarnings({ "static-access", "deprecation" })
@@ -400,5 +430,100 @@ public class StockIndexControllerHepler {
 			// 返回字符串类型的值
 			return String.valueOf(hssfCell.getStringCellValue());
 		}
+	}
+
+	/**
+	 * 下载股票指数数据
+	 * 
+	 * @param stock
+	 * @return
+	 */
+	public static Stock download(Stock stock) {
+		// 下载数据
+		List<StockIndex> stockIndexes = downloadStockIndex(stock);
+
+		// 检查有效性
+		reviewStockIndex(stockIndexes);
+
+		stock.setStockIndexs(stockIndexes);
+
+		return stock;
+	}
+
+	/**
+	 * 检查下载的数据是否正常，如有异常会进行处理
+	 * 
+	 * @param stockIndexes
+	 */
+	private static void reviewStockIndex(List<StockIndex> stockIndexes) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * 下载历史
+	 * 
+	 * @param stock
+	 * @return
+	 */
+	private static List<StockIndex> downloadStockIndex(Stock stock) {
+		List<StockIndex> stockIndexes = new LinkedList<StockIndex>();
+
+		List<String> urls = buildUrls(stock);// 时间周期大时，要按季度拆分成小的请求
+
+		for (String url : urls) {
+			String html = HttpClientHandle.get(url, "gb2312");
+
+			List<StockIndex> indexes = parseHtml(html);// 解析返回的html
+
+			stockIndexes.addAll(indexes);
+		}
+		return stockIndexes;
+	}
+
+	/**
+	 * 解析返回的html
+	 * 
+	 * @param html
+	 * @return
+	 */
+	private static List<StockIndex> parseHtml(String html) {
+		List<StockIndex> indexes = new ArrayList<StockIndex>();
+		try {
+			String tempString = html.replaceAll("&nbsp;", "").replaceAll("&", "");
+			tempString = tempString.substring(tempString.indexOf("<table id=\"FundHoldSharesTable"));
+			tempString = tempString.substring(0, tempString.indexOf("</table>") + 8);
+			Document doc = DocumentUtil.string2Doc(tempString);
+
+			NodeList daylyNodes = (NodeList) XPathUtil.parse(doc, "//table/tr[position()>1]", XPathConstants.NODESET);
+			for (int i = daylyNodes.getLength() - 1; i >= 0; i--) {
+				NodeList indexNodes = daylyNodes.item(i).getChildNodes();
+				String date = indexNodes.item(1).getChildNodes().item(0).getChildNodes().item(1).getTextContent();
+				date = StringUtil.replaceBlank(date);
+
+				String open = indexNodes.item(3).getTextContent();
+				String high = indexNodes.item(5).getTextContent();
+				String close = indexNodes.item(7).getTextContent();
+				String low = indexNodes.item(9).getTextContent();
+				String volume = indexNodes.item(11).getTextContent();
+				String amount = indexNodes.item(13).getTextContent();
+
+				System.out.println(date);
+				System.out.println(open);
+				System.out.println(high);
+				System.out.println(close);
+				System.out.println(low);
+				System.out.println(volume);
+				System.out.println(amount);
+
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// TODO Auto-generated method stub
+		return indexes;
 	}
 }

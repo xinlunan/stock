@@ -13,7 +13,8 @@ import com.xu.stock.data.model.Stock;
  * Author     Version       Date        Changes
  * lunan.xu    1.0           2015-5-23     Created
  * 
- * </pre>
+ *          </pre>
+ * 
  * @since 1.
  */
 public interface IStockService {
@@ -49,10 +50,10 @@ public interface IStockService {
 	public Integer insertStocks(List<Stock> stocks);
 
 	/**
-	 * 更新股票信息
+	 * 保留股票数据
 	 * 
 	 * @param stock
 	 */
-	public void updateStock(Stock stock);
+	public void saveStockData(Stock stock);
 
 }

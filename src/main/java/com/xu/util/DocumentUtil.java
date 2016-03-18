@@ -28,7 +28,7 @@ public class DocumentUtil {
 			doc = builder.parse(source);
 			return doc;
 		} catch (Exception e) {
-			return null;
+			throw new RuntimeException(e);
 		} finally {
 			if (reader != null) {
 				reader.close();
