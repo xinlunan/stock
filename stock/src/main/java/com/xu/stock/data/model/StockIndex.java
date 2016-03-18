@@ -51,6 +51,18 @@ public class StockIndex implements Serializable, Comparable<StockIndex> {
 	private Date created;
 	// 更新日期
 	private Date updated;
+	// 是否除权
+	private Boolean isExrights;
+
+	private Integer exrights;
+
+	public Integer getExrights() {
+		return exrights;
+	}
+
+	public void setExrights(Integer exrights) {
+		this.exrights = exrights;
+	}
 
 	public Long getIndexId() {
 		return indexId;
@@ -220,14 +232,22 @@ public class StockIndex implements Serializable, Comparable<StockIndex> {
 		this.updated = updated;
 	}
 
+	public Boolean getIsExrights() {
+		return isExrights;
+	}
+
+	public void setIsExrights(Boolean isExrights) {
+		this.isExrights = isExrights;
+	}
+
 	@Override
 	public String toString() {
 		return "StockIndex [indexId=" + indexId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", stockName="
 				+ stockName + ", date=" + date + ", lastClose=" + lastClose + ", open=" + open + ", close=" + close
 				+ ", closeGap=" + closeGap + ", closeGapRate=" + closeGapRate + ", high=" + high + ", low=" + low
 				+ ", highGap=" + highGap + ", highGapRate=" + highGapRate + ", lowGap=" + lowGap + ", lowGapRate="
-				+ lowGapRate + ", amount=" + amount + ", volume=" + volume + ", asset=" + asset + ", created="
-				+ created + ", updated=" + updated + "]";
+				+ lowGapRate + ", amount=" + amount + ", volume=" + volume + ", asset=" + asset + ", created=" + created
+				+ ", updated=" + updated + ", isExrights=" + isExrights + ", exrights=" + exrights + "]";
 	}
 
 	public int compareTo(StockIndex stockIndex) {

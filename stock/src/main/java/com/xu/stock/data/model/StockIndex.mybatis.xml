@@ -24,18 +24,21 @@
 		<id property="asset" column="asset"></id>
 		<id property="created" column="created"></id>
 		<id property="updated" column="updated"></id>
+		<id property="isExrights" column="isExrights"></id>
+		<id property="exrights" column="exrights"></id>
+		
 	</resultMap>
 	
 	<select id="getStockIndex" resultMap="StockIndex">
 		SELECT 	index_id, stock_id, stock_code, stock_name, DATE, last_close, OPEN, CLOSE, close_gap, close_gap_rate, 
-			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, created, updated
+			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, isExrights, exrights, created, updated
 	 	FROM t_stock_index 
 	 	WHERE stock_code=#{stockCode} and date=#{date};
 	</select>
 		
 	<select id="getLastStockIndex" resultMap="StockIndex">
 		SELECT 	index_id, stock_id, stock_code, stock_name, DATE, last_close, OPEN, CLOSE, close_gap, close_gap_rate, 
-			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, created, updated
+			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, isExrights, exrights, created, updated
 	 	FROM t_stock_index 
 	 	WHERE stock_code=#{stockCode} and date &lt; #{date}
 	 	ORDER BY date DESC
@@ -44,27 +47,27 @@
 	
 	<select id="getStockIndexs" resultMap="StockIndex">
 		SELECT 	index_id, stock_id, stock_code, stock_name, DATE, last_close, OPEN, CLOSE, close_gap, close_gap_rate, 
-			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, created, updated
+			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, isExrights, exrights, created, updated
 	 	FROM t_stock_index 
 	 	WHERE stock_code=#{stockCode};
 	</select>
 
 	<insert id="insertStockIndex" flushCache="true">
 		INSERT INTO t_stock_index (stock_id, stock_code, stock_name, DATE, last_close, OPEN, CLOSE, close_gap, close_gap_rate, 
-			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, created, updated)
+			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, isExrights, exrights, created, updated)
 		VALUES (#{stockId}, #{stockCode}, #{stockName}, #{date}, #{lastClose}, #{open}, #{close}, #{closeGap}, #{closeGapRate}, 
-			#{high}, #{low}, #{highGap}, #{highGapRate}, #{lowGap}, #{lowGapRate}, #{amount}, #{volume}, #{asset},sysdate(),sysdate());
+			#{high}, #{low}, #{highGap}, #{highGapRate}, #{lowGap}, #{lowGapRate}, #{amount}, #{volume}, #{asset}, #{isExrights}, #{exrights},sysdate(),sysdate());
 	</insert>
 	
-	<insert id="updateStockIndex" flushCache="true">
+	<update id="updateStockIndex" flushCache="true">
 		UPDATE t_stock_index 
 		SET updated = sysdate(), last_close=#{lastClose}, close_gap=#{closeGap}, close_gap_rate=#{closeGapRate}, 
 			high_gap=#{highGap}, high_gap_rate=#{highGapRate}, low_gap=#{lowGap}, low_gap_rate=#{lowGapRate}
 		WHERE stock_code=#{stockCode} and date=#{date};
-	</insert>
+	</update>
 	
-	<insert id="deleteStockIndex" flushCache="true">
+	<delete id="deleteStockIndex" flushCache="true">
 		DELETE FROM t_stock_index WHERE stock_code=#{stockCode} and date=#{date};
-	</insert>
+	</delete>
 	
 </mapper> 

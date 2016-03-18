@@ -5,14 +5,14 @@
  * of this software and media is authorized only pursuant to a
  * valid written license from Winit Corp or an authorized sublicensor.
  */
-package com.xu.stock.command;
+package com.xu.bak;
 
 import javax.annotation.Resource;
 
 import org.junit.Test;
 
 import com.xu.stock.data.controller.StockController;
-import com.xu.stock.data.controller.StockIndexController3;
+import com.xu.stock.data.service.downloador.EqbQuantStockIndexDownloqdor;
 import com.xu.test.BaseTestCase;
 
 /**
@@ -34,7 +34,7 @@ public class StockInitialize extends BaseTestCase {
 	@Resource
 	private StockController stockController;
 	@Resource
-	private StockIndexController3 stockIndexController;
+	private EqbQuantStockIndexDownloqdor stockIndexController;
 
 	/**
 	 * 获取股票指数启动命令

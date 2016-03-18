@@ -1,4 +1,4 @@
-package com.xu.stock.data.controller;
+package com.xu.stock.data.service.downloador;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,8 +39,8 @@ import net.sf.json.JSONObject;
  */
 @SuppressWarnings("restriction")
 @Service("stockIndexController3")
-public class StockIndexController3 {
-	static Logger log = LoggerFactory.getLogger(StockIndexController3.class);
+public class EqbQuantStockIndexDownloqdor {
+	static Logger log = LoggerFactory.getLogger(EqbQuantStockIndexDownloqdor.class);
 
 	private static final int NUM_300 = 300;
 
@@ -104,7 +104,7 @@ public class StockIndexController3 {
 	 */
 	private void doUpdateStockIndex(List<Stock> stocks) {
 		//组装初始化url
-		String url = StockIndexControllerHepler.buildUpdateUrl(stocks);
+		String url = EqbQuantStockIndexDownloqdorHepler.buildUpdateUrl(stocks);
 
 		// 获取股票指数
 		String jsonStr = HttpClientHandle.get(url);
@@ -151,7 +151,7 @@ public class StockIndexController3 {
 		log.info("初始化股票数据:" + stock.getStockCode());
 
 		//组装初始化url
-		String url = StockIndexControllerHepler.buildInitUrl(stock);
+		String url = EqbQuantStockIndexDownloqdorHepler.buildInitUrl(stock);
 
 		// 获取股票指数
 		String jsonStr = HttpClientHandle.get(url);
@@ -175,7 +175,7 @@ public class StockIndexController3 {
 			MorphDynaBean dateIndexs = (MorphDynaBean) map.get(stockCode);// 每日所有指数
 
 			// 解析每天股票指数
-			Stock stock = StockIndexControllerHepler.resolve(stockService, dateIndexs);
+			Stock stock = EqbQuantStockIndexDownloqdorHepler.resolve(stockService, dateIndexs);
 
 			//更新股票信息、保存股票指数 
 			stockService.saveStockData(stock);
@@ -232,7 +232,7 @@ public class StockIndexController3 {
 				log.info("stock index is exception, stock :" + stock.getStockCode() + " "
 						+ DateUtil.getDate(nextDate, "yyyy-MM-dd"));
 
-				StockIndex repairIndex = StockIndexControllerHepler.getRepairStockIndexByExcel(stock.getExchange()
+				StockIndex repairIndex = EqbQuantStockIndexDownloqdorHepler.getRepairStockIndexByExcel(stock.getExchange()
 						+ stock.getStockCode(), nextDate);
 				if (repairIndex != null) {//这一天真没数据。即当天停牌
 					repairIndexs.add(repairIndex);

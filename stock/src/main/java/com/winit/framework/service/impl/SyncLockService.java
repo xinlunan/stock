@@ -39,6 +39,7 @@ public class SyncLockService extends BaseService implements ISyncLockService {
 			isLocked = true;
 		} catch (Exception e) {
 			log.info("SyncLockService lock exception：", e);
+			throw new RuntimeException(e);
 		}
 
 		return isLocked;
@@ -69,6 +70,7 @@ public class SyncLockService extends BaseService implements ISyncLockService {
 			localhost = InetAddress.getLocalHost();
 		} catch (UnknownHostException uhe) {
 			log.info("====Localhost not seeable. Something is odd. =====");
+			throw new RuntimeException(uhe);
 		}
 		return localhost.getHostAddress();
 	}

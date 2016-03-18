@@ -1,5 +1,6 @@
 package com.xu.stock.data.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.xu.stock.data.dao.IStockDao;
 import com.xu.stock.data.dao.IStockIndexDao;
 import com.xu.stock.data.model.Stock;
+import com.xu.stock.data.model.StockIndex;
 import com.xu.stock.data.service.IStockService;
 
 /**
@@ -22,9 +24,11 @@ import com.xu.stock.data.service.IStockService;
  * Author     Version       Date        Changes
  * lunan.xu    1.0           2015-5-23     Created
  * 
- * </pre>
+ *          </pre>
+ * 
  * @since 1.
  */
+@SuppressWarnings("restriction")
 @Service("stockService")
 public class StockService implements IStockService {
 	static Logger log = LoggerFactory.getLogger(StockService.class);
@@ -59,11 +63,38 @@ public class StockService implements IStockService {
 	}
 
 	public void saveStockData(Stock stock) {
-		log.info("更新股票");
+		log.info("更新股票 :" + stock.getStockCode());
+		filterInvalid(stock);
+
 		stockIndexDao.saveStockIndexs(stock.getStockIndexs());
 
 		stock.setLastDate(StockServiceHelper.getLastDate());
 		stockDao.updateStock(stock);
+	}
+
+	/**
+	 * 过滤无效数据
+	 * 
+	 * @param stock
+	 */
+	private void filterInvalid(Stock stock) {
+		if (stock.getLastDate() == null) {
+			return;
+		}
+		List<StockIndex> indexs = stock.getStockIndexs();
+		List<StockIndex> invalidIndexs = new ArrayList<StockIndex>();
+		if (indexs != null) {
+			for (int i = 0; i < indexs.size(); i++) {
+				StockIndex index = indexs.get(i);
+				if (index.getDate().compareTo(stock.getLastDate()) <= 0) {// 日期小于最后日期
+					invalidIndexs.add(index);
+				}
+				if (index.getDate().compareTo(StockServiceHelper.getLastDate()) > 0) {// 日期大于最后有效日期
+					invalidIndexs.add(index);
+				}
+			}
+			indexs.removeAll(invalidIndexs);
+		}
 	}
 
 }
