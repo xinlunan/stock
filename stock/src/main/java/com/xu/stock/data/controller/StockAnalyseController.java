@@ -20,6 +20,7 @@ import com.xu.stock.data.service.IStockAnalyseService;
  * </pre>
  * @since 1.
  */
+@SuppressWarnings("restriction")
 @Service("stockAnalyseController")
 public class StockAnalyseController {
 	static Logger log = LoggerFactory.getLogger(StockAnalyseController.class);

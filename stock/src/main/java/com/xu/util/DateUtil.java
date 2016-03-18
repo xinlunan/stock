@@ -1100,4 +1100,17 @@ public class DateUtil {
 
 		return sys_time;
 	}
+	
+	
+	@SuppressWarnings("deprecation")
+	public static int getYear(Date date) {
+		return date.getYear() + 1900;
+	}
+
+	public static int getSeason(Date date) {
+		@SuppressWarnings("deprecation")
+		int m = date.getMonth() + 1;
+		return m % 3 == 0 ? m / 3 : m / 3 + 1;
+	}
+
 }
