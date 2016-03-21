@@ -79,7 +79,7 @@
 	<bean id="dataBaseProperties" class="com.winit.framework.config.DatabaseProperties" autowire="byName">
 		<property name="dataSource" ref="dataSource"></property>
 		<property name="propertySql" 
-			value="SELECT ID, IP, PORT, NAME, VALUE, REMARK FROM T_SYS_CONFIG WHERE ENABLE='Y'">
+			value="SELECT ID, IP, PORT, NAME, VALUE, REMARK FROM T_SYS_CONFIG WHERE ENABLE=1">
 			<!-- SQL格式：SELECT ID, IP, PORT, NAME, VALUE, REMARK FROM T_SYS_CONFIG WHERE ENABLE=1 ORDER BY ID -->
 		</property>
 	</bean>

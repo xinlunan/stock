@@ -2,8 +2,6 @@ package com.xu.stock.data.controller;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.data.service.IStockAnalyseService;
@@ -17,18 +15,20 @@ import com.xu.stock.data.service.IStockAnalyseService;
  * Author     Version       Date        Changes
  * lunan.xu    1.0           2015-5-29     Created
  * 
- * </pre>
+ *          </pre>
+ * 
  * @since 1.
  */
 @SuppressWarnings("restriction")
-@Service("stockAnalyseController")
-public class StockAnalyseController {
-	static Logger log = LoggerFactory.getLogger(StockAnalyseController.class);
+@Service("stockAnalyHighLowController")
+public class StockAnalyseHighLowController extends BaseStockAnalyseController {
 
 	@Resource
-	private IStockAnalyseService highLowAnalyseService;
+	private IStockAnalyseService stockAnalyseHighLowService;
 
-	public void highLowAnalyse() {
-		highLowAnalyseService.analyse();
+	@Override
+	public IStockAnalyseService getStockAnalyseService() {
+		return stockAnalyseHighLowService;
 	}
+
 }

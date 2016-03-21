@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.winit.framework.dao.impl.BaseDao;
@@ -28,7 +26,6 @@ import com.xu.stock.data.model.StockIndex;
  */
 @Repository("stockIndexDao")
 public class StockIndexDao extends BaseDao<StockIndex> implements IStockIndexDao {
-	static Logger log = LoggerFactory.getLogger(StockIndexDao.class);
 
 	public final String SQL_GET_STOCK_INDEX = getNameSpace() + "getStockIndex";
 	public final String SQL_GET_LAST_STOCK_INDEX = getNameSpace() + "getLastStockIndex";

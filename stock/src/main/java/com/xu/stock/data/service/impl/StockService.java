@@ -63,7 +63,7 @@ public class StockService implements IStockService {
 	}
 
 	public void saveStockData(Stock stock) {
-		log.info("更新股票 :" + stock.getStockCode());
+		log.info("更新:" + stock.getStockCode());
 		filterInvalid(stock);
 
 		stockIndexDao.saveStockIndexs(stock.getStockIndexs());

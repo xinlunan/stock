@@ -8,7 +8,6 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
@@ -429,6 +428,15 @@ public class DateUtil {
 			throw new RuntimeException(e);
 		}
 		return ret;
+	}
+
+	public static String date2String(Date myDate) {
+		try {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+			return formatter.format(myDate);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static String date2String(Date myDate, String parrten) {

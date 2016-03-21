@@ -25,6 +25,7 @@ import com.xu.stock.data.service.IStockIndexService;
  * </pre>
  * @since 1.
  */
+@SuppressWarnings("restriction")
 @Service("stockIndexService")
 public class StockIndexService implements IStockIndexService {
 	static Logger log = LoggerFactory.getLogger(StockIndexService.class);

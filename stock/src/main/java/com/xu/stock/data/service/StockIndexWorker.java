@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.service.downloador.SinaStockIndexDownloador;
@@ -25,13 +24,11 @@ import com.xu.util.DateUtil;
  * 
  * @since 1.
  */
-@Transactional // 测试时，事务将会被回滚
 public class StockIndexWorker extends Thread {
-	static Logger log = LoggerFactory.getLogger(StockIndexWorker.class);
+	protected static Logger log = LoggerFactory.getLogger(StockIndexWorker.class);
 
-	private List<Stock> stocks;
-	private IStockService stockService;
-	private IStockIndexService stockIndexService;
+	List<Stock> stocks;
+	IStockService stockService;
 
 	public void run() {
 		log.info("StockIndexWorker run size" + stocks.size());
@@ -76,7 +73,7 @@ public class StockIndexWorker extends Thread {
 	 * @param stock
 	 */
 	private void downloadStockIndex(Stock stock) {
-		log.info("初始化股票数据:" + stock.getStockCode());
+		log.info("初始化数据:" + stock.getStockCode());
 
 		Stock stockData = SinaStockIndexDownloador.download(stock);
 
@@ -84,24 +81,8 @@ public class StockIndexWorker extends Thread {
 
 	}
 
-	public IStockService getStockService() {
-		return stockService;
-	}
-
 	public void setStockService(IStockService stockService) {
 		this.stockService = stockService;
-	}
-
-	public IStockIndexService getStockIndexService() {
-		return stockIndexService;
-	}
-
-	public void setStockIndexService(IStockIndexService stockIndexService) {
-		this.stockIndexService = stockIndexService;
-	}
-
-	public List<Stock> getStocks() {
-		return stocks;
 	}
 
 	public void setStocks(List<Stock> stocks) {

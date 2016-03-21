@@ -8,8 +8,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import com.xu.stock.data.service.impl.StockServiceHelper;
-
 /**
  * 计算任意2个日期内的工作日，可扩展法假节假日
  * 
