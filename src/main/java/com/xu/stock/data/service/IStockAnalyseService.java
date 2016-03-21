@@ -1,5 +1,7 @@
 package com.xu.stock.data.service;
 
+import com.xu.stock.data.model.Stock;
+
 /**
  * 股票分析service接口
  * 
@@ -9,7 +11,8 @@ package com.xu.stock.data.service;
  * Author     Version       Date        Changes
  * lunan.xu    1.0           2015-5-31     Created
  * 
- * </pre>
+ *          </pre>
+ * 
  * @since 1.
  */
 public interface IStockAnalyseService {
@@ -19,6 +22,6 @@ public interface IStockAnalyseService {
 	 * 
 	 * @return
 	 */
-	public int analyse();
+	public int analyse(Stock stock);
 
 }

@@ -42,7 +42,7 @@ public class StockServiceHelper {
 	 */
 	public static List<Stock> converStocks(String jsonStr) {
 		List<Stock> stocks = new ArrayList<Stock>();
-		@SuppressWarnings("static-access")
+		@SuppressWarnings({ "static-access", "unused" })
 		JSONObject obj = new JSONObject().fromObject(jsonStr);
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		HashMap<String, String> map = (HashMap) JSONObject.toBean(obj, HashMap.class);
