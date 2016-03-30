@@ -81,12 +81,12 @@ public class StockServiceHelper {
 	@SuppressWarnings("deprecation")
 	public static Date getLastDate() {
 		Date date = new Date();
-		if ((date.getHours() == 15 && date.getMinutes() >= 30) || date.getHours() > 15) {
+		if ((date.getHours() == 15 && date.getMinutes() >= 45) || date.getHours() > 15) {
 			return date;
 		} else {
 			date = DateUtil.addDay(date, -1);
 			date.setHours(15);
-			date.setMinutes(30);
+			date.setMinutes(45);
 			return date;
 		}
 	}

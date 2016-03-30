@@ -24,7 +24,7 @@ public interface IStockAnalyst {
 	 * 
 	 * @param index
 	 */
-	public void putStockIndex(StockIndex index);
+	public List<StockIndex> putStockIndexs(List<StockIndex> indexs);
 
 	/**
 	 * 获取分析可购买点

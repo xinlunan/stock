@@ -1,5 +1,7 @@
 package com.xu.stock.data.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.xu.stock.data.dao.IStockDao;
 import com.xu.stock.data.dao.IStockIndexDao;
 import com.xu.stock.data.model.Stock;
+import com.xu.stock.data.model.StockIndex;
 import com.xu.stock.data.service.IStockAnalyseService;
 
 /**
@@ -34,9 +37,9 @@ public class StockAnalyseHighLowService implements IStockAnalyseService {
 	@Resource
 	private IStockIndexDao stockIndexDao;
 
-	public int analyse(Stock stock) {
+	public List<StockIndex> analyse(Stock stock) {
 		log.info("analyse stock code:" + stock.getStockCode());
 
-		return 0;
+		return null;
 	}
 }
