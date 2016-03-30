@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.stock.data.model.StockTrade">
+
+	<resultMap type="com.xu.stock.data.model.StockIndex" id="StockTrade">
+		<id property="tradeId" column="trade_id"></id>
+		<id property="stockId" column="stock_id"></id>
+		<id property="stockCode" column="stock_code"></id>
+		<id property="stockName" column="stock_name"></id>
+		<id property="date" column="date"></id>
+		<id property="hour" column="hour"></id>
+		<id property="minute" column="minute"></id>
+		<id property="price" column="price"></id>
+		<id property="tradeType" column="trade_type"></id>
+		<id property="strategy" column="strategy"></id>
+		<id property="parameters" column="parameters"></id>
+		<id property="created" column="created"></id>
+		<id property="updated" column="updated"></id>
+
+	</resultMap>
+
+	<select id="getStockTrades" resultMap="StockTrade">
+		SELECT trade_id,stock_id,stock_code,stock_name,date,hour,minute,price,trade_type,strategy,parameters,created,updated
+		FROM t_stock_trade
+		WHERE stock_code=#{stockCode};
+	</select>
+
+
+	<insert id="insertStockTrade" flushCache="true">
+		INSERT INTO t_stock_trade (
+		    stock_id,stock_code,stock_name,date,hour,minute,price,trade_type,strategy,parameters,created,updated)
+		VALUES (#{stockId}, #{stockCode}, #{stockName}, #{date}, #{hour}, #{minute}, #{price}, #{tradeType}, 
+		    #{strategy},#{parameters},sysdate(),sysdate());
+	</insert>
+
+
+</mapper> 
