@@ -16,12 +16,13 @@ import com.xu.stock.data.service.IStockMinuteIndexService;
 /**
  * 股票指数service实现
  * 
- * @version Revision History
  * 
- *          <pre>
- * Author     Version       Date        Changes
- * lunan.xu    1.0           2015-5-23     Created
+ * @version
  * 
+ * 			<pre>
+ * Author	Version		Date		Changes
+ * lunan.xu 	1.0  		2016年3月30日 	Created
+ *
  *          </pre>
  * 
  * @since 1.
