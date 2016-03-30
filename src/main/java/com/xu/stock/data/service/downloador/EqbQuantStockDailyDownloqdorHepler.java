@@ -27,7 +27,7 @@ import org.w3c.dom.NodeList;
 
 import com.xu.stock.StockApiConstant;
 import com.xu.stock.data.model.Stock;
-import com.xu.stock.data.model.StockIndex;
+import com.xu.stock.data.model.StockDaily;
 import com.xu.stock.data.service.IStockService;
 import com.xu.stock.data.service.impl.StockServiceHelper;
 import com.xu.util.DateUtil;
@@ -48,8 +48,8 @@ import net.sf.ezmorph.bean.MorphDynaBean;
  * </pre>
  * @since 1.
  */
-public class EqbQuantStockIndexDownloqdorHepler {
-	static Logger log = LoggerFactory.getLogger(EqbQuantStockIndexDownloqdorHepler.class);
+public class EqbQuantStockDailyDownloqdorHepler {
+	static Logger log = LoggerFactory.getLogger(EqbQuantStockDailyDownloqdorHepler.class);
 
 	/**
 	 * 构建初始化Url
@@ -80,7 +80,7 @@ public class EqbQuantStockIndexDownloqdorHepler {
 	 * @return
 	 * @throws Exception
 	 */
-	public static StockIndex getRepairStockIndexByPrice(String fullCode, Date date) throws Exception {
+	public static StockDaily getRepairStockDailyByPrice(String fullCode, Date date) throws Exception {
 		String url = buildRepairUrl(fullCode, date);
 
 		String resutlStr = HttpClientHandle.get(url, "gb2312");
@@ -91,9 +91,9 @@ public class EqbQuantStockIndexDownloqdorHepler {
 
 		resutlStr = resutlStr.substring(resutlStr.indexOf("<tbody>"), resutlStr.lastIndexOf("</tbody>") + 8);
 
-		StockIndex index = parseString2StockIndex(resutlStr);
+		StockDaily daily = parseString2StockDaily(resutlStr);
 
-		return index;
+		return daily;
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class EqbQuantStockIndexDownloqdorHepler {
 	 * @return
 	 * @throws Exception
 	 */
-	private static StockIndex parseString2StockIndex(String resutlStr) throws Exception {
+	private static StockDaily parseString2StockDaily(String resutlStr) throws Exception {
 		Long volume = 0l;
 		Float high = 0f;
 		Float low = 0f;
@@ -123,8 +123,8 @@ public class EqbQuantStockIndexDownloqdorHepler {
 		System.out.println(high);
 		System.out.println(low);
 
-		StockIndex index = new StockIndex();
-		return index;
+		StockDaily daily = new StockDaily();
+		return daily;
 	}
 
 	/**
@@ -188,49 +188,49 @@ public class EqbQuantStockIndexDownloqdorHepler {
 
 		Stock stock = stockService.getStock(stockCode);
 
-		List<StockIndex> stockIndexs = new ArrayList<StockIndex>();
+		List<StockDaily> stockDailys = new ArrayList<StockDaily>();
 		for (int i = 0; i < dates.size(); i++) {
 			if (i == dates.size() - 1 && !dates.get(i).endsWith("15:00:00")) {
 				continue;// 最后一天还未到收盘时间时，不作记录
 			}
 
-			StockIndex stockIndex = new StockIndex();
-			stockIndex.setStockId(stock.getStockId());
-			stockIndex.setStockCode(stockCode);
-			stockIndex.setStockName(stockName);
+			StockDaily stockDaily = new StockDaily();
+			stockDaily.setStockId(stock.getStockId());
+			stockDaily.setStockCode(stockCode);
+			stockDaily.setStockName(stockName);
 			Date lastDate = DateUtil.stringToDate(dates.get(i).substring(0, 10));
-			stockIndex.setDate(lastDate);
+			stockDaily.setDate(lastDate);
 			Integer lastCloseInt = stock.getLastClose() == null ? 1 : stock.getLastClose();
-			stockIndex.setLastClose(lastCloseInt);
-			stockIndex.setOpen(Double.valueOf(((opens.get(i) * StockServiceHelper.NUM_100))).intValue());
+			stockDaily.setLastClose(lastCloseInt);
+			stockDaily.setOpen(Double.valueOf(((opens.get(i) * StockServiceHelper.NUM_100))).intValue());
 			Integer close = Double.valueOf(((closes.get(i) * StockServiceHelper.NUM_100))).intValue();
-			stockIndex.setClose(close);
-			stockIndex.setCloseGap(stockIndex.getClose() - stockIndex.getLastClose());
-			BigDecimal closeGap = new BigDecimal(stockIndex.getCloseGap());
-			BigDecimal lastClose = new BigDecimal(stockIndex.getLastClose());
+			stockDaily.setClose(close);
+			stockDaily.setCloseGap(stockDaily.getClose() - stockDaily.getLastClose());
+			BigDecimal closeGap = new BigDecimal(stockDaily.getCloseGap());
+			BigDecimal lastClose = new BigDecimal(stockDaily.getLastClose());
 			Float closeGapRate = closeGap.divide(lastClose, 4, BigDecimal.ROUND_HALF_UP).floatValue() * 100;
-			stockIndex.setCloseGapRate(closeGapRate);
-			stockIndex.setHigh(Double.valueOf(((highs.get(i) * StockServiceHelper.NUM_100))).intValue());
-			stockIndex.setHighGap(stockIndex.getHigh() - stockIndex.getLastClose());
-			BigDecimal highGap = new BigDecimal(stockIndex.getHighGap());
+			stockDaily.setCloseGapRate(closeGapRate);
+			stockDaily.setHigh(Double.valueOf(((highs.get(i) * StockServiceHelper.NUM_100))).intValue());
+			stockDaily.setHighGap(stockDaily.getHigh() - stockDaily.getLastClose());
+			BigDecimal highGap = new BigDecimal(stockDaily.getHighGap());
 			Float highGapRate = highGap.divide(lastClose, 4, BigDecimal.ROUND_HALF_UP).floatValue() * 100;
-			stockIndex.setHighGapRate(highGapRate);
-			stockIndex.setLow(Double.valueOf(((lows.get(i) * StockServiceHelper.NUM_100))).intValue());
-			stockIndex.setLowGap(stockIndex.getLow() - stockIndex.getLastClose());
-			BigDecimal lowGap = new BigDecimal(stockIndex.getLowGap());
+			stockDaily.setHighGapRate(highGapRate);
+			stockDaily.setLow(Double.valueOf(((lows.get(i) * StockServiceHelper.NUM_100))).intValue());
+			stockDaily.setLowGap(stockDaily.getLow() - stockDaily.getLastClose());
+			BigDecimal lowGap = new BigDecimal(stockDaily.getLowGap());
 			Float lowGapRate = lowGap.divide(lastClose, 4, BigDecimal.ROUND_HALF_UP).floatValue() * 100;
-			stockIndex.setLowGapRate(lowGapRate);
-			stockIndex.setAmount(amounts.get(i).longValue());
-			stockIndex.setVolume(volumes.get(i).longValue());
+			stockDaily.setLowGapRate(lowGapRate);
+			stockDaily.setAmount(amounts.get(i).longValue());
+			stockDaily.setVolume(volumes.get(i).longValue());
 			Long asset = null;
-			stockIndex.setAsset(asset);
+			stockDaily.setAsset(asset);
 
-			stockIndexs.add(stockIndex);
+			stockDailys.add(stockDaily);
 
-			stock.setLastClose(stockIndex.getClose());
-			stock.setAsset(stockIndex.getAsset());
+			stock.setLastClose(stockDaily.getClose());
+			stock.setAsset(stockDaily.getAsset());
 		}
-		stock.setStockIndexs(stockIndexs);
+		stock.setStockDailys(stockDailys);
 
 		return stock;
 	}
@@ -243,7 +243,7 @@ public class EqbQuantStockIndexDownloqdorHepler {
 	 * @return
 	 * @throws IOException
 	 */
-	public static StockIndex getRepairStockIndexByExcel(String fullCode, Date date) throws Exception {
+	public static StockDaily getRepairStockDailyByExcel(String fullCode, Date date) throws Exception {
 		String url = buildRepairUrl(fullCode, date);
 
 		String path = "D:\\temp\\" + fullCode + "_" + DateUtil.getDate(date, "yyyyMMdd") + ".xls";
@@ -251,12 +251,12 @@ public class EqbQuantStockIndexDownloqdorHepler {
 		if (!download) {
 			return null;
 		}
-		StockIndex index = parseStockIndexExcel(path, fullCode, date);
+		StockDaily daily = parseStockDailyExcel(path, fullCode, date);
 
-		return index;
+		return daily;
 	}
 
-	public static StockIndex parseStockIndexExcel(String file, String fullCode, Date date) throws IOException {
+	public static StockDaily parseStockDailyExcel(String file, String fullCode, Date date) throws IOException {
 		Long volume = 0l;
 		Long amount = 0l;
 		Integer high = Integer.MIN_VALUE;
@@ -303,17 +303,17 @@ public class EqbQuantStockIndexDownloqdorHepler {
 			}
 
 			if (volume != 0 && amount != 0) {
-				StockIndex stockIndex = new StockIndex();
-				stockIndex.setOpen(open);
-				stockIndex.setClose(close);
-				stockIndex.setHigh(high);
-				stockIndex.setLow(low);
-				stockIndex.setAmount(amount);
-				stockIndex.setVolume(volume);
-				stockIndex.setDate(date);
-				stockIndex.setStockCode(fullCode.substring(2));
+				StockDaily stockDaily = new StockDaily();
+				stockDaily.setOpen(open);
+				stockDaily.setClose(close);
+				stockDaily.setHigh(high);
+				stockDaily.setLow(low);
+				stockDaily.setAmount(amount);
+				stockDaily.setVolume(volume);
+				stockDaily.setDate(date);
+				stockDaily.setStockCode(fullCode.substring(2));
 
-				return stockIndex;
+				return stockDaily;
 			}
 			return null;
 		} finally {
@@ -323,13 +323,13 @@ public class EqbQuantStockIndexDownloqdorHepler {
 	}
 
 	/**
-	 * 根据excel解决StockIndex
+	 * 根据excel解决StockDaily
 	 * 
 	 * @param file
 	 * @return
 	 * @throws IOException
 	 */
-	public static StockIndex parseStockIndexExcel_bak(String file) throws IOException {
+	public static StockDaily parseStockDailyExcel_bak(String file) throws IOException {
 		Long volume = 0l;
 		Long amount = 0l;
 		Integer high = Integer.MIN_VALUE;
@@ -371,15 +371,15 @@ public class EqbQuantStockIndexDownloqdorHepler {
 			is.close();
 		}
 
-		StockIndex stockIndex = new StockIndex();
-		stockIndex.setOpen(open);
-		stockIndex.setClose(close);
-		stockIndex.setHigh(high);
-		stockIndex.setLow(low);
-		stockIndex.setAmount(amount);
-		stockIndex.setVolume(volume);
+		StockDaily stockDaily = new StockDaily();
+		stockDaily.setOpen(open);
+		stockDaily.setClose(close);
+		stockDaily.setHigh(high);
+		stockDaily.setLow(low);
+		stockDaily.setAmount(amount);
+		stockDaily.setVolume(volume);
 
-		return stockIndex;
+		return stockDaily;
 	}
 
 	/**

@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.data.model.Stock;
-import com.xu.stock.data.model.StockIndex;
-import com.xu.stock.data.service.IStockIndexService;
+import com.xu.stock.data.model.StockDaily;
+import com.xu.stock.data.service.IStockDailyService;
 import com.xu.stock.data.service.IStockService;
 import com.xu.util.DateDiffUtil;
 import com.xu.util.DateUtil;
@@ -38,9 +38,9 @@ import net.sf.json.JSONObject;
  * @since 1.
  */
 @SuppressWarnings("restriction")
-@Service("stockIndexController3")
-public class EqbQuantStockIndexDownloqdor {
-	static Logger log = LoggerFactory.getLogger(EqbQuantStockIndexDownloqdor.class);
+@Service("stockDailyController3")
+public class EqbQuantStockDailyDownloqdor {
+	static Logger log = LoggerFactory.getLogger(EqbQuantStockDailyDownloqdor.class);
 
 	private static final int NUM_300 = 300;
 
@@ -48,19 +48,19 @@ public class EqbQuantStockIndexDownloqdor {
 	IStockService stockService;
 
 	@Resource
-	IStockIndexService stockIndexService;
+	IStockDailyService stockDailyService;
 
 	/**
 	 * 初始化股票指数
 	 */
-	public void initStockIndex() {
+	public void initStockDaily() {
 		boolean hasException = false;
 
-		hasException = doInitStockIndex();
+		hasException = doInitStockDaily();
 
 		//如果初始化过程产生了异常。则重新抓取异常
 		if (hasException) {
-			initStockIndex();//递归初始化方法
+			initStockDaily();//递归初始化方法
 		}
 
 	}
@@ -70,7 +70,7 @@ public class EqbQuantStockIndexDownloqdor {
 	 * 
 	 * @return
 	 */
-	public void updateStockIndex() {
+	public void updateStockDaily() {
 		log.info("更新股票数据");
 		try {
 			// 取出所有股票
@@ -86,13 +86,13 @@ public class EqbQuantStockIndexDownloqdor {
 				int fromIndex = i * NUM_300;
 				int toIndex = i == (pages - 1) ? stocks.size() : (i + 1) * NUM_300;
 				List<Stock> subStocks = stocks.subList(fromIndex, toIndex);
-				doUpdateStockIndex(subStocks);
+				doUpdateStockDaily(subStocks);
 			}
 
-			repairStockIndex();
+			repairStockDaily();
 		} catch (Exception e) {
 			log.error("",e);
-			updateStockIndex();
+			updateStockDaily();
 		}
 
 	}
@@ -102,9 +102,9 @@ public class EqbQuantStockIndexDownloqdor {
 	 * 
 	 * @param stocks
 	 */
-	private void doUpdateStockIndex(List<Stock> stocks) {
+	private void doUpdateStockDaily(List<Stock> stocks) {
 		//组装初始化url
-		String url = EqbQuantStockIndexDownloqdorHepler.buildUpdateUrl(stocks);
+		String url = EqbQuantStockDailyDownloqdorHepler.buildUpdateUrl(stocks);
 
 		// 获取股票指数
 		String jsonStr = HttpClientHandle.get(url);
@@ -118,7 +118,7 @@ public class EqbQuantStockIndexDownloqdor {
 	 * 
 	 * @return
 	 */
-	private boolean doInitStockIndex() {
+	private boolean doInitStockDaily() {
 		boolean hasException = false;
 		// 取出所有股票
 		List<Stock> stocks = stockService.getAllStocks();
@@ -127,12 +127,12 @@ public class EqbQuantStockIndexDownloqdor {
 			Date lastDate = stock.getLastDate();
 			try {
 				if (lastDate == null) {// 日期为空需求初始化
-					doInitStockIndex(stock);
+					doInitStockDaily(stock);
 				}
 
 			} catch (Exception e) {
 				hasException = true;
-				log.error("stock fetch index error stock :" + stock.getStockCode(), e);
+				log.error("stock fetch daily error stock :" + stock.getStockCode(), e);
 			}
 		}
 		return hasException;
@@ -147,11 +147,11 @@ public class EqbQuantStockIndexDownloqdor {
 	 * @param startDate
 	 * @param endDate
 	 */
-	private void doInitStockIndex(Stock stock) {
+	private void doInitStockDaily(Stock stock) {
 		log.info("初始化股票数据:" + stock.getStockCode());
 
 		//组装初始化url
-		String url = EqbQuantStockIndexDownloqdorHepler.buildInitUrl(stock);
+		String url = EqbQuantStockDailyDownloqdorHepler.buildInitUrl(stock);
 
 		// 获取股票指数
 		String jsonStr = HttpClientHandle.get(url);
@@ -175,7 +175,7 @@ public class EqbQuantStockIndexDownloqdor {
 			MorphDynaBean dateIndexs = (MorphDynaBean) map.get(stockCode);// 每日所有指数
 
 			// 解析每天股票指数
-			Stock stock = EqbQuantStockIndexDownloqdorHepler.resolve(stockService, dateIndexs);
+			Stock stock = EqbQuantStockDailyDownloqdorHepler.resolve(stockService, dateIndexs);
 
 			//更新股票信息、保存股票指数 
 			stockService.saveStockData(stock);
@@ -186,32 +186,32 @@ public class EqbQuantStockIndexDownloqdor {
 	/**
 	 * 修复股票指数
 	 */
-	public void repairStockIndex() {
+	public void repairStockDaily() {
 		boolean hasException = false;
 		// 取出所有股票
 		List<Stock> stocks = stockService.getAllStocks();
 
 		for (Stock stock : stocks) {// 取每支股
-			List<StockIndex> indexs = stockIndexService.getStockIndex(stock.getStockCode());
-			Collections.sort(indexs);
-			for (int i = 0; i < indexs.size(); i++) {// 取每支股指数
+			List<StockDaily> dailys = stockDailyService.getStockDaily(stock.getStockCode());
+			Collections.sort(dailys);
+			for (int i = 0; i < dailys.size(); i++) {// 取每支股指数
 				if (i == 0) {
 					continue;
 				}
 
-				StockIndex index = indexs.get(i);
-				StockIndex lastIndex = indexs.get(i - 1);
-				int diff = DateDiffUtil.getWorkDay(lastIndex.getDate(), index.getDate());
+				StockDaily daily = dailys.get(i);
+				StockDaily lastIndex = dailys.get(i - 1);
+				int diff = DateDiffUtil.getWorkDay(lastIndex.getDate(), daily.getDate());
 				//股票指数日期跳空。可能是接口问题，也可能是停牌
-				if (diff > 1 && index.getUpdated() == null) {
-					if (doRepair(stock, index, lastIndex)) {
+				if (diff > 1 && daily.getUpdated() == null) {
+					if (doRepair(stock, daily, lastIndex)) {
 						hasException = true;
 					}
 				}
 			}
 		}
 		if (hasException) {
-			repairStockIndex();
+			repairStockDaily();
 		}
 	}
 
@@ -219,33 +219,33 @@ public class EqbQuantStockIndexDownloqdor {
 	 * 更新服务指数
 	 * 
 	 * @param stock
-	 * @param index
+	 * @param daily
 	 * @param lastIndex
 	 */
-	private boolean doRepair(Stock stock, StockIndex index, StockIndex lastIndex) {
+	private boolean doRepair(Stock stock, StockDaily daily, StockDaily lastIndex) {
 		boolean hasException = false;
 		try {
-			List<StockIndex> repairIndexs = new ArrayList<StockIndex>();
+			List<StockDaily> repairIndexs = new ArrayList<StockDaily>();
 			boolean flag = true;
 			for (int j = 1; flag; j++) {
 				Date nextDate = DateUtil.addDay(lastIndex.getDate(), j);
-				log.info("stock index is exception, stock :" + stock.getStockCode() + " "
+				log.info("stock daily is exception, stock :" + stock.getStockCode() + " "
 						+ DateUtil.getDate(nextDate, "yyyy-MM-dd"));
 
-				StockIndex repairIndex = EqbQuantStockIndexDownloqdorHepler.getRepairStockIndexByExcel(stock.getExchange()
+				StockDaily repairIndex = EqbQuantStockDailyDownloqdorHepler.getRepairStockDailyByExcel(stock.getExchange()
 						+ stock.getStockCode(), nextDate);
 				if (repairIndex != null) {//这一天真没数据。即当天停牌
 					repairIndexs.add(repairIndex);
 				}
 
-				if (DateDiffUtil.getWorkDay(nextDate, index.getDate()) == 1) { //追平当前日期
+				if (DateDiffUtil.getWorkDay(nextDate, daily.getDate()) == 1) { //追平当前日期
 					flag = false;
 				}
 			}
-			stockIndexService.repairStockIndex(index, repairIndexs);
+			stockDailyService.repairStockDaily(daily, repairIndexs);
 		} catch (Exception e) {
 			hasException = true;
-			log.error("stock repair index error, stock :" + stock.getStockCode(), e);
+			log.error("stock repair daily error, stock :" + stock.getStockCode(), e);
 		}
 		return hasException;
 	}

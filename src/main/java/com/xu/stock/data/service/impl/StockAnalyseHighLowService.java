@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.data.dao.IStockDao;
-import com.xu.stock.data.dao.IStockIndexDao;
+import com.xu.stock.data.dao.IStockDailyDao;
 import com.xu.stock.data.model.Stock;
-import com.xu.stock.data.model.StockIndex;
+import com.xu.stock.data.model.StockDaily;
 import com.xu.stock.data.service.IStockAnalyseService;
 
 /**
@@ -35,9 +35,9 @@ public class StockAnalyseHighLowService implements IStockAnalyseService {
 	@Resource
 	private IStockDao stockDao;
 	@Resource
-	private IStockIndexDao stockIndexDao;
+	private IStockDailyDao stockDailyDao;
 
-	public List<StockIndex> analyse(Stock stock) {
+	public List<StockDaily> analyse(Stock stock) {
 		log.info("analyse stock code:" + stock.getStockCode());
 
 		return null;

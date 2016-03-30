@@ -22,7 +22,7 @@ public interface IStockTradeDao {
 	/**
 	 * 获取股票交易信息
 	 * 
-	 * @param index
+	 * @param stockCode
 	 * @return
 	 */
 	public List<StockTrade> getStockTrades(String stockCode);
@@ -30,7 +30,7 @@ public interface IStockTradeDao {
 	/**
 	 * 保存股票交易信息
 	 * 
-	 * @param stockIndexs
+	 * @param trades
 	 * @return
 	 */
 	public Integer saveStockTrades(List<StockTrade> trades);

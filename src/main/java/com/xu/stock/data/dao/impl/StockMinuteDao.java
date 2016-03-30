@@ -8,8 +8,8 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.winit.framework.dao.impl.BaseDao;
-import com.xu.stock.data.dao.IStockMinuteIndexDao;
-import com.xu.stock.data.model.StockMinuteIndex;
+import com.xu.stock.data.dao.IStockMinuteDao;
+import com.xu.stock.data.model.StockMinute;
 
 /**
  * 股票分时指数Dao实现
@@ -25,22 +25,22 @@ import com.xu.stock.data.model.StockMinuteIndex;
  * 
  * @since 1.
  */
-@Repository("stockMinuteIndexDao")
-public class StockMinuteIndexDao extends BaseDao<StockMinuteIndex> implements IStockMinuteIndexDao {
+@Repository("stockMinuteDao")
+public class StockMinuteDao extends BaseDao<StockMinute> implements IStockMinuteDao {
 
-	public final String SQL_GET_STOCK_MINUTE_INDEX = getNameSpace() + "getStockMinuteIndex";
-	public final String SQL_INSERT_STOCK_MINUTE_INDEX = getNameSpace() + "insertStockMinuteIndex";
+	public final String SQL_GET_STOCK_MINUTE_INDEX = getNameSpace() + "getStockMinute";
+	public final String SQL_INSERT_STOCK_MINUTE_INDEX = getNameSpace() + "insertStockMinute";
 
-	public Integer saveStockMinuteIndexs(List<StockMinuteIndex> stockIndexs) {
+	public Integer saveStockMinutes(List<StockMinute> stockMinutes) {
 		Integer result = 0;
-		for (StockMinuteIndex stockIndex : stockIndexs) {
-			getSqlSession().insert(SQL_INSERT_STOCK_MINUTE_INDEX, stockIndex);
+		for (StockMinute stockMinute : stockMinutes) {
+			getSqlSession().insert(SQL_INSERT_STOCK_MINUTE_INDEX, stockMinute);
 			result++;
 		}
 		return result;
 	}
 
-	public List<StockMinuteIndex> getStockMinuteIndexs(String stockCode, Date date) {
+	public List<StockMinute> getStockMinutes(String stockCode, Date date) {
 		Map<String, Object> paras = new HashMap<String, Object>();
 		paras.put("stockCode", stockCode);
 		paras.put("date", date);

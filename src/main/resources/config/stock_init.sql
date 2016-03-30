@@ -35,12 +35,12 @@ CREATE TABLE `t_stock` (
   KEY `index_stock_name` (`stock_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2864 DEFAULT CHARSET=utf8;
 
-/*Table structure for table `t_stock_index` */
+/*Table structure for table `t_stock_daily` */
 
-DROP TABLE IF EXISTS `t_stock_index`;
+DROP TABLE IF EXISTS `t_stock_daily`;
 
-CREATE TABLE `t_stock_index` (
-  `index_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '股票每日指数Id',
+CREATE TABLE `t_stock_daily` (
+  `daily_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '股票每日指数Id',
   `stock_id` int(11) DEFAULT NULL COMMENT '股票Id',
   `stock_code` char(6) DEFAULT NULL COMMENT '股票代码',
   `stock_name` varchar(10) DEFAULT NULL COMMENT '股票名称',
@@ -63,18 +63,18 @@ CREATE TABLE `t_stock_index` (
   `exrights` int(11) DEFAULT NULL COMMENT '除权比例',
   `created` datetime DEFAULT NULL COMMENT '创建日期',
   `updated` datetime DEFAULT NULL COMMENT '更新日期',
-  PRIMARY KEY (`index_id`),
+  PRIMARY KEY (`daily_id`),
   KEY `NewIndex1` (`stock_id`),
   KEY `NewIndex2` (`date`),
   KEY `index_stock_code` (`stock_code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5018584 DEFAULT CHARSET=utf8;
 
-/*Table structure for table `t_stock_minute_index` */
+/*Table structure for table `t_stock_minute` */
 
-DROP TABLE IF EXISTS `t_stock_minute_index`;
+DROP TABLE IF EXISTS `t_stock_minute`;
 
-CREATE TABLE `t_stock_minute_index` (
-  `index_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '股票分时指数Id',
+CREATE TABLE `t_stock_minute` (
+  `minute_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '股票分时指数Id',
   `stock_id` int(11) DEFAULT NULL COMMENT '股票Id',
   `stock_code` char(6) DEFAULT NULL COMMENT '股票代码',
   `date` date DEFAULT NULL COMMENT '日期',
@@ -83,7 +83,7 @@ CREATE TABLE `t_stock_minute_index` (
   `price` int(11) DEFAULT NULL COMMENT '当前价',
   `created` datetime DEFAULT NULL COMMENT '创建日期',
   `updated` datetime DEFAULT NULL COMMENT '更新日期',
-  PRIMARY KEY (`index_id`),
+  PRIMARY KEY (`minute_id`),
   KEY `NewIndex1` (`stock_id`),
   KEY `NewIndex2` (`date`),
   KEY `index_stock_code` (`stock_code`)

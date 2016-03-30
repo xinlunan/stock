@@ -2,7 +2,7 @@ package com.xu.stock.data.service;
 
 import java.util.List;
 
-import com.xu.stock.data.model.StockIndex;
+import com.xu.stock.data.model.StockDaily;
 
 /**
  * 股票指数Service
@@ -16,7 +16,7 @@ import com.xu.stock.data.model.StockIndex;
  * </pre>
  * @since 1.
  */
-public interface IStockIndexService {
+public interface IStockDailyService {
 
 	/**
 	 * 修复股票指数
@@ -24,9 +24,9 @@ public interface IStockIndexService {
 	 * 即删除index，插入repairIndexs
 	 * 
 	 * @param repairIndexs
-	 * @param index
+	 * @param daily
 	 */
-	public void repairStockIndex(StockIndex index, List<StockIndex> repairIndexs);
+	public void repairStockDaily(StockDaily daily, List<StockDaily> repairIndexs);
 
 	/**
 	 * 根据
@@ -34,5 +34,5 @@ public interface IStockIndexService {
 	 * @param stockCode
 	 * @return
 	 */
-	public List<StockIndex> getStockIndex(String stockCode);
+	public List<StockDaily> getStockDaily(String stockCode);
 }

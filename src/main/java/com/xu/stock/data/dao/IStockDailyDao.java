@@ -3,7 +3,7 @@ package com.xu.stock.data.dao;
 import java.util.Date;
 import java.util.List;
 
-import com.xu.stock.data.model.StockIndex;
+import com.xu.stock.data.model.StockDaily;
 
 /**
  * 股票指数Dao
@@ -14,18 +14,20 @@ import com.xu.stock.data.model.StockIndex;
  * Author     Version       Date        Changes
  * lunan.xu    1.0           2015-5-25     Created
  * 
- * </pre>
+ *          </pre>
+ * 
  * @since 1.
  */
-public interface IStockIndexDao {
+public interface IStockDailyDao {
 
 	/**
 	 * 获取股票指数
 	 * 
-	 * @param index
+	 * @param stockCode
+	 * @param date
 	 * @return
 	 */
-	public StockIndex getStockIndex(String stockCode, Date date);
+	public StockDaily getStockDaily(String stockCode, Date date);
 
 	/**
 	 * 根据股票编码获取股票指数
@@ -33,15 +35,15 @@ public interface IStockIndexDao {
 	 * @param stockCode
 	 * @return
 	 */
-	public List<StockIndex> getStockIndexs(String stockCode);
+	public List<StockDaily> getStockDailys(String stockCode);
 
 	/**
 	 * 保存股票指数
 	 * 
-	 * @param stockIndexs
+	 * @param stockDailys
 	 * @return
 	 */
-	public Integer saveStockIndexs(List<StockIndex> stockIndexs);
+	public Integer saveStockDailys(List<StockDaily> stockDailys);
 
 	/**
 	 * 更新股票指数日期
@@ -49,7 +51,7 @@ public interface IStockIndexDao {
 	 * @param stockCode
 	 * @param date
 	 */
-	public void updateStockIndex(StockIndex stockIndex);
+	public void updateStockDaily(StockDaily stockDaily);
 
 	/**
 	 * 删除股票指数
@@ -57,7 +59,7 @@ public interface IStockIndexDao {
 	 * @param stockCode
 	 * @param date
 	 */
-	public void deleteStockIndex(String stockCode, Date date);
+	public void deleteStockDaily(String stockCode, Date date);
 
 	/**
 	 * 获取上一天股票指数
@@ -66,6 +68,6 @@ public interface IStockIndexDao {
 	 * @param date
 	 * @return
 	 */
-	public StockIndex getLastStockIndex(String stockCode, Date date);
+	public StockDaily getLastStockDaily(String stockCode, Date date);
 
 }

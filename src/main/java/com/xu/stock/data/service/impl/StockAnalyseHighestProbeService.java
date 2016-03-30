@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.data.dao.IStockDao;
-import com.xu.stock.data.dao.IStockIndexDao;
+import com.xu.stock.data.dao.IStockDailyDao;
 import com.xu.stock.data.model.Stock;
-import com.xu.stock.data.model.StockIndex;
+import com.xu.stock.data.model.StockDaily;
 import com.xu.stock.data.service.IStockAnalyseService;
 import com.xu.stock.data.service.analyse.HighestProbeAnalyst;
 
@@ -23,15 +23,15 @@ public class StockAnalyseHighestProbeService implements IStockAnalyseService {
 	@Resource
 	private IStockDao stockDao;
 	@Resource
-	private IStockIndexDao stockIndexDao;
+	private IStockDailyDao stockDailyDao;
 
-	public List<StockIndex> analyse(Stock stock) {
+	public List<StockDaily> analyse(Stock stock) {
 		log.info("analyse stock code:" + stock.getStockCode());
 
-		List<StockIndex> indexs = stockIndexDao.getStockIndexs(stock.getStockCode());
+		List<StockDaily> dailys = stockDailyDao.getStockDailys(stock.getStockCode());
 
 		HighestProbeAnalyst probe = HighestProbeAnalyst.newInstance();
-		return probe.putStockIndexs(indexs);
+		return probe.putStockDailys(dailys);
 
 	}
 

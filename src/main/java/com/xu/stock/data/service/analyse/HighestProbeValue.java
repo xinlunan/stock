@@ -2,7 +2,7 @@ package com.xu.stock.data.service.analyse;
 
 import java.io.Serializable;
 
-import com.xu.stock.data.model.StockIndex;
+import com.xu.stock.data.model.StockDaily;
 
 /**
  * 最高点探测
@@ -20,19 +20,19 @@ import com.xu.stock.data.model.StockIndex;
 public class HighestProbeValue implements Serializable {
 	private static final long serialVersionUID = -7253656148791370045L;
 	/** 样本初始价 */
-	private StockIndex p1_FirstPrice;
+	private StockDaily p1_FirstPrice;
 	/** 上次最低价 */
-	private StockIndex p2_LastLowest;
+	private StockDaily p2_LastLowest;
 	/** 上次最高价 */
-	private StockIndex p3_LastHighest;
+	private StockDaily p3_LastHighest;
 	/** 这次最低价 */
-	private StockIndex p4_ThisLowest;
+	private StockDaily p4_ThisLowest;
 	/** 当前价 */
-	private StockIndex p5_CurrentPrice;
+	private StockDaily p5_CurrentPrice;
 	/** 预期临界最低价 */
-	private StockIndex p6_ExpectCriticalLow;
+	private StockDaily p6_ExpectCriticalLow;
 	/** 预期临界最高价 */
-	private StockIndex p7_ExpectCriticalHigh;
+	private StockDaily p7_ExpectCriticalHigh;
 	/** 上次波动周期 */
 	private Integer d1_LastWaveCycle = 0;
 	/** 本次波动周期 */
@@ -46,59 +46,59 @@ public class HighestProbeValue implements Serializable {
 	/** 最佳相差幅度缓冲范围 */
 	private Integer f4_ExpectCriticalBufferRate = 0;
 
-	public StockIndex getP1_FirstPrice() {
+	public StockDaily getP1_FirstPrice() {
 		return p1_FirstPrice;
 	}
 
-	public void setP1_FirstPrice(StockIndex p1_FirstPrice) {
+	public void setP1_FirstPrice(StockDaily p1_FirstPrice) {
 		this.p1_FirstPrice = p1_FirstPrice;
 	}
 
-	public StockIndex getP2_LastLowest() {
+	public StockDaily getP2_LastLowest() {
 		return p2_LastLowest;
 	}
 
-	public void setP2_LastLowest(StockIndex p2_LastLowest) {
+	public void setP2_LastLowest(StockDaily p2_LastLowest) {
 		this.p2_LastLowest = p2_LastLowest;
 	}
 
-	public StockIndex getP3_LastHighest() {
+	public StockDaily getP3_LastHighest() {
 		return p3_LastHighest;
 	}
 
-	public void setP3_LastHighest(StockIndex p3_LastHighest) {
+	public void setP3_LastHighest(StockDaily p3_LastHighest) {
 		this.p3_LastHighest = p3_LastHighest;
 	}
 
-	public StockIndex getP4_ThisLowest() {
+	public StockDaily getP4_ThisLowest() {
 		return p4_ThisLowest;
 	}
 
-	public void setP4_ThisLowest(StockIndex p4_ThisLowest) {
+	public void setP4_ThisLowest(StockDaily p4_ThisLowest) {
 		this.p4_ThisLowest = p4_ThisLowest;
 	}
 
-	public StockIndex getP5_CurrentPrice() {
+	public StockDaily getP5_CurrentPrice() {
 		return p5_CurrentPrice;
 	}
 
-	public void setP5_CurrentPrice(StockIndex p5_CurrentPrice) {
+	public void setP5_CurrentPrice(StockDaily p5_CurrentPrice) {
 		this.p5_CurrentPrice = p5_CurrentPrice;
 	}
 
-	public StockIndex getP6_ExpectCriticalLow() {
+	public StockDaily getP6_ExpectCriticalLow() {
 		return p6_ExpectCriticalLow;
 	}
 
-	public void setP6_ExpectCriticalLow(StockIndex p6_ExpectCriticalLow) {
+	public void setP6_ExpectCriticalLow(StockDaily p6_ExpectCriticalLow) {
 		this.p6_ExpectCriticalLow = p6_ExpectCriticalLow;
 	}
 
-	public StockIndex getP7_ExpectCriticalHigh() {
+	public StockDaily getP7_ExpectCriticalHigh() {
 		return p7_ExpectCriticalHigh;
 	}
 
-	public void setP7_ExpectCriticalHigh(StockIndex p7_ExpectCriticalHigh) {
+	public void setP7_ExpectCriticalHigh(StockDaily p7_ExpectCriticalHigh) {
 		this.p7_ExpectCriticalHigh = p7_ExpectCriticalHigh;
 	}
 

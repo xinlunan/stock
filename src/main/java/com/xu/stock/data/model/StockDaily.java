@@ -6,11 +6,11 @@ import java.util.Date;
 /**
  * @author lunan.xu 股票每日指数
  */
-public class StockIndex implements Serializable, Comparable<StockIndex> {
+public class StockDaily implements Serializable, Comparable<StockDaily> {
 	private static final long serialVersionUID = 2643489463991553829L;
 
 	// 股票每日指数Id
-	private Long indexId;
+	private Long dailyId;
 	// 股票Id
 	private Integer stockId;
 	// 股票代码
@@ -64,12 +64,12 @@ public class StockIndex implements Serializable, Comparable<StockIndex> {
 		this.exrights = exrights;
 	}
 
-	public Long getIndexId() {
-		return indexId;
+	public Long getDailyId() {
+		return dailyId;
 	}
 
-	public void setIndexId(Long indexId) {
-		this.indexId = indexId;
+	public void setDailyId(Long dailyId) {
+		this.dailyId = dailyId;
 	}
 
 	public Integer getStockId() {
@@ -242,7 +242,7 @@ public class StockIndex implements Serializable, Comparable<StockIndex> {
 
 	@Override
 	public String toString() {
-		return "StockIndex [indexId=" + indexId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", stockName="
+		return "StockDaily [dailyId=" + dailyId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", stockName="
 				+ stockName + ", date=" + date + ", lastClose=" + lastClose + ", open=" + open + ", close=" + close
 				+ ", closeGap=" + closeGap + ", closeGapRate=" + closeGapRate + ", high=" + high + ", low=" + low
 				+ ", highGap=" + highGap + ", highGapRate=" + highGapRate + ", lowGap=" + lowGap + ", lowGapRate="
@@ -250,8 +250,8 @@ public class StockIndex implements Serializable, Comparable<StockIndex> {
 				+ ", updated=" + updated + ", isExrights=" + isExrights + ", exrights=" + exrights + "]";
 	}
 
-	public int compareTo(StockIndex stockIndex) {
-		return this.getDate().compareTo(stockIndex.getDate());
+	public int compareTo(StockDaily stockDaily) {
+		return this.getDate().compareTo(stockDaily.getDate());
 	}
 
 }
