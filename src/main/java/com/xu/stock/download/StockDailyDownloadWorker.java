@@ -1,4 +1,4 @@
-package com.xu.stock.data.service;
+package com.xu.stock.download;
 
 import java.util.Date;
 import java.util.List;
@@ -7,7 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.xu.stock.data.model.Stock;
-import com.xu.stock.data.service.downloador.SinaStockDailyDownloador;
+import com.xu.stock.data.service.IStockService;
+import com.xu.stock.download.downloador.SinaStockDailyDownloador;
 import com.xu.util.DateUtil;
 
 /**
@@ -24,8 +25,8 @@ import com.xu.util.DateUtil;
  * 
  * @since 1.
  */
-public class StockDailyWorker extends Thread {
-	protected static Logger log = LoggerFactory.getLogger(StockDailyWorker.class);
+public class StockDailyDownloadWorker extends Thread {
+	protected static Logger log = LoggerFactory.getLogger(StockDailyDownloadWorker.class);
 
 	List<Stock> stocks;
 	IStockService stockService;

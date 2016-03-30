@@ -1,4 +1,4 @@
-package com.xu.stock.data.service.impl;
+package com.xu.stock.download.downloador;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +26,7 @@ import com.xu.util.DateUtil;
  * 
  * @since 1.
  */
-public class StockServiceHelper {
+public class StockDownloadHelper {
 
 	public static final String DATE_PARRTEN_YYYY_MM_DD = "yyyy-MM-dd";
 	public static final String DATE_PARRTEN_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
@@ -68,8 +68,8 @@ public class StockServiceHelper {
 
 	protected boolean isUpdated(Date lastDate) {
 		Date currentDate = new Date();
-		int diff = DateDiffUtil.getWorkDay(DateUtil.date2String(lastDate, StockServiceHelper.DATE_PARRTEN_YYYY_MM_DD),
-				DateUtil.date2String(currentDate, StockServiceHelper.DATE_PARRTEN_YYYY_MM_DD));
+		int diff = DateDiffUtil.getWorkDay(DateUtil.date2String(lastDate, StockDownloadHelper.DATE_PARRTEN_YYYY_MM_DD),
+				DateUtil.date2String(currentDate, StockDownloadHelper.DATE_PARRTEN_YYYY_MM_DD));
 		return diff > 0;
 	}
 

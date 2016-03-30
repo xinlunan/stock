@@ -1,4 +1,4 @@
-package com.xu.stock.data.service.analyse;
+package com.xu.stock.analyse.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.xu.stock.data.model.StockDaily;
-import com.xu.stock.data.service.IStockAnalyst;
 import com.xu.util.DateUtil;
 
 /**

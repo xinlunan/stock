@@ -1,4 +1,4 @@
-package com.xu.stock.data.service;
+package com.xu.stock.analyse.service;
 
 import java.util.List;
 

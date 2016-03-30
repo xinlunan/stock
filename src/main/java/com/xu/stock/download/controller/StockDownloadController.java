@@ -1,4 +1,4 @@
-package com.xu.stock.data.controller;
+package com.xu.stock.download.controller;
 
 import java.util.List;
 
@@ -8,10 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.xu.stock.StockApiConstant;
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.service.IStockService;
-import com.xu.stock.data.service.impl.StockServiceHelper;
+import com.xu.stock.download.downloador.StockApiConstant;
+import com.xu.stock.download.downloador.StockDownloadHelper;
 import com.xu.util.HttpClientHandle;
 
 /**
@@ -27,9 +27,9 @@ import com.xu.util.HttpClientHandle;
  * @since 1.
  */
 @SuppressWarnings("restriction")
-@Service("stockController")
-public class StockController {
-	static Logger log = LoggerFactory.getLogger(StockController.class);
+@Service("stockDownloadController")
+public class StockDownloadController {
+	static Logger log = LoggerFactory.getLogger(StockDownloadController.class);
 
 	@Resource
 	private IStockService stockService;
@@ -39,7 +39,7 @@ public class StockController {
 		String jsonStr = HttpClientHandle.get(StockApiConstant.EqbQuant.API_URL_GET_ALL_STOCKS);
 
 		//封装股票对象
-		List<Stock> stocks = StockServiceHelper.converStocks(jsonStr);
+		List<Stock> stocks = StockDownloadHelper.converStocks(jsonStr);
 
 		//插入到数据库
 		Integer result = stockService.insertStocks(stocks);

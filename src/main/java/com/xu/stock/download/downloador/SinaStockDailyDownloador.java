@@ -1,4 +1,4 @@
-package com.xu.stock.data.service.downloador;
+package com.xu.stock.download.downloador;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,10 +14,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.xu.stock.StockApiConstant;
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.model.StockDaily;
-import com.xu.stock.data.service.impl.StockServiceHelper;
+import com.xu.stock.download.downloador.StockApiConstant.Sina;
 import com.xu.util.DateUtil;
 import com.xu.util.DocumentUtil;
 import com.xu.util.HttpClientHandle;
@@ -148,10 +147,10 @@ public class SinaStockDailyDownloador {
 					Node dateNode = dateNodes.getLength() > 1 ? dateNodes.item(1) : dateNodes.item(0);
 					String date = StringUtil.replaceBlank(dateNode.getTextContent());
 
-					Integer open = NumberUtil.mul(dailyNodes.item(3).getTextContent(), StockServiceHelper.STR_100);
-					Integer high = NumberUtil.mul(dailyNodes.item(5).getTextContent(), StockServiceHelper.STR_100);
-					Integer close = NumberUtil.mul(dailyNodes.item(7).getTextContent(), StockServiceHelper.STR_100);
-					Integer low = NumberUtil.mul(dailyNodes.item(9).getTextContent(), StockServiceHelper.STR_100);
+					Integer open = NumberUtil.mul(dailyNodes.item(3).getTextContent(), StockDownloadHelper.STR_100);
+					Integer high = NumberUtil.mul(dailyNodes.item(5).getTextContent(), StockDownloadHelper.STR_100);
+					Integer close = NumberUtil.mul(dailyNodes.item(7).getTextContent(), StockDownloadHelper.STR_100);
+					Integer low = NumberUtil.mul(dailyNodes.item(9).getTextContent(), StockDownloadHelper.STR_100);
 					String volume = dailyNodes.item(11).getTextContent();
 					String amount = dailyNodes.item(13).getTextContent();
 
