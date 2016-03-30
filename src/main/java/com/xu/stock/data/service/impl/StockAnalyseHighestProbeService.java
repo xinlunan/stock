@@ -14,35 +14,25 @@ import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.model.StockIndex;
 import com.xu.stock.data.service.IStockAnalyseService;
 import com.xu.stock.data.service.analyse.HighestProbeAnalyst;
-import com.xu.util.DateUtil;
 
 @SuppressWarnings("restriction")
 @Service("stockAnalyseHighestProbeService")
 public class StockAnalyseHighestProbeService implements IStockAnalyseService {
-	protected static Logger log = LoggerFactory.getLogger(StockAnalyseHighLowService.class);
+	protected static Logger log = LoggerFactory.getLogger(StockAnalyseHighestProbeService.class);
 
 	@Resource
 	private IStockDao stockDao;
 	@Resource
 	private IStockIndexDao stockIndexDao;
 
-	public int analyse(Stock stock) {
+	public List<StockIndex> analyse(Stock stock) {
 		log.info("analyse stock code:" + stock.getStockCode());
 
-		HighestProbeAnalyst probe = HighestProbeAnalyst.newInstance();
-
 		List<StockIndex> indexs = stockIndexDao.getStockIndexs(stock.getStockCode());
-		for (StockIndex stockIndex : indexs) {
-			probe.putStockIndex(stockIndex);
-		}
 
-		List<StockIndex> points = probe.getBuyPoints();
+		HighestProbeAnalyst probe = HighestProbeAnalyst.newInstance();
+		return probe.putStockIndexs(indexs);
 
-		for (StockIndex stockIndex : points) {
-			log.info(stock.getStockCode() + "适合购入点：" + DateUtil.date2String(stockIndex.getDate()));
-		}
-
-		return points.size();
 	}
 
 }

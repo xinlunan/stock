@@ -1,6 +1,9 @@
 package com.xu.stock.data.service;
 
+import java.util.List;
+
 import com.xu.stock.data.model.Stock;
+import com.xu.stock.data.model.StockIndex;
 
 /**
  * 股票分析service接口
@@ -22,6 +25,6 @@ public interface IStockAnalyseService {
 	 * 
 	 * @return
 	 */
-	public int analyse(Stock stock);
+	public List<StockIndex> analyse(Stock stock);
 
 }

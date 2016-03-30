@@ -24,23 +24,19 @@ public class HighestProbeConfig implements Serializable {
 	private Integer d1_LastWaveCycle;
 	/** 本次波动周期 */
 	private Integer d2_ThisWaveCycle;
-	/** 上次增长幅度 */
-	private Integer f1_LastRoseRate;
 	/** 这次下跌幅度 */
-	private Integer f2_ThisFallRate;
+	private Integer f1_ThisFallRate;
+	/** 上次增长幅度 */
+	private Integer f2_WarnRateHigh;
 	/** 离最高价最佳相差幅度 */
-	private Integer f3_ExpectCriticalRate;
-	/** 最佳相差幅度缓冲范围 */
-	private Integer f4_ExpectCriticalBufferRate;
+	private Integer f3_WarnRateLow;
 
 	public HighestProbeConfig() {
 		d1_LastWaveCycle = AppPropertyHandle.getInt("stock.analyse.highest.probe.config.d1_LastWaveCycle");
 		d2_ThisWaveCycle = AppPropertyHandle.getInt("stock.analyse.highest.probe.config.d2_ThisWaveCycle");
-		f1_LastRoseRate = AppPropertyHandle.getInt("stock.analyse.highest.probe.config.f1_LastRoseRate");
-		f2_ThisFallRate = AppPropertyHandle.getInt("stock.analyse.highest.probe.config.f2_ThisFallRate");
-		f3_ExpectCriticalRate = AppPropertyHandle.getInt("stock.analyse.highest.probe.config.f3_ExpectCriticalRate");
-		f4_ExpectCriticalBufferRate = AppPropertyHandle
-				.getInt("stock.analyse.highest.probe.config.f4_ExpectCriticalBufferRate");
+		f1_ThisFallRate = AppPropertyHandle.getInt("stock.analyse.highest.probe.config.f1_ThisFallRate");
+		f2_WarnRateHigh = AppPropertyHandle.getInt("stock.analyse.highest.probe.config.f2_WarnRateHigh");
+		f3_WarnRateLow = AppPropertyHandle.getInt("stock.analyse.highest.probe.config.f3_WarnRateLow");
 	}
 
 	public Integer getD1_LastWaveCycle() {
@@ -59,36 +55,32 @@ public class HighestProbeConfig implements Serializable {
 		this.d2_ThisWaveCycle = d2_ThisWaveCycle;
 	}
 
-	public Integer getF1_LastRoseRate() {
-		return f1_LastRoseRate;
+	public Integer getF1_ThisFallRate() {
+		return f1_ThisFallRate;
 	}
 
-	public void setF1_LastRoseRate(Integer f1_LastRoseRate) {
-		this.f1_LastRoseRate = f1_LastRoseRate;
+	public void setF1_ThisFallRate(Integer f1_ThisFallRate) {
+		this.f1_ThisFallRate = f1_ThisFallRate;
 	}
 
-	public Integer getF2_ThisFallRate() {
-		return f2_ThisFallRate;
+	public Integer getF2_WarnRateHigh() {
+		return f2_WarnRateHigh;
 	}
 
-	public void setF2_ThisFallRate(Integer f2_ThisFallRate) {
-		this.f2_ThisFallRate = f2_ThisFallRate;
+	public void setF2_WarnRateHigh(Integer f2_WarnRateHigh) {
+		this.f2_WarnRateHigh = f2_WarnRateHigh;
 	}
 
-	public Integer getF3_ExpectCriticalRate() {
-		return f3_ExpectCriticalRate;
+	public Integer getF3_WarnRateLow() {
+		return f3_WarnRateLow;
 	}
 
-	public void setF3_ExpectCriticalRate(Integer f3_ExpectCriticalRate) {
-		this.f3_ExpectCriticalRate = f3_ExpectCriticalRate;
+	public void setF3_WarnRateLow(Integer f3_WarnRateLow) {
+		this.f3_WarnRateLow = f3_WarnRateLow;
 	}
 
-	public Integer getF4_ExpectCriticalBufferRate() {
-		return f4_ExpectCriticalBufferRate;
-	}
-
-	public void setF4_ExpectCriticalBufferRate(Integer f4_ExpectCriticalBufferRate) {
-		this.f4_ExpectCriticalBufferRate = f4_ExpectCriticalBufferRate;
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 }

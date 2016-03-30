@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.xu.stock.data.model.Stock;
+import com.xu.stock.data.model.StockIndex;
+import com.xu.util.DateUtil;
 
 public class StockAnalyseWorker extends Thread {
 	protected static Logger log = LoggerFactory.getLogger(StockAnalyseWorker.class);
@@ -20,7 +22,11 @@ public class StockAnalyseWorker extends Thread {
 		for (Stock stock : stocks) {
 
 			try {
-				stockAnalyseService.analyse(stock);
+				List<StockIndex> points = stockAnalyseService.analyse(stock);
+
+				for (StockIndex stockIndex : points) {
+					log.info(stock.getStockCode() + " buy point：" + DateUtil.date2String(stockIndex.getDate()));
+				}
 
 			} catch (Exception e) {
 				log.error("stock fetch index error stock :" + stock.getStockCode(), e);

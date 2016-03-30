@@ -42,7 +42,7 @@
 		<jetty.version>7.6.14.v20131031</jetty.version>
 		<joda-time.version>2.5</joda-time.version>
 		<jolokia.version>1.1.5</jolokia.version>
-		<junit.version>4.11</junit.version>
+		<junit.version>4.12</junit.version>
 		<jmockit_version>0.999.8</jmockit_version>
 		<log4j.version>2.4.1</log4j.version>
 		<logback.version>1.1.1</logback.version>
