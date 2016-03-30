@@ -37,7 +37,7 @@ public class Stock implements Serializable, Comparable<Stock> {
 	// 更新日期
 	private Date updated;
 
-	private List<StockIndex> stockIndexs;
+	private List<StockDaily> stockDailys;
 
 	public Integer getStockId() {
 		return stockId;
@@ -111,12 +111,12 @@ public class Stock implements Serializable, Comparable<Stock> {
 		this.updated = updated;
 	}
 
-	public void setStockIndexs(List<StockIndex> stockIndexs) {
-		this.stockIndexs = stockIndexs;
+	public void setStockDailys(List<StockDaily> stockDailys) {
+		this.stockDailys = stockDailys;
 	}
 
-	public List<StockIndex> getStockIndexs() {
-		return stockIndexs;
+	public List<StockDaily> getStockDailys() {
+		return stockDailys;
 	}
 
 	public int compareTo(Stock stock) {

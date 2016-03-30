@@ -16,11 +16,11 @@ import java.util.Date;
  * 
  * @since 1.
  */
-public class StockMinuteIndex implements Serializable {
+public class StockMinute implements Serializable {
 	private static final long serialVersionUID = -352228891672124416L;
 
 	// 股票每分钟指数Id
-	private Long indexId;
+	private Long minuteId;
 	// 股票Id
 	private Integer stockId;
 	// 股票代码
@@ -38,12 +38,12 @@ public class StockMinuteIndex implements Serializable {
 	// 更新日期
 	private Date updated;
 
-	public Long getIndexId() {
-		return indexId;
+	public Long getMinuteId() {
+		return minuteId;
 	}
 
-	public void setIndexId(Long indexId) {
-		this.indexId = indexId;
+	public void setMinuteId(Long minuteId) {
+		this.minuteId = minuteId;
 	}
 
 	public Integer getStockId() {
@@ -116,7 +116,7 @@ public class StockMinuteIndex implements Serializable {
 
 	@Override
 	public String toString() {
-		return "StockMinuteIndex [indexId=" + indexId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", date="
+		return "StockMinute [minuteId=" + minuteId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", date="
 				+ date + ", hour=" + hour + ", minute=" + minute + ", price=" + price + ", created=" + created
 				+ ", updated=" + updated + "]";
 	}

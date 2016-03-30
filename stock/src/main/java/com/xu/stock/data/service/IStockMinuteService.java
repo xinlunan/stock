@@ -3,7 +3,7 @@ package com.xu.stock.data.service;
 import java.util.Date;
 import java.util.List;
 
-import com.xu.stock.data.model.StockMinuteIndex;
+import com.xu.stock.data.model.StockMinute;
 
 /**
  * 股票指数Service
@@ -18,7 +18,7 @@ import com.xu.stock.data.model.StockMinuteIndex;
  * 
  * @since 1.
  */
-public interface IStockMinuteIndexService {
+public interface IStockMinuteService {
 
 	/**
 	 * 根据
@@ -26,7 +26,7 @@ public interface IStockMinuteIndexService {
 	 * @param stockCode
 	 * @return
 	 */
-	public List<StockMinuteIndex> getStockMinuteIndexs(String stockCode, Date date);
+	public List<StockMinute> getStockMinutes(String stockCode, Date date);
 
 	/**
 	 * 根据
@@ -34,5 +34,5 @@ public interface IStockMinuteIndexService {
 	 * @param stockCode
 	 * @return
 	 */
-	public void saveStockMinuteIndexs(List<StockMinuteIndex> stockMinuteIndexs);
+	public void saveStockMinutes(List<StockMinute> stockMinutes);
 }

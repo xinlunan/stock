@@ -3,7 +3,7 @@ package com.xu.stock.data.dao;
 import java.util.Date;
 import java.util.List;
 
-import com.xu.stock.data.model.StockMinuteIndex;
+import com.xu.stock.data.model.StockMinute;
 
 /**
  * 股票分时指数Dao
@@ -18,22 +18,23 @@ import com.xu.stock.data.model.StockMinuteIndex;
  * 
  * @since 1.
  */
-public interface IStockMinuteIndexDao {
+public interface IStockMinuteDao {
 
 	/**
 	 * 获取股票指数
 	 * 
-	 * @param index
+	 * @param stockCode
+	 * @param date
 	 * @return
 	 */
-	public List<StockMinuteIndex> getStockMinuteIndexs(String stockCode, Date date);
+	public List<StockMinute> getStockMinutes(String stockCode, Date date);
 
 	/**
 	 * 保存股票指数
 	 * 
-	 * @param stockIndexs
+	 * @param stockMinutes
 	 * @return
 	 */
-	public Integer saveStockMinuteIndexs(List<StockMinuteIndex> stockIndexs);
+	public Integer saveStockMinutes(List<StockMinute> stockMinutes);
 
 }

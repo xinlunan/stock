@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.xu.stock.data.model.Stock;
-import com.xu.stock.data.service.downloador.SinaStockIndexDownloador;
+import com.xu.stock.data.service.downloador.SinaStockDailyDownloador;
 import com.xu.util.DateUtil;
 
 /**
@@ -24,23 +24,23 @@ import com.xu.util.DateUtil;
  * 
  * @since 1.
  */
-public class StockIndexWorker extends Thread {
-	protected static Logger log = LoggerFactory.getLogger(StockIndexWorker.class);
+public class StockDailyWorker extends Thread {
+	protected static Logger log = LoggerFactory.getLogger(StockDailyWorker.class);
 
 	List<Stock> stocks;
 	IStockService stockService;
 
 	public void run() {
-		log.info("StockIndexWorker run size" + stocks.size());
+		log.info("StockDailyWorker run size" + stocks.size());
 
 		for (Stock stock : stocks) {// 抓取每支股票指数
 			try {
 				if (hasValidDay(stock.getLastDate())) {// 存在有效日期
-					downloadStockIndex(stock);
+					downloadStockDaily(stock);
 				}
 
 			} catch (Exception e) {
-				log.error("stock fetch index error stock :" + stock.getStockCode(), e);
+				log.error("stock fetch daily error stock :" + stock.getStockCode(), e);
 			}
 		}
 	}
@@ -72,10 +72,10 @@ public class StockIndexWorker extends Thread {
 	 * 
 	 * @param stock
 	 */
-	private void downloadStockIndex(Stock stock) {
+	private void downloadStockDaily(Stock stock) {
 		log.info("初始化数据:" + stock.getStockCode());
 
-		Stock stockData = SinaStockIndexDownloador.download(stock);
+		Stock stockData = SinaStockDailyDownloador.download(stock);
 
 		stockService.saveStockData(stockData);
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.xu.stock.data.model.StockMinuteIndex">
+<mapper namespace="com.xu.stock.data.model.StockMinute">
 
-	<resultMap type="com.xu.stock.data.model.StockMinuteIndex" id="StockMinuteIndex">
-		<id property="indexId" column="index_id"></id>
+	<resultMap type="com.xu.stock.data.model.StockMinute" id="StockMinute">
+		<id property="minuteId" column="minute_id"></id>
 		<id property="stockId" column="stock_id"></id>
 		<id property="stockCode" column="stock_code"></id>
 		<id property="date" column="date"></id>
@@ -14,14 +14,14 @@
 		<id property="updated" column="updated"></id>
 	</resultMap>
 	
-	<select id="getStockMinuteIndex" resultMap="StockMinuteIndex">
-		SELECT index_id, stock_id, stock_code, date, hour, minute, price, created, updated
-	 	FROM t_stock_minute_index 
+	<select id="getStockMinute" resultMap="StockMinute">
+		SELECT minute_id, stock_id, stock_code, date, hour, minute, price, created, updated
+	 	FROM t_stock_minute 
 	 	WHERE stock_id=#{stockId} and date=#{date};
 	</select>
 
-	<insert id="insertStockMinuteIndex" flushCache="true">
-		INSERT INTO t_stock_index (stock_id, stock_code, date, hour, minute, price, created, updated)
+	<insert id="insertStockMinute" flushCache="true">
+		INSERT INTO t_stock_minute (stock_id, stock_code, date, hour, minute, price, created, updated)
 		VALUES (#{stockId}, #{stockCode}, #{date}, #{hour}, #{minute}, #{price}, sysdate(), sysdate());
 	</insert>
 	

@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 import org.junit.Test;
 
 import com.xu.stock.data.controller.StockController;
-import com.xu.stock.data.service.downloador.EqbQuantStockIndexDownloqdor;
+import com.xu.stock.data.service.downloador.EqbQuantStockDailyDownloqdor;
 import com.xu.test.BaseTestCase;
 
 /**
@@ -34,7 +34,7 @@ public class StockInitialize extends BaseTestCase {
 	@Resource
 	private StockController stockController;
 	@Resource
-	private EqbQuantStockIndexDownloqdor stockIndexController;
+	private EqbQuantStockDailyDownloqdor stockDailyController;
 
 	/**
 	 * 获取股票指数启动命令
@@ -54,9 +54,9 @@ public class StockInitialize extends BaseTestCase {
 	 * 获取股票指数启动命令
 	 */
 	@Test
-	public void initStockIndex() {
+	public void initStockDaily() {
 		log.info("开始初始化股票指数...");
-		stockIndexController.initStockIndex();
+		stockDailyController.initStockDaily();
 		log.info("获取股票指数完成.");
 	}
 
@@ -64,9 +64,9 @@ public class StockInitialize extends BaseTestCase {
 	 * 更新股票指数启动命令
 	 */
 	@Test
-	public void updateStockIndex() {
+	public void updateStockDaily() {
 		log.info("开始更新股票指数...");
-		stockIndexController.updateStockIndex();
+		stockDailyController.updateStockDaily();
 		log.info("更新股票指数完成.");
 	}
 
@@ -77,9 +77,9 @@ public class StockInitialize extends BaseTestCase {
 	 * 
 	 */
 	@Test
-	public void repairStockIndex() {
+	public void repairStockDaily() {
 		log.info("开始修复股票指数...");
-		stockIndexController.repairStockIndex();
+		stockDailyController.repairStockDaily();
 		log.info("更新修复股票指数.");
 	}
 

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.service.IStockService;
-import com.xu.stock.data.service.StockIndexWorker;
+import com.xu.stock.data.service.StockDailyWorker;
 import com.xu.util.CollectionUtil;
 import com.xu.util.ThreadUtil;
 
@@ -29,9 +29,9 @@ import com.xu.util.ThreadUtil;
  * @since 1.
  */
 @SuppressWarnings("restriction")
-@Service("stockIndexController")
-public class StockIndexController {
-	protected static Logger log = LoggerFactory.getLogger(StockIndexController.class);
+@Service("stockDailyController")
+public class StockDailyController {
+	protected static Logger log = LoggerFactory.getLogger(StockDailyController.class);
 
 	@Resource
 	private IStockService stockService;
@@ -39,14 +39,14 @@ public class StockIndexController {
 	/**
 	 * 下载股票交易数据
 	 */
-	public void downloadStockIndex(int threads) {
+	public void downloadStockDaily(int threads) {
 		List<Stock> stocks = stockService.getAllStocks();
 
 		List<List<Stock>> stockGroups = CollectionUtil.subListByPages(stocks, threads);
 
 		List<Runnable> workers = new ArrayList<Runnable>();
 		for (List<Stock> subStocks : stockGroups) {
-			StockIndexWorker worker = new StockIndexWorker();
+			StockDailyWorker worker = new StockDailyWorker();
 			worker.setStocks(subStocks);
 			worker.setStockService(stockService);
 			worker.start();

@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.xu.stock.data.model.Stock;
-import com.xu.stock.data.model.StockIndex;
+import com.xu.stock.data.model.StockDaily;
 import com.xu.util.DateUtil;
 
 public class StockAnalyseWorker extends Thread {
@@ -17,19 +17,19 @@ public class StockAnalyseWorker extends Thread {
 	IStockAnalyseService stockAnalyseService;
 
 	public void run() {
-		log.info("StockIndexWorker run size" + stocks.size());
+		log.info("StockDailyWorker run size" + stocks.size());
 
 		for (Stock stock : stocks) {
 
 			try {
-				List<StockIndex> points = stockAnalyseService.analyse(stock);
+				List<StockDaily> points = stockAnalyseService.analyse(stock);
 
-				for (StockIndex stockIndex : points) {
-					log.info(stock.getStockCode() + " buy point：" + DateUtil.date2String(stockIndex.getDate()));
+				for (StockDaily stockDaily : points) {
+					log.info(stock.getStockCode() + " buy point：" + DateUtil.date2String(stockDaily.getDate()));
 				}
 
 			} catch (Exception e) {
-				log.error("stock fetch index error stock :" + stock.getStockCode(), e);
+				log.error("stock fetch daily error stock :" + stock.getStockCode(), e);
 			}
 		}
 

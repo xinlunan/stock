@@ -3,7 +3,7 @@ package com.xu.stock.data.service;
 import java.util.List;
 
 import com.xu.stock.data.model.Stock;
-import com.xu.stock.data.model.StockIndex;
+import com.xu.stock.data.model.StockDaily;
 
 /**
  * 股票分析service接口
@@ -25,6 +25,6 @@ public interface IStockAnalyseService {
 	 * 
 	 * @return
 	 */
-	public List<StockIndex> analyse(Stock stock);
+	public List<StockDaily> analyse(Stock stock);
 
 }
