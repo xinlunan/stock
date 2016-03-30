@@ -89,6 +89,31 @@ CREATE TABLE `t_stock_minute_index` (
   KEY `index_stock_code` (`stock_code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5018584 DEFAULT CHARSET=utf8;
 
+/*Table structure for table `t_stock_trade` */
+
+DROP TABLE IF EXISTS `t_stock_trade`;
+
+CREATE TABLE `t_stock_trade` (
+  `trade_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '股票交易Id',
+  `stock_id` int(11) DEFAULT NULL COMMENT '股票Id',
+  `stock_code` char(6) DEFAULT NULL COMMENT '股票代码',
+  `stock_name` varchar(10) DEFAULT NULL COMMENT '股票名称',
+  `date` date DEFAULT NULL COMMENT '日期',
+  `hour` int(11) DEFAULT NULL COMMENT '小时',
+  `minute` int(11) DEFAULT NULL COMMENT '分钟',
+  `price` int(11) DEFAULT NULL COMMENT '当前价',
+  `trade_type` varchar(10) DEFAULT NULL COMMENT '交易类型：BUY,SELL',
+  `trade_nature` varchar(10) DEFAULT NULL COMMENT '交易性质：REAL,VIRTUAL',
+  `strategy` varchar(50) DEFAULT NULL COMMENT '策略',
+  `parameters` varchar(500) DEFAULT NULL COMMENT '策略参数',
+  `created` datetime DEFAULT NULL COMMENT '创建日期',
+  `updated` datetime DEFAULT NULL COMMENT '更新日期',
+  PRIMARY KEY (`trade_id`),
+  KEY `NewIndex1` (`stock_id`),
+  KEY `NewIndex2` (`date`),
+  KEY `index_stock_code` (`stock_code`)
+) ENGINE=InnoDB AUTO_INCREMENT=5018584 DEFAULT CHARSET=utf8;
+
 /*Table structure for table `t_sys_config` */
 
 DROP TABLE IF EXISTS `t_sys_config`;
