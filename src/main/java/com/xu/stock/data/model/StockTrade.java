@@ -37,6 +37,8 @@ public class StockTrade implements Serializable {
 	private Integer price;
 	// 交易类型
 	private String tradeType;
+	// 交易性质
+	private String tradeNature;
 	// 策略
 	private String strategy;
 	// 参数
@@ -118,6 +120,14 @@ public class StockTrade implements Serializable {
 		this.tradeType = tradeType;
 	}
 
+	public String getTradeNature() {
+		return tradeNature;
+	}
+
+	public void setTradeNature(String tradeNature) {
+		this.tradeNature = tradeNature;
+	}
+
 	public String getStrategy() {
 		return strategy;
 	}
@@ -158,8 +168,8 @@ public class StockTrade implements Serializable {
 	public String toString() {
 		return "StockTrade [tradeId=" + tradeId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", stockName="
 				+ stockName + ", date=" + date + ", hour=" + hour + ", minute=" + minute + ", price=" + price
-				+ ", tradeType=" + tradeType + ", strategy=" + strategy + ", parameters=" + parameters + ", created="
-				+ created + ", updated=" + updated + "]";
+				+ ", tradeType=" + tradeType + ", tradeNature=" + tradeNature + ", strategy=" + strategy
+				+ ", parameters=" + parameters + ", created=" + created + ", updated=" + updated + "]";
 	}
 
 }
