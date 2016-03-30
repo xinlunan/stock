@@ -1,4 +1,4 @@
-package com.xu.stock;
+package com.xu.stock.download.downloador;
 
 /**
  * @author lunan.xu 股票API常数

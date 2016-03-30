@@ -1,4 +1,4 @@
-package com.xu.stock.data.controller;
+package com.xu.stock.download.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,55 +7,54 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.xu.stock.data.model.Stock;
-import com.xu.stock.data.service.IStockAnalyseService;
 import com.xu.stock.data.service.IStockService;
-import com.xu.stock.data.service.StockAnalyseWorker;
+import com.xu.stock.download.StockDailyDownloadWorker;
 import com.xu.util.CollectionUtil;
 import com.xu.util.ThreadUtil;
 
 /**
- * 股票分析控制层
+ * 股票指数控制层
  * 
+ * @version Revision History
  * 
- * @version
+ *          <pre>
+ * Author     Version       Date        Changes
+ * lunan.xu    1.0           2015-5-29     Created
  * 
- * 			<pre>
- * Author	Version		Date		Changes
- * lunan.xu 	1.0  		2016年3月19日 	Created
- *
  *          </pre>
  * 
  * @since 1.
  */
 @SuppressWarnings("restriction")
-public abstract class BaseStockAnalyseController {
-	protected static Logger log = LoggerFactory.getLogger(BaseStockAnalyseController.class);
+@Service("stockDailyDownloadController")
+public class StockDailyDownloadController {
+	protected static Logger log = LoggerFactory.getLogger(StockDailyDownloadController.class);
 
 	@Resource
 	private IStockService stockService;
 
-	public void analyse(int threads) {
+	/**
+	 * 下载股票交易数据
+	 */
+	public void downloadStockDaily(int threads) {
 		List<Stock> stocks = stockService.getAllStocks();
 
 		List<List<Stock>> stockGroups = CollectionUtil.subListByPages(stocks, threads);
 
 		List<Runnable> workers = new ArrayList<Runnable>();
 		for (List<Stock> subStocks : stockGroups) {
-			StockAnalyseWorker worker = new StockAnalyseWorker();
+			StockDailyDownloadWorker worker = new StockDailyDownloadWorker();
 			worker.setStocks(subStocks);
 			worker.setStockService(stockService);
-			worker.setStockAnalyseService(getStockAnalyseService());
 			worker.start();
 			workers.add(worker);
 
 		}
 
 		ThreadUtil.threadsJoin(workers);
-
 	}
-
-	public abstract IStockAnalyseService getStockAnalyseService();
 
 }

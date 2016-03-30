@@ -1,4 +1,4 @@
-package com.xu.stock.data.service;
+package com.xu.stock.analyse.service;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.model.StockDaily;
+import com.xu.stock.data.service.IStockService;
 import com.xu.util.DateUtil;
 
 public class StockAnalyseWorker extends Thread {

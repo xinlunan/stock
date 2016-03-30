@@ -4,8 +4,8 @@ import javax.annotation.Resource;
 
 import org.junit.Test;
 
-import com.xu.stock.data.controller.StockAnalyseHighLowController;
-import com.xu.stock.data.controller.StockAnalyseHighestProbeController;
+import com.xu.stock.analyse.controller.StockAnalyseHighLowController;
+import com.xu.stock.analyse.controller.StockAnalyseHighestProbeController;
 import com.xu.test.BaseTestCase;
 
 /**

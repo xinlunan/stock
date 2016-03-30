@@ -14,6 +14,7 @@ import com.xu.stock.data.dao.IStockDailyDao;
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.model.StockDaily;
 import com.xu.stock.data.service.IStockService;
+import com.xu.stock.download.downloador.StockDownloadHelper;
 
 /**
  * 股票service实现
@@ -68,7 +69,7 @@ public class StockService implements IStockService {
 
 		stockDailyDao.saveStockDailys(stock.getStockDailys());
 
-		stock.setLastDate(StockServiceHelper.getLastDate());
+		stock.setLastDate(StockDownloadHelper.getLastDate());
 		stockDao.updateStock(stock);
 	}
 
@@ -89,7 +90,7 @@ public class StockService implements IStockService {
 				if (daily.getDate().compareTo(stock.getLastDate()) <= 0) {// 日期小于最后日期
 					invalidIndexs.add(daily);
 				}
-				if (daily.getDate().compareTo(StockServiceHelper.getLastDate()) > 0) {// 日期大于最后有效日期
+				if (daily.getDate().compareTo(StockDownloadHelper.getLastDate()) > 0) {// 日期大于最后有效日期
 					invalidIndexs.add(daily);
 				}
 			}

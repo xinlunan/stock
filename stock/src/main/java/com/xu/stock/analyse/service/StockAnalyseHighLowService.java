@@ -1,4 +1,4 @@
-package com.xu.stock.data.service.impl;
+package com.xu.stock.analyse.service;
 
 import java.util.List;
 
@@ -12,7 +12,6 @@ import com.xu.stock.data.dao.IStockDao;
 import com.xu.stock.data.dao.IStockDailyDao;
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.model.StockDaily;
-import com.xu.stock.data.service.IStockAnalyseService;
 
 /**
  * 最高最低价差价分析

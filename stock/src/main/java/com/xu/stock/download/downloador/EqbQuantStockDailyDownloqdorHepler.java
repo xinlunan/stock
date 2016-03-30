@@ -1,4 +1,4 @@
-package com.xu.stock.data.service.downloador;
+package com.xu.stock.download.downloador;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,11 +25,11 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import com.xu.stock.StockApiConstant;
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.model.StockDaily;
 import com.xu.stock.data.service.IStockService;
-import com.xu.stock.data.service.impl.StockServiceHelper;
+import com.xu.stock.download.downloador.StockApiConstant.EqbQuant;
+import com.xu.stock.download.downloador.StockApiConstant.Sina;
 import com.xu.util.DateUtil;
 import com.xu.util.DocumentUtil;
 import com.xu.util.HttpClientHandle;
@@ -202,20 +202,20 @@ public class EqbQuantStockDailyDownloqdorHepler {
 			stockDaily.setDate(lastDate);
 			Integer lastCloseInt = stock.getLastClose() == null ? 1 : stock.getLastClose();
 			stockDaily.setLastClose(lastCloseInt);
-			stockDaily.setOpen(Double.valueOf(((opens.get(i) * StockServiceHelper.NUM_100))).intValue());
-			Integer close = Double.valueOf(((closes.get(i) * StockServiceHelper.NUM_100))).intValue();
+			stockDaily.setOpen(Double.valueOf(((opens.get(i) * StockDownloadHelper.NUM_100))).intValue());
+			Integer close = Double.valueOf(((closes.get(i) * StockDownloadHelper.NUM_100))).intValue();
 			stockDaily.setClose(close);
 			stockDaily.setCloseGap(stockDaily.getClose() - stockDaily.getLastClose());
 			BigDecimal closeGap = new BigDecimal(stockDaily.getCloseGap());
 			BigDecimal lastClose = new BigDecimal(stockDaily.getLastClose());
 			Float closeGapRate = closeGap.divide(lastClose, 4, BigDecimal.ROUND_HALF_UP).floatValue() * 100;
 			stockDaily.setCloseGapRate(closeGapRate);
-			stockDaily.setHigh(Double.valueOf(((highs.get(i) * StockServiceHelper.NUM_100))).intValue());
+			stockDaily.setHigh(Double.valueOf(((highs.get(i) * StockDownloadHelper.NUM_100))).intValue());
 			stockDaily.setHighGap(stockDaily.getHigh() - stockDaily.getLastClose());
 			BigDecimal highGap = new BigDecimal(stockDaily.getHighGap());
 			Float highGapRate = highGap.divide(lastClose, 4, BigDecimal.ROUND_HALF_UP).floatValue() * 100;
 			stockDaily.setHighGapRate(highGapRate);
-			stockDaily.setLow(Double.valueOf(((lows.get(i) * StockServiceHelper.NUM_100))).intValue());
+			stockDaily.setLow(Double.valueOf(((lows.get(i) * StockDownloadHelper.NUM_100))).intValue());
 			stockDaily.setLowGap(stockDaily.getLow() - stockDaily.getLastClose());
 			BigDecimal lowGap = new BigDecimal(stockDaily.getLowGap());
 			Float lowGapRate = lowGap.divide(lastClose, 4, BigDecimal.ROUND_HALF_UP).floatValue() * 100;
@@ -283,7 +283,7 @@ public class EqbQuantStockDailyDownloqdorHepler {
 				if (prices == null) {
 					continue;
 				}
-				Integer intPrice = Double.valueOf(((Double.valueOf(prices[1]) * StockServiceHelper.NUM_100)))
+				Integer intPrice = Double.valueOf(((Double.valueOf(prices[1]) * StockDownloadHelper.NUM_100)))
 						.intValue();
 				if (rowNum == 1) {
 					close = intPrice;
@@ -348,7 +348,7 @@ public class EqbQuantStockDailyDownloqdorHepler {
 					continue;
 				}
 				Double price = Double.valueOf(getValue(hssfRow.getCell((short) 1)));
-				Integer intPrice = Double.valueOf(((price * StockServiceHelper.NUM_100))).intValue();
+				Integer intPrice = Double.valueOf(((price * StockDownloadHelper.NUM_100))).intValue();
 				if (rowNum == 1) {
 					close = intPrice;
 				} else {

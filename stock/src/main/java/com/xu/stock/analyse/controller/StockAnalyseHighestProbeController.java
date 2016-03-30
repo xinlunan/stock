@@ -1,10 +1,10 @@
-package com.xu.stock.data.controller;
+package com.xu.stock.analyse.controller;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.xu.stock.data.service.IStockAnalyseService;
+import com.xu.stock.analyse.service.IStockAnalyseService;
 
 /**
  * 股票分析控制层
@@ -20,15 +20,15 @@ import com.xu.stock.data.service.IStockAnalyseService;
  * @since 1.
  */
 @SuppressWarnings("restriction")
-@Service("stockAnalyHighLowController")
-public class StockAnalyseHighLowController extends BaseStockAnalyseController {
+@Service("stockAnalyseHighestProbeController")
+public class StockAnalyseHighestProbeController extends BaseStockAnalyseController {
 
 	@Resource
-	private IStockAnalyseService stockAnalyseHighLowService;
+	private IStockAnalyseService stockAnalyseHighestProbeService;
 
 	@Override
 	public IStockAnalyseService getStockAnalyseService() {
-		return stockAnalyseHighLowService;
+		return stockAnalyseHighestProbeService;
 	}
 
 }
