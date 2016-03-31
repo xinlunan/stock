@@ -1,4 +1,4 @@
-package com.xu.stock.data.model;
+package com.xu.stock.analyse.model;
 
 import java.io.Serializable;
 import java.util.Date;

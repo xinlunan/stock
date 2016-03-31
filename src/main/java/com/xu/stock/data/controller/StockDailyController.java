@@ -1,4 +1,4 @@
-package com.xu.stock.download.controller;
+package com.xu.stock.data.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.xu.stock.data.download.StockDailyDownloadWorker;
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.service.IStockService;
-import com.xu.stock.download.StockDailyDownloadWorker;
 import com.xu.util.CollectionUtil;
 import com.xu.util.ThreadUtil;
 
@@ -29,9 +29,9 @@ import com.xu.util.ThreadUtil;
  * @since 1.
  */
 @SuppressWarnings("restriction")
-@Service("stockDailyDownloadController")
-public class StockDailyDownloadController {
-	protected static Logger log = LoggerFactory.getLogger(StockDailyDownloadController.class);
+@Service("stockDailyController")
+public class StockDailyController {
+	protected static Logger log = LoggerFactory.getLogger(StockDailyController.class);
 
 	@Resource
 	private IStockService stockService;

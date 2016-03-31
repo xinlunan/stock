@@ -1,11 +1,11 @@
-package com.xu.stock.data.service;
+package com.xu.stock.analyse.dao;
 
 import java.util.List;
 
-import com.xu.stock.data.model.StockTrade;
+import com.xu.stock.analyse.model.StockTrade;
 
 /**
- * 股票指数Service
+ * 股票交易信息
  * 
  * @version
  * 
@@ -17,10 +17,10 @@ import com.xu.stock.data.model.StockTrade;
  * 
  * @since 1.
  */
-public interface IStockTradeService {
+public interface IStockTradeDao {
 
 	/**
-	 * 根据
+	 * 获取股票交易信息
 	 * 
 	 * @param stockCode
 	 * @return
@@ -28,10 +28,11 @@ public interface IStockTradeService {
 	public List<StockTrade> getStockTrades(String stockCode);
 
 	/**
-	 * 根据
+	 * 保存股票交易信息
 	 * 
-	 * @param stockCode
+	 * @param trades
 	 * @return
 	 */
-	public void saveStockTrades(List<StockTrade> stockTrades);
+	public Integer saveStockTrades(List<StockTrade> trades);
+
 }

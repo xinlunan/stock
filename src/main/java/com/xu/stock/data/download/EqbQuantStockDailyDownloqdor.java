@@ -1,4 +1,4 @@
-package com.xu.stock.download.downloador;
+package com.xu.stock.data.download;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -172,7 +172,7 @@ public class EqbQuantStockDailyDownloqdor {
 		Iterator<String> stockCodes = map.keySet().iterator();
 		while (stockCodes.hasNext()) {// 每支股票日指数
 			String stockCode = stockCodes.next();
-			MorphDynaBean dateIndexs = (MorphDynaBean) map.get(stockCode);// 每日所有指数
+			MorphDynaBean dateIndexs = map.get(stockCode);// 每日所有指数
 
 			// 解析每天股票指数
 			Stock stock = EqbQuantStockDailyDownloqdorHepler.resolve(stockService, dateIndexs);
