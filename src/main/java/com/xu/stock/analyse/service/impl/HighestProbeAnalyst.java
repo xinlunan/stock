@@ -1,4 +1,4 @@
-package com.xu.stock.analyse.service;
+package com.xu.stock.analyse.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -8,11 +8,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.xu.stock.analyse.service.IStockAnalyst;
 import com.xu.stock.data.model.StockDaily;
 import com.xu.util.DateUtil;
 
 /**
- * 最高点探测分析师
+ * 最高点探测分析
  * 
  * @version
  * 

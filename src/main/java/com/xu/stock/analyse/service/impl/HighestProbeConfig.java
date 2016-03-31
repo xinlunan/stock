@@ -1,4 +1,4 @@
-package com.xu.stock.analyse.service;
+package com.xu.stock.analyse.service.impl;
 
 import java.io.Serializable;
 
