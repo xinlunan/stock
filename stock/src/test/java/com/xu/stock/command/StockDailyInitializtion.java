@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 
 import org.junit.Test;
 
-import com.xu.stock.download.controller.StockDailyDownloadController;
+import com.xu.stock.data.controller.StockDailyController;
 import com.xu.test.BaseTestCase;
 
 /**
@@ -33,7 +33,7 @@ public class StockDailyInitializtion extends BaseTestCase {
 	public static final int NUM_THREADS = 10;
 
 	@Resource
-	private StockDailyDownloadController stockDailyDownloadController;
+	private StockDailyController stockDailyController;
 
 	/**
 	 * 获取股票指数启动命令
@@ -41,7 +41,7 @@ public class StockDailyInitializtion extends BaseTestCase {
 	@Test
 	public void downloadIndex() {
 		log.info("开始初始化股票指数...");
-		stockDailyDownloadController.downloadStockDaily(NUM_THREADS);
+		stockDailyController.downloadStockDaily(NUM_THREADS);
 		log.info("获取股票指数完成.");
 	}
 }
