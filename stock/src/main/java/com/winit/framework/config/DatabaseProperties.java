@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 
-import com.xu.stock.command.StockAnalyse;
-
 /**
  * 从数据库里读取配置
  * 

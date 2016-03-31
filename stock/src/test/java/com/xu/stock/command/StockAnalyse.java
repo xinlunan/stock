@@ -4,8 +4,8 @@ import javax.annotation.Resource;
 
 import org.junit.Test;
 
-import com.xu.stock.analyse.controller.StockAnalyseHighLowController;
-import com.xu.stock.analyse.controller.StockAnalyseHighestProbeController;
+import com.xu.stock.analyse.controller.HighLowAnalyseController;
+import com.xu.stock.analyse.controller.HighestProbeAnalyseController;
 import com.xu.test.BaseTestCase;
 
 /**
@@ -26,21 +26,21 @@ public class StockAnalyse extends BaseTestCase {
 	public static final int NUM_THREADS = 1;
 
 	@Resource
-	private StockAnalyseHighLowController stockAnalyHighLowController;
+	private HighLowAnalyseController highLowAnalyseController;
 	@Resource
-	private StockAnalyseHighestProbeController stockAnalyseHighestProbeController;
+	private HighestProbeAnalyseController highestProbeAnalyseController;
 
 	@Test
 	public void highestProbeAnalyse() {
 		log.info("最高点试探分析开始...");
-		stockAnalyseHighestProbeController.analyse(NUM_THREADS);
+		highestProbeAnalyseController.analyse(NUM_THREADS);
 		log.info("最高点试探分析完成.");
 	}
 
 	@Test
 	public void highLowAnalyse() {
 		log.info("高低分析开始");
-		stockAnalyHighLowController.analyse(NUM_THREADS);
+		highLowAnalyseController.analyse(NUM_THREADS);
 		log.info("高低分析完成.");
 	}
 

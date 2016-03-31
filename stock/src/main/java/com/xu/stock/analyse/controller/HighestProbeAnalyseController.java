@@ -20,15 +20,15 @@ import com.xu.stock.analyse.service.IStockAnalyseService;
  * @since 1.
  */
 @SuppressWarnings("restriction")
-@Service("stockAnalyseHighestProbeController")
-public class StockAnalyseHighestProbeController extends BaseStockAnalyseController {
+@Service("highestProbeAnalyseController")
+public class HighestProbeAnalyseController extends BaseStockAnalyseController {
 
 	@Resource
-	private IStockAnalyseService stockAnalyseHighestProbeService;
+	private IStockAnalyseService highestProbeAnalyseService;
 
 	@Override
 	public IStockAnalyseService getStockAnalyseService() {
-		return stockAnalyseHighestProbeService;
+		return highestProbeAnalyseService;
 	}
 
 }
