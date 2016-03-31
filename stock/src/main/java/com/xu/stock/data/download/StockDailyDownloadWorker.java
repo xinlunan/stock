@@ -1,4 +1,4 @@
-package com.xu.stock.download;
+package com.xu.stock.data.download;
 
 import java.util.Date;
 import java.util.List;
@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.service.IStockService;
-import com.xu.stock.download.downloador.SinaStockDailyDownloador;
 import com.xu.util.DateUtil;
 
 /**

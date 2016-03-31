@@ -1,4 +1,4 @@
-package com.xu.stock.download.controller;
+package com.xu.stock.data.controller;
 
 import java.util.List;
 
@@ -8,10 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.xu.stock.data.download.StockApiConstant;
+import com.xu.stock.data.download.StockDownloadHelper;
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.service.IStockService;
-import com.xu.stock.download.downloador.StockApiConstant;
-import com.xu.stock.download.downloador.StockDownloadHelper;
 import com.xu.util.HttpClientHandle;
 
 /**
@@ -27,9 +27,9 @@ import com.xu.util.HttpClientHandle;
  * @since 1.
  */
 @SuppressWarnings("restriction")
-@Service("stockDownloadController")
-public class StockDownloadController {
-	static Logger log = LoggerFactory.getLogger(StockDownloadController.class);
+@Service("stockController")
+public class StockController {
+	static Logger log = LoggerFactory.getLogger(StockController.class);
 
 	@Resource
 	private IStockService stockService;

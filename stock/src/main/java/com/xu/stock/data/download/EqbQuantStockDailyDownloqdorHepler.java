@@ -1,4 +1,4 @@
-package com.xu.stock.download.downloador;
+package com.xu.stock.data.download;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,8 +28,6 @@ import org.w3c.dom.NodeList;
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.model.StockDaily;
 import com.xu.stock.data.service.IStockService;
-import com.xu.stock.download.downloador.StockApiConstant.EqbQuant;
-import com.xu.stock.download.downloador.StockApiConstant.Sina;
 import com.xu.util.DateUtil;
 import com.xu.util.DocumentUtil;
 import com.xu.util.HttpClientHandle;
@@ -329,6 +327,7 @@ public class EqbQuantStockDailyDownloqdorHepler {
 	 * @return
 	 * @throws IOException
 	 */
+	@SuppressWarnings("deprecation")
 	public static StockDaily parseStockDailyExcel_bak(String file) throws IOException {
 		Long volume = 0l;
 		Long amount = 0l;
@@ -388,7 +387,7 @@ public class EqbQuantStockDailyDownloqdorHepler {
 	 * @param hssfCell Excel中的每一个格子
 	 * @return Excel中每一个格子中的值
 	 */
-	@SuppressWarnings({ "static-access", "deprecation" })
+	@SuppressWarnings({ "static-access" })
 	private static String getValue(HSSFCell hssfCell) {
 		if (hssfCell.getCellType() == hssfCell.CELL_TYPE_BOOLEAN) {
 			// 返回布尔类型的值

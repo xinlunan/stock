@@ -1,4 +1,4 @@
-package com.xu.stock.download.downloador;
+package com.xu.stock.data.download;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -16,7 +16,6 @@ import org.w3c.dom.NodeList;
 
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.model.StockDaily;
-import com.xu.stock.download.downloador.StockApiConstant.Sina;
 import com.xu.util.DateUtil;
 import com.xu.util.DocumentUtil;
 import com.xu.util.HttpClientHandle;

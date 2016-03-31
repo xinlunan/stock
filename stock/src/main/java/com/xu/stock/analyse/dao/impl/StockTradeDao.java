@@ -1,4 +1,4 @@
-package com.xu.stock.data.dao.impl;
+package com.xu.stock.analyse.dao.impl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,8 +7,8 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.winit.framework.dao.impl.BaseDao;
-import com.xu.stock.data.dao.IStockTradeDao;
-import com.xu.stock.data.model.StockTrade;
+import com.xu.stock.analyse.dao.IStockTradeDao;
+import com.xu.stock.analyse.model.StockTrade;
 
 /**
  * 股票分时指数Dao实现

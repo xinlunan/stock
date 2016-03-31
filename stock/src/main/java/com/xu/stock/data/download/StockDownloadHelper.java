@@ -1,4 +1,4 @@
-package com.xu.stock.download.downloador;
+package com.xu.stock.data.download;
 
 import java.util.ArrayList;
 import java.util.Collections;

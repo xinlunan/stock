@@ -1,4 +1,4 @@
-package com.xu.stock.data.service.impl;
+package com.xu.stock.analyse.service.impl;
 
 import java.util.List;
 
@@ -8,9 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.xu.stock.data.dao.IStockTradeDao;
-import com.xu.stock.data.model.StockTrade;
-import com.xu.stock.data.service.IStockTradeService;
+import com.xu.stock.analyse.dao.IStockTradeDao;
+import com.xu.stock.analyse.model.StockTrade;
+import com.xu.stock.analyse.service.IStockTradeService;
 
 /**
  * 股票指数service实现
