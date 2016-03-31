@@ -28,15 +28,26 @@ import com.xu.stock.analyse.model.StockTrade;
 public class StockTradeDao extends BaseDao<StockTrade> implements IStockTradeDao {
 
 	public final String SQL_GET_STOCK_TRADES = getNameSpace() + "getStockTrades";
+	public final String SQL_GET_STOCK_TRADE = getNameSpace() + "getStockTrade";
 	public final String SQL_INSERT_STOCK_TRADE = getNameSpace() + "insertStockTrade";
 
 	public Integer saveStockTrades(List<StockTrade> stockTrades) {
 		Integer result = 0;
 		for (StockTrade trade : stockTrades) {
-			getSqlSession().insert(SQL_INSERT_STOCK_TRADE, trade);
-			result++;
+			if (!existTrade(trade)) {
+				getSqlSession().insert(SQL_INSERT_STOCK_TRADE, trade);
+				result++;
+			}
 		}
 		return result;
+	}
+
+	public boolean existTrade(StockTrade trade) {
+		StockTrade oldTrade = getSqlSession().selectOne(SQL_GET_STOCK_TRADE, trade);
+		if (oldTrade != null) {
+			return true;
+		}
+		return false;
 	}
 
 	public List<StockTrade> getStockTrades(String stockCode) {

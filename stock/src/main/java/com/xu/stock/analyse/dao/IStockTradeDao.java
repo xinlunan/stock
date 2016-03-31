@@ -28,6 +28,14 @@ public interface IStockTradeDao {
 	public List<StockTrade> getStockTrades(String stockCode);
 
 	/**
+	 * 是否存在当前交易
+	 * 
+	 * @param trade
+	 * @return
+	 */
+	public boolean existTrade(StockTrade trade);
+
+	/**
 	 * 保存股票交易信息
 	 * 
 	 * @param trades
