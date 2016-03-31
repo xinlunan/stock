@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 
 import org.junit.Test;
 
-import com.xu.stock.download.controller.StockDownloadController;
+import com.xu.stock.data.controller.StockController;
 import com.xu.test.BaseTestCase;
 
 /**
@@ -31,7 +31,7 @@ import com.xu.test.BaseTestCase;
 public class StockInitializtion extends BaseTestCase {
 
 	@Resource
-	private StockDownloadController stockDownloadController;
+	private StockController stockController;
 
 	/**
 	 * 获取股票指数启动命令
@@ -40,7 +40,7 @@ public class StockInitializtion extends BaseTestCase {
 	public void init() {
 		try {
 			log.info("开始初始化股票...");
-			stockDownloadController.initStock();
+			stockController.initStock();
 			log.info("获取股票完成.");
 		} catch (Exception e) {
 			log.error("", e);
