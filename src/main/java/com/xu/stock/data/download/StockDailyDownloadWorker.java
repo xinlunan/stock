@@ -57,7 +57,7 @@ public class StockDailyDownloadWorker extends Thread {
 
 		long timediff = today.getTime() - beginDate.getTime();
 
-		if (timediff > ((15 * 60 + 30) * 60 * 1000)) {
+		if (timediff > ((15 * 60 + 45) * 60 * 1000)) {
 			hasValidDay = true;
 		}
 		return hasValidDay;
