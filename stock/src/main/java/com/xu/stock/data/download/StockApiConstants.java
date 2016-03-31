@@ -3,7 +3,7 @@ package com.xu.stock.data.download;
 /**
  * @author lunan.xu 股票API常数
  */
-public interface StockApiConstant {
+public interface StockApiConstants {
 
 	/**
 	 * 新浪股票信息

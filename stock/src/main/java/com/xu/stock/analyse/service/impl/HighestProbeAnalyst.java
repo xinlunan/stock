@@ -8,7 +8,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.xu.stock.analyse.model.StockAnalyseStrategy;
 import com.xu.stock.analyse.service.IStockAnalyst;
+import com.xu.stock.analyse.service.StockAnalyseConstants.HighestProbeArgs;
 import com.xu.stock.data.model.StockDaily;
 import com.xu.util.DateUtil;
 
@@ -28,21 +30,22 @@ import com.xu.util.DateUtil;
 public class HighestProbeAnalyst implements IStockAnalyst {
 	protected static Logger log = LoggerFactory.getLogger(HighestProbeAnalyst.class);
 
-	/** 探测配置信息 */
-	HighestProbeConfig config = new HighestProbeConfig();
 	/** 可购买点 */
-	List<StockDaily> buyPoints = new LinkedList<StockDaily>();
+	private List<StockDaily> buyPoints = new LinkedList<StockDaily>();
 
-	public static HighestProbeAnalyst newInstance() {
-		return new HighestProbeAnalyst();
+	private StockAnalyseStrategy strategy;
+
+	public static HighestProbeAnalyst newInstance(StockAnalyseStrategy strategy) {
+		return new HighestProbeAnalyst(strategy);
 	}
 
 	public List<StockDaily> putStockDailys(List<StockDaily> stockDailys) {
-		int thisFallRate = config.getF1_ThisFallRate();
-		int warnRateHigh = config.getF2_WarnRateHigh();
-		int warnRateLow = config.getF3_WarnRateLow();
-		int lastWaveCycle = config.getD1_LastWaveCycle();
-		int thisWaveCycle = config.getD2_ThisWaveCycle();
+
+		int lastWaveCycle = strategy.getIntValue(HighestProbeArgs.D1_LASTWAVECYCLE);
+		int thisWaveCycle = strategy.getIntValue(HighestProbeArgs.D2_THISWAVECYCLE);
+		int thisFallRate = strategy.getIntValue(HighestProbeArgs.F1_THISFALLRATE);
+		int warnRateHigh = strategy.getIntValue(HighestProbeArgs.F2_WARNRATEHIGH);
+		int warnRateLow = strategy.getIntValue(HighestProbeArgs.F3_WARNRATELOW);
 
 		List<Integer> highestPoints = countHighestPoints(stockDailys, lastWaveCycle, thisWaveCycle);
 
@@ -148,7 +151,8 @@ public class HighestProbeAnalyst implements IStockAnalyst {
 		return buyPoints;
 	}
 
-	private HighestProbeAnalyst() {
+	private HighestProbeAnalyst(StockAnalyseStrategy strategy) {
+		this.strategy = strategy;
 	}
 
 }

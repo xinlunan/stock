@@ -61,7 +61,7 @@ public class EqbQuantStockDailyDownloqdorHepler {
 		String endDate = DateUtil.getSrvDate();
 
 		StringBuffer url = new StringBuffer();
-		url.append(StockApiConstant.EqbQuant.API_URL_GET_STOCK_INDEX).append(fullCode);
+		url.append(StockApiConstants.EqbQuant.API_URL_GET_STOCK_INDEX).append(fullCode);
 		url.append("?start-date=").append(startDate).append("&end-date=").append(endDate);
 		// url.append("&exright=true");// 前复权
 
@@ -138,7 +138,7 @@ public class EqbQuantStockDailyDownloqdorHepler {
 		String date = DateUtil.getDate(nextDate, "yyyy-MM-dd");
 
 		StringBuffer url = new StringBuffer();
-		url.append(StockApiConstant.Sina.API_URL_REPAIR_STOCK_INDEX).append("?symbol=").append(fullCode);
+		url.append(StockApiConstants.Sina.API_URL_REPAIR_STOCK_INDEX).append("?symbol=").append(fullCode);
 		url.append("&date=").append(date);
 		return url.toString();
 	}
@@ -165,7 +165,7 @@ public class EqbQuantStockDailyDownloqdorHepler {
 		start = DateUtil.addDays(DateUtil.date2String(startDate, "yyyy-MM-dd"), 1);
 
 		StringBuffer url = new StringBuffer();
-		url.append(StockApiConstant.EqbQuant.API_URL_GET_STOCK_INDEX).append(fullCodes);
+		url.append(StockApiConstants.EqbQuant.API_URL_GET_STOCK_INDEX).append(fullCodes);
 		url.append("?start-date=").append(start).append("&end-date=").append(end);
 		// url.append("&exright=true");// 前复权
 

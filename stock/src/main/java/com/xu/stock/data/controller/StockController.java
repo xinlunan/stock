@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.xu.stock.data.download.StockApiConstant;
+import com.xu.stock.data.download.StockApiConstants;
 import com.xu.stock.data.download.StockDownloadHelper;
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.service.IStockService;
@@ -36,7 +36,7 @@ public class StockController {
 
 	public void initStock() {
 		//通过API获取股票信息
-		String jsonStr = HttpClientHandle.get(StockApiConstant.EqbQuant.API_URL_GET_ALL_STOCKS);
+		String jsonStr = HttpClientHandle.get(StockApiConstants.EqbQuant.API_URL_GET_ALL_STOCKS);
 
 		//封装股票对象
 		List<Stock> stocks = StockDownloadHelper.converStocks(jsonStr);

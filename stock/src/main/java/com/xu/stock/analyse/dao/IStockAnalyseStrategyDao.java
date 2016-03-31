@@ -1,6 +1,7 @@
 package com.xu.stock.analyse.dao;
 
 import com.xu.stock.analyse.model.StockAnalyseStrategy;
+import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 
 /**
  * 股票交易信息
@@ -23,6 +24,6 @@ public interface IStockAnalyseStrategyDao {
 	 * @param stockCode
 	 * @return
 	 */
-	public StockAnalyseStrategy getAnalyseStrategy(String strategyType);
+	public StockAnalyseStrategy getAnalyseStrategy(StrategyType strategyType);
 
 }
