@@ -41,11 +41,11 @@ public class HighestProbeAnalyst implements IStockAnalyst {
 
 	public List<StockDaily> putStockDailys(List<StockDaily> stockDailys) {
 
-		int lastWaveCycle = strategy.getIntValue(HighestProbeArgs.D1_LASTWAVECYCLE);
-		int thisWaveCycle = strategy.getIntValue(HighestProbeArgs.D2_THISWAVECYCLE);
-		int thisFallRate = strategy.getIntValue(HighestProbeArgs.F1_THISFALLRATE);
-		int warnRateHigh = strategy.getIntValue(HighestProbeArgs.F2_WARNRATEHIGH);
-		int warnRateLow = strategy.getIntValue(HighestProbeArgs.F3_WARNRATELOW);
+		int lastWaveCycle = strategy.getIntValue(HighestProbeArgs.D1_LAST_WAVE_CYCLE);
+		int thisWaveCycle = strategy.getIntValue(HighestProbeArgs.D2_THIS_WAVE_CYCLE);
+		int thisFallRate = strategy.getIntValue(HighestProbeArgs.F1_THIS_FALL_RATE);
+		int warnRateHigh = strategy.getIntValue(HighestProbeArgs.F2_WARN_RATE_HIGH);
+		int warnRateLow = strategy.getIntValue(HighestProbeArgs.F3_WARN_RATE_LOW);
 
 		List<Integer> highestPoints = countHighestPoints(stockDailys, lastWaveCycle, thisWaveCycle);
 
@@ -78,13 +78,14 @@ public class HighestProbeAnalyst implements IStockAnalyst {
 			Integer rate = Integer.MIN_VALUE;
 			for (int i = point; i < stockDailys.size(); i++) {
 				int current = stockDailys.get(i).getClose();
+				int currentHighest = stockDailys.get(i).getHigh();
 				if (current < lowest) {
 					lowest = stockDailys.get(i).getClose();
 					Integer closeGap = highest - lowest;
 					rate = BigDecimal.valueOf(closeGap.longValue()).multiply(BigDecimal.valueOf(100))
 							.divide(BigDecimal.valueOf(highest.longValue()), 2, BigDecimal.ROUND_HALF_UP).intValue();
 				}
-				if (rate > thisFallRate && current >= warnLow && current <= warnHigh) {
+				if (rate > thisFallRate && current >= warnLow && current <= warnHigh && currentHighest < highest) {
 
 					log.info("buy point:" + stockDailys.get(point).getStockCode() + "\t"
 							+ DateUtil.date2String(stockDailys.get(point).getDate()) + "\t"
@@ -140,8 +141,15 @@ public class HighestProbeAnalyst implements IStockAnalyst {
 	 */
 	private boolean isHighest(List<StockDaily> stockDailys, int index, int date1, int date2) {
 		for (int i = index - date1; i < index + date2; i++) {
-			if (stockDailys.get(i).getClose() > stockDailys.get(index).getClose()) {
-				return false;
+			if (i < index) {
+				if (stockDailys.get(i).getClose() > stockDailys.get(index).getClose()) {
+					return false;
+				}
+			}
+			if (i > index) {
+				if (stockDailys.get(i).getClose() >= stockDailys.get(index).getClose()) {
+					return false;
+				}
 			}
 		}
 		return true;

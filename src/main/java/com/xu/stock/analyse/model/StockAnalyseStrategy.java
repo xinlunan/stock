@@ -30,7 +30,7 @@ public class StockAnalyseStrategy implements Serializable {
 	// 策略类型
 	private String strategyType;
 	// 版本
-	private String version;
+	private Integer version;
 	// 参数
 	private String parameters;
 	// 创建日期
@@ -54,11 +54,11 @@ public class StockAnalyseStrategy implements Serializable {
 		this.strategyType = strategyType;
 	}
 
-	public String getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 
-	public void setVersion(String version) {
+	public void setVersion(Integer version) {
 		this.version = version;
 	}
 

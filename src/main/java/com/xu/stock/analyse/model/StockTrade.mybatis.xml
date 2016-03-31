@@ -14,6 +14,7 @@
 		<id property="tradeType" column="trade_type"></id>
 		<id property="tradeNature" column="trade_nature"></id>
 		<id property="strategy" column="strategy"></id>
+		<id property="version" column="version"></id>
 		<id property="parameters" column="parameters"></id>
 		<id property="created" column="created"></id>
 		<id property="updated" column="updated"></id>
@@ -21,17 +22,22 @@
 	</resultMap>
 
 	<select id="getStockTrades" resultMap="StockTrade">
-		SELECT trade_id,stock_id,stock_code,stock_name,date,hour,minute,price,trade_type,trade_nature,strategy,parameters,created,updated
+		SELECT trade_id,stock_id,stock_code,stock_name,date,hour,minute,price,trade_type,trade_nature,strategy,version,parameters,created,updated
 		FROM t_stock_trade
 		WHERE stock_code=#{stockCode};
 	</select>
 
+	<select id="getStockTrade" resultMap="StockTrade">
+		SELECT trade_id,stock_id,stock_code,stock_name,date,hour,minute,price,trade_type,trade_nature,strategy,version,parameters,created,updated
+		FROM t_stock_trade
+		WHERE stock_code=#{stockCode} and trade_type=#{tradeType} and version=#{version} and date=#{date};
+	</select>
 
 	<insert id="insertStockTrade" flushCache="true">
 		INSERT INTO t_stock_trade (
-		    stock_id,stock_code,stock_name,date,hour,minute,price,trade_type,trade_nature,strategy,parameters,created,updated)
+		    stock_id,stock_code,stock_name,date,hour,minute,price,trade_type,trade_nature,strategy,version,parameters,created,updated)
 		VALUES (#{stockId}, #{stockCode}, #{stockName}, #{date}, #{hour}, #{minute}, #{price}, #{tradeType}, #{tradeNature}, 
-		    #{strategy},#{parameters},sysdate(),sysdate());
+		    #{strategy},#{version},#{parameters},sysdate(),sysdate());
 	</insert>
 
 

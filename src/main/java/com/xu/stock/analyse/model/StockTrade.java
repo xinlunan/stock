@@ -41,6 +41,8 @@ public class StockTrade implements Serializable {
 	private String tradeNature;
 	// 策略
 	private String strategy;
+	// 策略版本
+	private Integer version;
 	// 参数
 	private String parameters;
 	// 创建日期
@@ -164,12 +166,20 @@ public class StockTrade implements Serializable {
 		return serialVersionUID;
 	}
 
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
 	@Override
 	public String toString() {
 		return "StockTrade [tradeId=" + tradeId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", stockName="
 				+ stockName + ", date=" + date + ", hour=" + hour + ", minute=" + minute + ", price=" + price
-				+ ", tradeType=" + tradeType + ", tradeNature=" + tradeNature + ", strategy=" + strategy
-				+ ", parameters=" + parameters + ", created=" + created + ", updated=" + updated + "]";
+				+ ", tradeType=" + tradeType + ", tradeNature=" + tradeNature + ", strategy=" + strategy + ", version="
+				+ version + ", parameters=" + parameters + ", created=" + created + ", updated=" + updated + "]";
 	}
 
 }

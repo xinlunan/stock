@@ -33,7 +33,21 @@ CREATE TABLE `t_stock` (
   PRIMARY KEY (`stock_id`),
   UNIQUE KEY `index_stock_code` (`stock_code`),
   KEY `index_stock_name` (`stock_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2864 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2869 DEFAULT CHARSET=utf8;
+
+/*Table structure for table `t_stock_analyse_strategy` */
+
+DROP TABLE IF EXISTS `t_stock_analyse_strategy`;
+
+CREATE TABLE `t_stock_analyse_strategy` (
+  `strategy_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '策略ID',
+  `strategy_type` varchar(50) DEFAULT NULL COMMENT '策略类型',
+  `version` int(11) DEFAULT NULL COMMENT '参数版本',
+  `parameters` varchar(500) DEFAULT NULL COMMENT '策略参数',
+  `created` datetime DEFAULT NULL COMMENT '创建日期',
+  `updated` datetime DEFAULT NULL COMMENT '更新日期',
+  PRIMARY KEY (`strategy_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5018586 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_stock_daily` */
 
@@ -67,7 +81,7 @@ CREATE TABLE `t_stock_daily` (
   KEY `NewIndex1` (`stock_id`),
   KEY `NewIndex2` (`date`),
   KEY `index_stock_code` (`stock_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=5018584 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5018608 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_stock_minute` */
 
@@ -105,6 +119,7 @@ CREATE TABLE `t_stock_trade` (
   `trade_type` varchar(10) DEFAULT NULL COMMENT '交易类型：BUY,SELL',
   `trade_nature` varchar(10) DEFAULT NULL COMMENT '交易性质：REAL,VIRTUAL',
   `strategy` varchar(50) DEFAULT NULL COMMENT '策略',
+  `version` int(11) DEFAULT NULL COMMENT '策略版本',
   `parameters` varchar(500) DEFAULT NULL COMMENT '策略参数',
   `created` datetime DEFAULT NULL COMMENT '创建日期',
   `updated` datetime DEFAULT NULL COMMENT '更新日期',
@@ -112,7 +127,7 @@ CREATE TABLE `t_stock_trade` (
   KEY `NewIndex1` (`stock_id`),
   KEY `NewIndex2` (`date`),
   KEY `index_stock_code` (`stock_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=5018584 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5022364 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_sys_config` */
 

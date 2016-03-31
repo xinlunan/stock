@@ -12,13 +12,22 @@ public interface StockAnalyseConstants {
 	}
 
 	public interface HighestProbeArgs {
-		public static final String D1_LASTWAVECYCLE = "d1";
-		public static final String D2_THISWAVECYCLE = "d2";
-		public static final String F1_THISFALLRATE = "f1";
-		public static final String F2_WARNRATEHIGH = "f2";
-		public static final String F3_WARNRATELOW = "f3";
-		public static final String F4_EXPECTCRITICALBUFFERRATE = "f4";
+		public static final String D1_LAST_WAVE_CYCLE = "d1";
+		public static final String D2_THIS_WAVE_CYCLE = "d2";
+		public static final String F1_THIS_FALL_RATE = "f1";
+		public static final String F2_WARN_RATE_HIGH = "f2";
+		public static final String F3_WARN_RATE_LOW = "f3";
 
+	}
+
+	public interface TradeType {
+		public static final String BUY = "BUY";
+		public static final String SELL = "SELL";
+	}
+
+	public interface TradeNature {
+		public static final String REAL = "BUY";
+		public static final String VIRTUAL = "VIRTUAL";
 	}
 
 }
