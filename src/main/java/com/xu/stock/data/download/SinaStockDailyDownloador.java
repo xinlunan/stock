@@ -112,7 +112,7 @@ public class SinaStockDailyDownloador {
 		}
 
 		for (String season : seasons) {
-			StringBuilder url = new StringBuilder(StockApiConstant.Sina.API_URL_GET_STOCK_INDEX)
+			StringBuilder url = new StringBuilder(StockApiConstants.Sina.API_URL_GET_STOCK_INDEX)
 					.append(stock.getStockCode()).append(".phtml?").append(season);
 			urls.add(url.toString());
 		}

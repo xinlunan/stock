@@ -7,13 +7,13 @@
 		<id property="strategyId" column="strategy_id"></id>
 		<id property="strategyType" column="strategy_type"></id>
 		<id property="version" column="version"></id>
-		<id property="prameters" column="prameters"></id>
+		<id property="parameters" column="parameters"></id>
 		<id property="created" column="created"></id>
 		<id property="updated" column="updated"></id>
 	</resultMap>
 
 	<select id="getAnalyseStrategy" resultMap="StockAnalyseStrategy">
-		SELECT strategy_id,strategy_type,version,prameters,created,updated
+		SELECT strategy_id,strategy_type,version,parameters,created,updated
 		FROM t_stock_analyse_strategy
 		WHERE strategy_type=#{strategyType}
 		ORDER BY version desc
