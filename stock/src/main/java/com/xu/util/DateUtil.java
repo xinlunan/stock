@@ -1079,6 +1079,15 @@ public class DateUtil {
 		pstrDate = oFormatter.format(pdttValue);
 		return pstrDate;
 	}
+	
+	/**
+	 * Date convert to String.
+	 * 
+	 * @return String representation of the given Date and DateFormat.
+	 */
+	public static String dateToString(Date pdttValue) {
+		return dateToString(pdttValue,"yyyy-MM-dd");
+	}
 
 	/**
 	 * 

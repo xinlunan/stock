@@ -20,15 +20,15 @@ import com.xu.stock.analyse.service.IStockAnalyseService;
  * @since 1.
  */
 @SuppressWarnings("restriction")
-@Service("highLowAnalyseController")
-public class HighLowAnalyseController extends BaseStockAnalyseController {
+@Service("highLowSellAnalyseController")
+public class HighLowSellAnalyseController extends BaseStockAnalyseController {
 
 	@Resource
-	private IStockAnalyseService highLowAnalyseService;
+	private IStockAnalyseService highLowSellAnalyseService;
 
 	@Override
 	public IStockAnalyseService getStockAnalyseService() {
-		return highLowAnalyseService;
+		return highLowSellAnalyseService;
 	}
 
 }

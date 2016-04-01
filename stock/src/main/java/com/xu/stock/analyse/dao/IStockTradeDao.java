@@ -3,6 +3,7 @@ package com.xu.stock.analyse.dao;
 import java.util.List;
 
 import com.xu.stock.analyse.model.StockTrade;
+import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 
 /**
  * 股票交易信息
@@ -18,6 +19,15 @@ import com.xu.stock.analyse.model.StockTrade;
  * @since 1.
  */
 public interface IStockTradeDao {
+
+	/**
+	 * 获取所有购买交易信息
+	 * 
+	 * @param strategy
+	 * @param stockCode
+	 * @return
+	 */
+	public List<StockTrade> getBuyTrades(StrategyType strategy, String stockCode);
 
 	/**
 	 * 获取股票交易信息

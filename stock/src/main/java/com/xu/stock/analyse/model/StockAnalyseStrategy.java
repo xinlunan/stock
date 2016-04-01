@@ -96,6 +96,10 @@ public class StockAnalyseStrategy implements Serializable {
 		return parseJSON2Map(parameters).get(key) + "";
 	}
 
+	public Double getDoubleValue(String key) {
+		return Double.valueOf(parseJSON2Map(parameters).get(key) + "");
+	}
+
 	public Integer getIntValue(String key) {
 		return Integer.valueOf(parseJSON2Map(parameters).get(key) + "");
 	}

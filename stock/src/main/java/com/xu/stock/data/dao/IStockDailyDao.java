@@ -30,7 +30,15 @@ public interface IStockDailyDao {
 	public StockDaily getStockDaily(String stockCode, Date date);
 
 	/**
-	 * 根据股票编码获取股票指数
+	 * 根据股票编码获取后复权后股票指数
+	 * 
+	 * @param stockCode
+	 * @return
+	 */
+	public List<StockDaily> getRrightStockDailys(String stockCode);
+
+	/**
+	 * 根据股票编码获取后复权后股票指数
 	 * 
 	 * @param stockCode
 	 * @return
@@ -69,5 +77,14 @@ public interface IStockDailyDao {
 	 * @return
 	 */
 	public StockDaily getLastStockDaily(String stockCode, Date date);
+
+	/**
+	 * 获取下一天的指数
+	 * 
+	 * @param stockCode
+	 * @param date
+	 * @return
+	 */
+	public StockDaily getNextStockDaily(String stockCode, Date date);
 
 }

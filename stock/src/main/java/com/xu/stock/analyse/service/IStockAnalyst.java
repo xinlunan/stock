@@ -24,7 +24,7 @@ public interface IStockAnalyst {
 	 * 
 	 * @param dailys
 	 */
-	public List<StockDaily> putStockDailys(List<StockDaily> dailys);
+	public List<StockDaily> analyseaaa(List<StockDaily> dailys);
 
 	/**
 	 * 获取分析可购买点

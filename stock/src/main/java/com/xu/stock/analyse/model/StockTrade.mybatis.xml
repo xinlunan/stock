@@ -7,10 +7,20 @@
 		<id property="stockId" column="stock_id"></id>
 		<id property="stockCode" column="stock_code"></id>
 		<id property="stockName" column="stock_name"></id>
-		<id property="date" column="date"></id>
-		<id property="hour" column="hour"></id>
-		<id property="minute" column="minute"></id>
-		<id property="price" column="price"></id>
+		<id property="buyDate" column="buy_date"></id>
+		<id property="buyHour" column="buy_hour"></id>
+		<id property="buyMinute" column="buy_minute"></id>
+		<id property="buyTradePrice" column="buy_trade_price"></id>
+		<id property="buyHighPrice" column="buy_high_price"></id>
+		<id property="buyClosePrice" column="buy_close_price"></id>
+		<id property="sellDate" column="sell_date"></id>
+		<id property="sellHour" column="sell_hour"></id>
+		<id property="sellMinute" column="sell_minute"></id>
+		<id property="sellTradePrice" column="sell_trade_price"></id>
+		<id property="sellHighPrice" column="sell_high_price"></id>
+		<id property="sellClosePrice" column="sell_close_price"></id>
+		<id property="profit" column="profit"></id>
+		<id property="profitRate" column="profit_rate"></id>
 		<id property="tradeType" column="trade_type"></id>
 		<id property="tradeNature" column="trade_nature"></id>
 		<id property="strategy" column="strategy"></id>
@@ -18,26 +28,55 @@
 		<id property="parameters" column="parameters"></id>
 		<id property="created" column="created"></id>
 		<id property="updated" column="updated"></id>
-
 	</resultMap>
 
 	<select id="getStockTrades" resultMap="StockTrade">
-		SELECT trade_id,stock_id,stock_code,stock_name,date,hour,minute,price,trade_type,trade_nature,strategy,version,parameters,created,updated
+		SELECT trade_id,stock_id,stock_code,stock_name,
+			buy_date,buy_hour,buy_minute,buy_trade_price,buy_high_price,buy_close_price,
+			sell_date,sell_hour,sell_minute,sell_trade_price,sell_high_price,sell_close_price,
+			profit,profit_rate,trade_type,trade_nature,strategy,version,parameters,created,updated
 		FROM t_stock_trade
 		WHERE stock_code=#{stockCode};
 	</select>
 
-	<select id="getStockTrade" resultMap="StockTrade">
-		SELECT trade_id,stock_id,stock_code,stock_name,date,hour,minute,price,trade_type,trade_nature,strategy,version,parameters,created,updated
+	<select id="getBuyStockTrade" resultMap="StockTrade">
+		SELECT trade_id,stock_id,stock_code,stock_name,
+			buy_date,buy_hour,buy_minute,buy_trade_price,buy_high_price,buy_close_price,
+			sell_date,sell_hour,sell_minute,sell_trade_price,sell_high_price,sell_close_price,
+			profit,profit_rate,trade_type,trade_nature,strategy,version,parameters,created,updated
 		FROM t_stock_trade
-		WHERE stock_code=#{stockCode} and trade_type=#{tradeType} and version=#{version} and date=#{date};
+		WHERE stock_code=#{stockCode} and trade_type=#{tradeType} and version=#{version} and buy_date=#{buyDate};
+	</select>
+	
+	<select id="getSellStockTrade" resultMap="StockTrade">
+		SELECT trade_id,stock_id,stock_code,stock_name,
+			buy_date,buy_hour,buy_minute,buy_trade_price,buy_high_price,buy_close_price,
+			sell_date,sell_hour,sell_minute,sell_trade_price,sell_high_price,sell_close_price,
+			profit,profit_rate,trade_type,trade_nature,strategy,version,parameters,created,updated
+		FROM t_stock_trade
+		WHERE stock_code=#{stockCode} and trade_type=#{tradeType} and version=#{version} and sell_date=#{sellDate};
+	</select>
+	
+	<select id="getBuyStockTrades" resultMap="StockTrade">
+		SELECT trade_id,stock_id,stock_code,stock_name,
+			buy_date,buy_hour,buy_minute,buy_trade_price,buy_high_price,buy_close_price,
+			sell_date,sell_hour,sell_minute,sell_trade_price,sell_high_price,sell_close_price,
+			profit,profit_rate,trade_type,trade_nature,strategy,version,parameters,created,updated
+		FROM t_stock_trade
+		WHERE strategy=#{strategy} and stock_code=#{stockCode} and trade_type='BUY' ;
 	</select>
 
 	<insert id="insertStockTrade" flushCache="true">
 		INSERT INTO t_stock_trade (
-		    stock_id,stock_code,stock_name,date,hour,minute,price,trade_type,trade_nature,strategy,version,parameters,created,updated)
-		VALUES (#{stockId}, #{stockCode}, #{stockName}, #{date}, #{hour}, #{minute}, #{price}, #{tradeType}, #{tradeNature}, 
-		    #{strategy},#{version},#{parameters},sysdate(),sysdate());
+		    stock_id,stock_code,stock_name,
+			buy_date,buy_hour,buy_minute,buy_trade_price,buy_high_price,buy_close_price,
+			sell_date,sell_hour,sell_minute,sell_trade_price,sell_high_price,sell_close_price,
+			profit,profit_rate,trade_type,trade_nature,strategy,version,parameters,created,updated)
+		VALUES (#{stockId},#{stockCode},#{stockName},
+			#{buyDate},#{buyHour},#{buyMinute},#{buyTradePrice},#{buyHighPrice},#{buyClosePrice},
+			#{sellDate},#{sellHour},#{sellMinute},#{sellTradePrice},#{sellHighPrice},#{sellClosePrice},
+			#{profit},#{profitRate},#{tradeType},#{tradeNature},#{strategy},#{version},#{parameters},sysdate(),sysdate()
+		);
 	</insert>
 
 

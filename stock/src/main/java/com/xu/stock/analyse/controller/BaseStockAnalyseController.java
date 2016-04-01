@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.xu.stock.analyse.service.IStockAnalyseService;
 import com.xu.stock.analyse.service.StockAnalyseWorker;
+import com.xu.stock.data.dao.IStockDailyDao;
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.service.IStockService;
 import com.xu.util.CollectionUtil;
@@ -35,6 +36,8 @@ public abstract class BaseStockAnalyseController {
 
 	@Resource
 	private IStockService stockService;
+	@Resource
+	private IStockDailyDao stockDailyDao;
 
 	public void analyse(int threads) {
 		List<Stock> stocks = stockService.getAllStocks();
@@ -45,7 +48,7 @@ public abstract class BaseStockAnalyseController {
 		for (List<Stock> subStocks : stockGroups) {
 			StockAnalyseWorker worker = new StockAnalyseWorker();
 			worker.setStocks(subStocks);
-			worker.setStockService(stockService);
+			worker.setStockDailyDao(stockDailyDao);
 			worker.setStockAnalyseService(getStockAnalyseService());
 			worker.start();
 			workers.add(worker);
