@@ -45,6 +45,15 @@
 	 	LIMIT 1 ;
 	</select>
 	
+	<select id="getNextStockDaily" resultMap="StockDaily">
+		SELECT 	daily_id, stock_id, stock_code, stock_name, DATE, last_close, OPEN, CLOSE, close_gap, close_gap_rate, 
+			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, isExrights, exrights, created, updated
+	 	FROM t_stock_daily 
+	 	WHERE stock_code=#{stockCode} and date &gt; #{date}
+	 	ORDER BY date
+	 	LIMIT 1 ;
+	</select>
+	
 	<select id="getStockDailys" resultMap="StockDaily">
 		SELECT 	daily_id, stock_id, stock_code, stock_name, DATE, last_close, OPEN, CLOSE, close_gap, close_gap_rate, 
 			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, isExrights, exrights, created, updated

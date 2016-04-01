@@ -28,6 +28,7 @@ import com.xu.stock.data.model.StockDaily;
 public class StockDailyDao extends BaseDao<StockDaily> implements IStockDailyDao {
 
 	public final String SQL_GET_STOCK_INDEX = getNameSpace() + "getStockDaily";
+	public final String SQL_GET_NEXT_STOCK_INDEX = getNameSpace() + "getNextStockDaily";
 	public final String SQL_GET_LAST_STOCK_INDEX = getNameSpace() + "getLastStockDaily";
 	public final String SQL_GET_STOCK_INDEXS = getNameSpace() + "getStockDailys";
 	public final String SQL_INSERT_STOCK_INDEX = getNameSpace() + "insertStockDaily";
@@ -44,8 +45,12 @@ public class StockDailyDao extends BaseDao<StockDaily> implements IStockDailyDao
 		return result;
 	}
 
-	public List<StockDaily> getStockDailys(String stockCode) {
+	public List<StockDaily> getRrightStockDailys(String stockCode) {
 		return getSqlSession().selectList(SQL_GET_STOCK_INDEXS, stockCode);
+	}
+
+	public List<StockDaily> getStockDailys(String stockCode) {
+		return getRrightStockDailys(stockCode);
 	}
 
 	public StockDaily getLastStockDaily(String stockCode, Date date) {
@@ -59,7 +64,14 @@ public class StockDailyDao extends BaseDao<StockDaily> implements IStockDailyDao
 		Map<String, Object> paras = new HashMap<String, Object>();
 		paras.put("stockCode", stockCode);
 		paras.put("date", date);
-		return getSqlSession().selectOne(SQL_GET_STOCK_INDEX, paras);
+		return getSqlSession().selectOne(SQL_GET_NEXT_STOCK_INDEX, paras);
+	}
+
+	public StockDaily getNextStockDaily(String stockCode, Date date) {
+		Map<String, Object> paras = new HashMap<String, Object>();
+		paras.put("stockCode", stockCode);
+		paras.put("date", date);
+		return getSqlSession().selectOne(SQL_GET_NEXT_STOCK_INDEX, paras);
 	}
 
 	public void updateStockDaily(StockDaily stockDaily) {

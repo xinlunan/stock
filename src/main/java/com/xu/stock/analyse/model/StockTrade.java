@@ -1,6 +1,7 @@
 package com.xu.stock.analyse.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -28,13 +29,33 @@ public class StockTrade implements Serializable {
 	// 股票名称
 	private String stockName;
 	// 日期
-	private Date date;
+	private Date buyDate;
 	// 小时
-	private Integer hour;
+	private Integer buyHour;
 	// 分钟
-	private Integer minute;
-	// 最低价
-	private Integer price;
+	private Integer buyMinute;
+	// 购买价
+	private BigDecimal buyTradePrice;
+	// 购买日最高价
+	private BigDecimal buyHighPrice;
+	// 购买日收盘价
+	private BigDecimal buyClosePrice;
+	// 日期
+	private Date sellDate;
+	// 小时
+	private Integer sellHour;
+	// 分钟
+	private Integer sellMinute;
+	// 购买价
+	private BigDecimal sellTradePrice;
+	// 购买日最高价
+	private BigDecimal sellHighPrice;
+	// 购买日收盘价
+	private BigDecimal sellClosePrice;
+	// 利润
+	private BigDecimal profit;
+	// 利润率
+	private BigDecimal profitRate;
 	// 交易类型
 	private String tradeType;
 	// 交易性质
@@ -82,36 +103,116 @@ public class StockTrade implements Serializable {
 		this.stockName = stockName;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getBuyDate() {
+		return buyDate;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setBuyDate(Date buyDate) {
+		this.buyDate = buyDate;
 	}
 
-	public Integer getHour() {
-		return hour;
+	public Integer getBuyHour() {
+		return buyHour;
 	}
 
-	public void setHour(Integer hour) {
-		this.hour = hour;
+	public void setBuyHour(Integer buyHour) {
+		this.buyHour = buyHour;
 	}
 
-	public Integer getMinute() {
-		return minute;
+	public Integer getBuyMinute() {
+		return buyMinute;
 	}
 
-	public void setMinute(Integer minute) {
-		this.minute = minute;
+	public void setBuyMinute(Integer buyMinute) {
+		this.buyMinute = buyMinute;
 	}
 
-	public Integer getPrice() {
-		return price;
+	public BigDecimal getBuyTradePrice() {
+		return buyTradePrice;
 	}
 
-	public void setPrice(Integer price) {
-		this.price = price;
+	public void setBuyTradePrice(BigDecimal buyTradePrice) {
+		this.buyTradePrice = buyTradePrice;
+	}
+
+	public BigDecimal getBuyHighPrice() {
+		return buyHighPrice;
+	}
+
+	public void setBuyHighPrice(BigDecimal buyHighPrice) {
+		this.buyHighPrice = buyHighPrice;
+	}
+
+	public BigDecimal getBuyClosePrice() {
+		return buyClosePrice;
+	}
+
+	public void setBuyClosePrice(BigDecimal buyClosePrice) {
+		this.buyClosePrice = buyClosePrice;
+	}
+
+	public Date getSellDate() {
+		return sellDate;
+	}
+
+	public void setSellDate(Date sellDate) {
+		this.sellDate = sellDate;
+	}
+
+	public Integer getSellHour() {
+		return sellHour;
+	}
+
+	public void setSellHour(Integer sellHour) {
+		this.sellHour = sellHour;
+	}
+
+	public Integer getSellMinute() {
+		return sellMinute;
+	}
+
+	public void setSellMinute(Integer sellMinute) {
+		this.sellMinute = sellMinute;
+	}
+
+	public BigDecimal getSellTradePrice() {
+		return sellTradePrice;
+	}
+
+	public void setSellTradePrice(BigDecimal sellTradePrice) {
+		this.sellTradePrice = sellTradePrice;
+	}
+
+	public BigDecimal getSellHighPrice() {
+		return sellHighPrice;
+	}
+
+	public void setSellHighPrice(BigDecimal sellHighPrice) {
+		this.sellHighPrice = sellHighPrice;
+	}
+
+	public BigDecimal getSellClosePrice() {
+		return sellClosePrice;
+	}
+
+	public void setSellClosePrice(BigDecimal sellClosePrice) {
+		this.sellClosePrice = sellClosePrice;
+	}
+
+	public BigDecimal getProfit() {
+		return profit;
+	}
+
+	public void setProfit(BigDecimal profit) {
+		this.profit = profit;
+	}
+
+	public BigDecimal getProfitRate() {
+		return profitRate;
+	}
+
+	public void setProfitRate(BigDecimal profitRate) {
+		this.profitRate = profitRate;
 	}
 
 	public String getTradeType() {
@@ -136,6 +237,14 @@ public class StockTrade implements Serializable {
 
 	public void setStrategy(String strategy) {
 		this.strategy = strategy;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 	public String getParameters() {
@@ -166,20 +275,16 @@ public class StockTrade implements Serializable {
 		return serialVersionUID;
 	}
 
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-
 	@Override
 	public String toString() {
 		return "StockTrade [tradeId=" + tradeId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", stockName="
-				+ stockName + ", date=" + date + ", hour=" + hour + ", minute=" + minute + ", price=" + price
-				+ ", tradeType=" + tradeType + ", tradeNature=" + tradeNature + ", strategy=" + strategy + ", version="
-				+ version + ", parameters=" + parameters + ", created=" + created + ", updated=" + updated + "]";
+				+ stockName + ", buyDate=" + buyDate + ", buyHour=" + buyHour + ", buyMinute=" + buyMinute
+				+ ", buyTradePrice=" + buyTradePrice + ", buyHighPrice=" + buyHighPrice + ", buyClosePrice="
+				+ buyClosePrice + ", sellDate=" + sellDate + ", sellHour=" + sellHour + ", sellMinute=" + sellMinute
+				+ ", sellTradePrice=" + sellTradePrice + ", sellHighPrice=" + sellHighPrice + ", sellClosePrice="
+				+ sellClosePrice + ", profit=" + profit + ", profitRate=" + profitRate + ", tradeType=" + tradeType
+				+ ", tradeNature=" + tradeNature + ", strategy=" + strategy + ", version=" + version + ", parameters="
+				+ parameters + ", created=" + created + ", updated=" + updated + "]";
 	}
 
 }

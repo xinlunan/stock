@@ -1,5 +1,7 @@
 package com.xu.stock.analyse.dao;
 
+import java.util.List;
+
 import com.xu.stock.analyse.model.StockAnalyseStrategy;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 
@@ -25,5 +27,13 @@ public interface IStockAnalyseStrategyDao {
 	 * @return
 	 */
 	public StockAnalyseStrategy getAnalyseStrategy(StrategyType strategyType);
+
+	/**
+	 * 获取所有分析策略版本
+	 * 
+	 * @param highestProbeBuy
+	 * @return
+	 */
+	public List<StockAnalyseStrategy> getAnalyseStrategys(StrategyType highestProbeBuy);
 
 }

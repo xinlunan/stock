@@ -5,17 +5,16 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.xu.stock.data.dao.IStockDailyDao;
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.model.StockDaily;
-import com.xu.stock.data.service.IStockService;
-import com.xu.util.DateUtil;
 
 public class StockAnalyseWorker extends Thread {
 	protected static Logger log = LoggerFactory.getLogger(StockAnalyseWorker.class);
 
-	List<Stock> stocks;
-	IStockService stockService;
-	IStockAnalyseService stockAnalyseService;
+	private List<Stock> stocks;
+	private IStockAnalyseService stockAnalyseService;
+	private IStockDailyDao stockDailyDao;
 
 	public void run() {
 		log.info("StockDailyWorker run size" + stocks.size());
@@ -23,10 +22,13 @@ public class StockAnalyseWorker extends Thread {
 		for (Stock stock : stocks) {
 
 			try {
-				List<StockDaily> points = stockAnalyseService.analyse(stock);
+				log.info("analyse stock code:" + stock.getStockCode());
 
-				for (StockDaily stockDaily : points) {
-					log.info(stock.getStockCode() + " buy point：" + DateUtil.date2String(stockDaily.getDate()));
+				// 所有交易记录
+				List<StockDaily> dailys = stockDailyDao.getRrightStockDailys(stock.getStockCode());
+
+				if (!dailys.isEmpty()) {
+					stockAnalyseService.analyse(dailys);
 				}
 
 			} catch (Exception e) {
@@ -40,8 +42,8 @@ public class StockAnalyseWorker extends Thread {
 		this.stocks = stocks;
 	}
 
-	public void setStockService(IStockService stockService) {
-		this.stockService = stockService;
+	public void setStockDailyDao(IStockDailyDao stockDailyDao) {
+		this.stockDailyDao = stockDailyDao;
 	}
 
 	public void setStockAnalyseService(IStockAnalyseService stockAnalyseService) {

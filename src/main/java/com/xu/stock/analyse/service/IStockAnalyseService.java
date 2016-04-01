@@ -2,7 +2,6 @@ package com.xu.stock.analyse.service;
 
 import java.util.List;
 
-import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.model.StockDaily;
 
 /**
@@ -25,6 +24,6 @@ public interface IStockAnalyseService {
 	 * 
 	 * @return
 	 */
-	public List<StockDaily> analyse(Stock stock);
+	public void analyse(List<StockDaily> dailys);
 
 }
