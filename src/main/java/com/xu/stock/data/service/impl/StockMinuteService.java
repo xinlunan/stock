@@ -30,7 +30,7 @@ import com.xu.stock.data.service.IStockMinuteService;
 @SuppressWarnings("restriction")
 @Service("stockMinuteService")
 public class StockMinuteService implements IStockMinuteService {
-	static Logger log = LoggerFactory.getLogger(StockMinuteService.class);
+	protected Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Resource
 	private IStockMinuteDao stockMinuteDao;

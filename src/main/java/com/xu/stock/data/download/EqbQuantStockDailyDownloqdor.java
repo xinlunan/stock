@@ -40,7 +40,7 @@ import net.sf.json.JSONObject;
 @SuppressWarnings("restriction")
 @Service("stockDailyController3")
 public class EqbQuantStockDailyDownloqdor {
-	static Logger log = LoggerFactory.getLogger(EqbQuantStockDailyDownloqdor.class);
+	protected Logger log = LoggerFactory.getLogger(this.getClass());
 
 	private static final int NUM_300 = 300;
 

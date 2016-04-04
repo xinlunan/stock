@@ -28,8 +28,8 @@ import com.xu.stock.data.service.IStockDailyService;
 @SuppressWarnings("restriction")
 @Service("stockDailyService")
 public abstract class StockDailyService implements IStockDailyService {
-	static Logger log = LoggerFactory.getLogger(StockDailyService.class);
-
+	protected Logger log = LoggerFactory.getLogger(this.getClass());
+	public static final BigDecimal BD_100 = BigDecimal.valueOf(100);
 	@Resource
 	private IStockDailyDao stockDailyDao;
 
@@ -51,36 +51,28 @@ public abstract class StockDailyService implements IStockDailyService {
 				stockDaily.setStockCode(lastIdex.getStockCode());
 				stockDaily.setStockName(lastIdex.getStockName());
 				stockDaily.setLastClose(lastIdex.getClose());
-				stockDaily.setCloseGap(stockDaily.getClose() - stockDaily.getLastClose());
-				BigDecimal closeGap = new BigDecimal(stockDaily.getCloseGap());
-				BigDecimal lastClose = new BigDecimal(stockDaily.getLastClose());
-				Float closeGapRate = closeGap.divide(lastClose, 4, BigDecimal.ROUND_HALF_UP).floatValue() * 100;
+				stockDaily.setCloseGap(stockDaily.getClose().subtract(stockDaily.getLastClose()));
+				BigDecimal closeGapRate = stockDaily.getCloseGap().multiply(BD_100).divide(stockDaily.getLastClose(), 2, BigDecimal.ROUND_HALF_UP);
 				stockDaily.setCloseGapRate(closeGapRate);
-				stockDaily.setHighGap(stockDaily.getHigh() - stockDaily.getLastClose());
-				BigDecimal highGap = new BigDecimal(stockDaily.getHighGap());
-				Float highGapRate = highGap.divide(lastClose, 4, BigDecimal.ROUND_HALF_UP).floatValue() * 100;
+				stockDaily.setHighGap(stockDaily.getHigh().subtract(stockDaily.getLastClose()));
+				BigDecimal highGapRate = stockDaily.getHighGap().multiply(BD_100).divide(stockDaily.getLastClose(), 2, BigDecimal.ROUND_HALF_UP);
 				stockDaily.setHighGapRate(highGapRate);
-				stockDaily.setLowGap(stockDaily.getLow() - stockDaily.getLastClose());
-				BigDecimal lowGap = new BigDecimal(stockDaily.getLowGap());
-				Float lowGapRate = lowGap.divide(lastClose, 4, BigDecimal.ROUND_HALF_UP).floatValue() * 100;
+				stockDaily.setLowGap(stockDaily.getLow().subtract(stockDaily.getLastClose()));
+				BigDecimal lowGapRate = stockDaily.getLowGap().multiply(BD_100).divide(stockDaily.getLastClose(), 2, BigDecimal.ROUND_HALF_UP);
 				stockDaily.setLowGapRate(lowGapRate);
 				Long asset = null;
 				stockDaily.setAsset(asset);
 
 				if (i == repairIndexs.size() - 1) {
 					daily.setLastClose(stockDaily.getClose());
-					daily.setCloseGap(daily.getClose() - daily.getLastClose());
-					closeGap = new BigDecimal(daily.getCloseGap());
-					lastClose = new BigDecimal(daily.getLastClose());
-					closeGapRate = closeGap.divide(lastClose, 4, BigDecimal.ROUND_HALF_UP).floatValue() * 100;
+					daily.setCloseGap(daily.getClose().subtract(daily.getLastClose()));
+					closeGapRate = daily.getCloseGap().multiply(BD_100).divide(stockDaily.getLastClose(), 2, BigDecimal.ROUND_HALF_UP);
 					daily.setCloseGapRate(closeGapRate);
-					daily.setHighGap(daily.getHigh() - daily.getLastClose());
-					highGap = new BigDecimal(daily.getHighGap());
-					highGapRate = highGap.divide(lastClose, 4, BigDecimal.ROUND_HALF_UP).floatValue() * 100;
+					daily.setHighGap(daily.getHigh().subtract(daily.getLastClose()));
+					highGapRate = daily.getHighGap().multiply(BD_100).divide(stockDaily.getLastClose(), 2, BigDecimal.ROUND_HALF_UP);
 					daily.setHighGapRate(highGapRate);
-					daily.setLowGap(daily.getLow() - daily.getLastClose());
-					lowGap = new BigDecimal(daily.getLowGap());
-					lowGapRate = lowGap.divide(lastClose, 4, BigDecimal.ROUND_HALF_UP).floatValue() * 100;
+					daily.setLowGap(daily.getLow().subtract(daily.getLastClose()));
+					lowGapRate = daily.getLowGap().multiply(BD_100).divide(stockDaily.getLastClose(), 2, BigDecimal.ROUND_HALF_UP);
 					daily.setLowGapRate(lowGapRate);
 					daily.setAsset(asset);
 				}

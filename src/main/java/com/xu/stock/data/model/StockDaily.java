@@ -1,6 +1,7 @@
 package com.xu.stock.data.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -20,27 +21,27 @@ public class StockDaily implements Serializable, Comparable<StockDaily> {
 	// 日期
 	private Date date;
 	// 昨天收盘价
-	private Integer lastClose;
+	private BigDecimal lastClose;
 	// 开盘价
-	private Integer open;
+	private BigDecimal open;
 	// 收盘价
-	private Integer close;
+	private BigDecimal close;
 	// 涨跌额
-	private Integer closeGap;
+	private BigDecimal closeGap;
 	// 涨跌幅
-	private Float closeGapRate;
+	private BigDecimal closeGapRate;
 	// 最高价
-	private Integer high;
+	private BigDecimal high;
 	// 最低价
-	private Integer low;
+	private BigDecimal low;
 	// 最高价与开盘价差价 high-open
-	private Integer highGap;
+	private BigDecimal highGap;
 	// 最高价与开盘价相差比例 (high-open)/open
-	private Float highGapRate;
+	private BigDecimal highGapRate;
 	// 最低价与开盘价差价 低 low-open
-	private Integer lowGap;
+	private BigDecimal lowGap;
 	// 最低价与开盘价相差比例 (low-open)/open
-	private Float lowGapRate;
+	private BigDecimal lowGapRate;
 	// 成交额
 	private Long amount;
 	// 成交量
@@ -104,91 +105,91 @@ public class StockDaily implements Serializable, Comparable<StockDaily> {
 		this.date = date;
 	}
 
-	public Integer getLastClose() {
+	public BigDecimal getLastClose() {
 		return lastClose;
 	}
 
-	public void setLastClose(Integer lastClose) {
+	public void setLastClose(BigDecimal lastClose) {
 		this.lastClose = lastClose;
 	}
 
-	public Integer getOpen() {
+	public BigDecimal getOpen() {
 		return open;
 	}
 
-	public void setOpen(Integer open) {
+	public void setOpen(BigDecimal open) {
 		this.open = open;
 	}
 
-	public Integer getClose() {
+	public BigDecimal getClose() {
 		return close;
 	}
 
-	public void setClose(Integer close) {
+	public void setClose(BigDecimal close) {
 		this.close = close;
 	}
 
-	public Integer getCloseGap() {
+	public BigDecimal getCloseGap() {
 		return closeGap;
 	}
 
-	public void setCloseGap(Integer closeGap) {
+	public void setCloseGap(BigDecimal closeGap) {
 		this.closeGap = closeGap;
 	}
 
-	public Float getCloseGapRate() {
+	public BigDecimal getCloseGapRate() {
 		return closeGapRate;
 	}
 
-	public void setCloseGapRate(Float closeGapRate) {
+	public void setCloseGapRate(BigDecimal closeGapRate) {
 		this.closeGapRate = closeGapRate;
 	}
 
-	public Integer getHigh() {
+	public BigDecimal getHigh() {
 		return high;
 	}
 
-	public void setHigh(Integer high) {
+	public void setHigh(BigDecimal high) {
 		this.high = high;
 	}
 
-	public Integer getLow() {
+	public BigDecimal getLow() {
 		return low;
 	}
 
-	public void setLow(Integer low) {
+	public void setLow(BigDecimal low) {
 		this.low = low;
 	}
 
-	public Integer getHighGap() {
+	public BigDecimal getHighGap() {
 		return highGap;
 	}
 
-	public void setHighGap(Integer highGap) {
+	public void setHighGap(BigDecimal highGap) {
 		this.highGap = highGap;
 	}
 
-	public Float getHighGapRate() {
+	public BigDecimal getHighGapRate() {
 		return highGapRate;
 	}
 
-	public void setHighGapRate(Float highGapRate) {
+	public void setHighGapRate(BigDecimal highGapRate) {
 		this.highGapRate = highGapRate;
 	}
 
-	public Integer getLowGap() {
+	public BigDecimal getLowGap() {
 		return lowGap;
 	}
 
-	public void setLowGap(Integer lowGap) {
+	public void setLowGap(BigDecimal lowGap) {
 		this.lowGap = lowGap;
 	}
 
-	public Float getLowGapRate() {
+	public BigDecimal getLowGapRate() {
 		return lowGapRate;
 	}
 
-	public void setLowGapRate(Float lowGapRate) {
+	public void setLowGapRate(BigDecimal lowGapRate) {
 		this.lowGapRate = lowGapRate;
 	}
 

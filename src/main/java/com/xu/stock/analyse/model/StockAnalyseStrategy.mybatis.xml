@@ -15,7 +15,7 @@
 	<select id="getAnalyseStrategy" resultMap="StockAnalyseStrategy">
 		SELECT strategy_id,strategy_type,version,parameters,created,updated
 		FROM t_stock_analyse_strategy
-		WHERE strategy_type=#{strategyType}
+		WHERE strategy_type=#{strategyType} and enable=1
 		ORDER BY version desc
 		LIMIT 0, 1;
 	</select>
@@ -23,7 +23,7 @@
 	<select id="getAnalyseStrategyVersion" resultMap="StockAnalyseStrategy">
 		SELECT strategy_id,strategy_type,version,parameters,created,updated
 		FROM t_stock_analyse_strategy
-		WHERE strategy_type=#{strategyType}
+		WHERE strategy_type=#{strategyType} and enable=1
 	</select>
 
 </mapper> 

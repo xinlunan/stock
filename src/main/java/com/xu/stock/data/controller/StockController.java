@@ -29,7 +29,7 @@ import com.xu.util.HttpClientHandle;
 @SuppressWarnings("restriction")
 @Service("stockController")
 public class StockController {
-	static Logger log = LoggerFactory.getLogger(StockController.class);
+	protected Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Resource
 	private IStockService stockService;

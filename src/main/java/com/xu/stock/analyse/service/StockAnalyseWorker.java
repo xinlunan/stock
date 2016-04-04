@@ -10,20 +10,19 @@ import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.model.StockDaily;
 
 public class StockAnalyseWorker extends Thread {
-	protected static Logger log = LoggerFactory.getLogger(StockAnalyseWorker.class);
+	protected Logger log = LoggerFactory.getLogger(this.getClass());
 
 	private List<Stock> stocks;
 	private IStockAnalyseService stockAnalyseService;
 	private IStockDailyDao stockDailyDao;
 
+	@Override
 	public void run() {
 		log.info("StockDailyWorker run size" + stocks.size());
 
 		for (Stock stock : stocks) {
 
 			try {
-				log.info("analyse stock code:" + stock.getStockCode());
-
 				// 所有交易记录
 				List<StockDaily> dailys = stockDailyDao.getRrightStockDailys(stock.getStockCode());
 

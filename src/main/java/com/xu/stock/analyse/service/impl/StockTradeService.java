@@ -29,7 +29,7 @@ import com.xu.stock.analyse.service.IStockTradeService;
 @SuppressWarnings("restriction")
 @Service("stockTradeService")
 public class StockTradeService implements IStockTradeService {
-	static Logger log = LoggerFactory.getLogger(StockTradeService.class);
+	protected Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Resource
 	private IStockTradeDao stockTradeDao;

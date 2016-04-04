@@ -1,5 +1,6 @@
 package com.xu.stock.analyse.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -30,7 +31,10 @@ import com.xu.stock.data.model.StockDaily;
  */
 @SuppressWarnings("restriction")
 public abstract class BaseStockAnalyseService implements IStockAnalyseService {
-	protected static Logger log = LoggerFactory.getLogger(BaseStockAnalyseService.class);
+	protected Logger log = LoggerFactory.getLogger(this.getClass());
+
+	public static final BigDecimal BD_100 = BigDecimal.valueOf(100);
+	protected StockAnalyseStrategy strategy;
 
 	@Resource
 	protected IStockAnalyseStrategyDao stockAnalyseStrategyDao;
@@ -39,7 +43,6 @@ public abstract class BaseStockAnalyseService implements IStockAnalyseService {
 	@Resource
 	protected IStockAnalyseRecordDao stockAnalyseRecordDao;
 
-	protected StockAnalyseStrategy strategy;
 
 	public void analyse(List<StockDaily> dailys) {
 

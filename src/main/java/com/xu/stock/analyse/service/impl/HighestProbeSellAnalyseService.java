@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.xu.stock.analyse.model.StockAnalyseStrategy;
 import com.xu.stock.analyse.model.StockTrade;
 import com.xu.stock.analyse.service.StockAnalyseConstants.HighestProbeSellArgs;
+import com.xu.stock.analyse.service.StockAnalyseConstants.SerialRiseSellArgs;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeNature;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeType;
@@ -18,9 +19,18 @@ import com.xu.util.DateUtil;
 
 @Service("highestProbeSellAnalyseService")
 public class HighestProbeSellAnalyseService extends BaseStockAnalyseService {
+	private Integer holdDay;
+
+	@Override
+	public void setAnalyseStrategy(StockAnalyseStrategy strategy) {
+		super.setAnalyseStrategy(strategy);
+		this.holdDay = strategy.getIntValue(SerialRiseSellArgs.HOLD_DAY);
+	}
 
 	@Override
 	public List<StockTrade> doAnalyse(List<StockDaily> dailys) {
+		log.info("analyse stock code:" + dailys.get(0).getStockCode());
+
 		// 获取买入点
 		List<StockTrade> buys = stockTradeDao.getBuyTrades(StrategyType.HIGHEST_PROBE_BUY,
 				dailys.get(0).getStockCode());
@@ -39,7 +49,7 @@ public class HighestProbeSellAnalyseService extends BaseStockAnalyseService {
 	private List<StockTrade> analyseSellPoints(List<StockDaily> dailys, List<StockTrade> buys) {
 		List<StockTrade> sells = new ArrayList<StockTrade>();
 		for (StockTrade stockTrade : buys) {
-			StockDaily nextDaily = getNextStockDaily(dailys, stockTrade.getBuyDate());
+			StockDaily nextDaily = getSellStockDaily(dailys, stockTrade.getBuyDate());
 			if (nextDaily != null) {
 				StockTrade trade = new StockTrade();
 
@@ -57,21 +67,20 @@ public class HighestProbeSellAnalyseService extends BaseStockAnalyseService {
 				trade.setSellDate(nextDaily.getDate());
 				trade.setSellHour(15);
 				trade.setSellMinute(0);
-				BigDecimal expectRate = BigDecimal.valueOf(strategy.getDoubleValue(HighestProbeSellArgs.EXPECT_RATE))
-						.divide(BigDecimal.valueOf(100)).setScale(4, BigDecimal.ROUND_HALF_UP);// 期望收益
-				BigDecimal expectSellPrice = stockTrade.getBuyTradePrice()
-						.add(stockTrade.getBuyTradePrice().multiply(expectRate));
-				if (expectSellPrice.compareTo(BigDecimal.valueOf(nextDaily.getHigh())) <= 0) {
+				BigDecimal expectRate = BigDecimal.valueOf(strategy.getDoubleValue(HighestProbeSellArgs.EXPECT_RATE)).divide(BD_100).setScale(4, BigDecimal.ROUND_HALF_UP);// 期望收益
+				BigDecimal expectSellPrice = stockTrade.getBuyTradePrice().add(stockTrade.getBuyTradePrice().multiply(expectRate));
+				if (expectSellPrice.compareTo(nextDaily.getHigh()) <= 0) {
 					trade.setSellTradePrice(expectSellPrice);
 				} else {
-					trade.setSellTradePrice(BigDecimal.valueOf(nextDaily.getClose()));
+					trade.setSellTradePrice(nextDaily.getClose());
 				}
-				trade.setSellHighPrice(BigDecimal.valueOf(nextDaily.getHigh()));
-				trade.setSellClosePrice(BigDecimal.valueOf(nextDaily.getClose()));
+				trade.setSellHighPrice(nextDaily.getHigh());
+				trade.setSellClosePrice(nextDaily.getClose());
 
 				trade.setProfit(trade.getSellTradePrice().subtract(trade.getBuyTradePrice()));
-				trade.setProfitRate(trade.getProfit().multiply(BigDecimal.valueOf(100))
-						.divide(trade.getBuyTradePrice().setScale(4, BigDecimal.ROUND_HALF_UP)));
+				trade.setProfitRate(trade.getProfit().multiply(BD_100).divide(trade.getBuyTradePrice(), 4, BigDecimal.ROUND_HALF_UP));
+				trade.setHighProfitRate(trade.getSellHighPrice().subtract(trade.getBuyTradePrice()).multiply(BD_100).divide(trade.getBuyTradePrice(), 4, BigDecimal.ROUND_HALF_UP));
+				trade.setCloseProfitRate(trade.getSellClosePrice().subtract(trade.getBuyTradePrice()).multiply(BD_100).divide(trade.getBuyTradePrice(), 4, BigDecimal.ROUND_HALF_UP));
 
 				trade.setTradeType(TradeType.SELL);
 				trade.setTradeNature(TradeNature.VIRTUAL);
@@ -87,11 +96,11 @@ public class HighestProbeSellAnalyseService extends BaseStockAnalyseService {
 		return sells;
 	}
 
-	private StockDaily getNextStockDaily(List<StockDaily> dailys, Date date) {
+	private StockDaily getSellStockDaily(List<StockDaily> dailys, Date date) {
 		for (int i = 0; i < dailys.size() - 1; i++) {
 			StockDaily daily = dailys.get(i);
 			if (DateUtil.dateToString(daily.getDate()).equals(DateUtil.dateToString(date))) {
-				return dailys.get(i + 1);
+				return dailys.get(i + holdDay);
 			}
 		}
 		return null;
