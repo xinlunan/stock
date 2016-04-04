@@ -1,6 +1,7 @@
 package com.xu.stock.data.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class Stock implements Serializable, Comparable<Stock> {
 	// 最后同步日期
 	private Date lastDate;
 	// 最后收盘价
-	private Integer lastClose;
+	private BigDecimal lastClose;
 	// 创建日期
 	private Date created;
 	// 更新日期
@@ -87,11 +88,11 @@ public class Stock implements Serializable, Comparable<Stock> {
 		this.lastDate = lastDate;
 	}
 
-	public Integer getLastClose() {
+	public BigDecimal getLastClose() {
 		return lastClose;
 	}
 
-	public void setLastClose(Integer lastClose) {
+	public void setLastClose(BigDecimal lastClose) {
 		this.lastClose = lastClose;
 	}
 

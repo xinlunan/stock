@@ -19,7 +19,6 @@ import com.xu.stock.data.model.StockDaily;
 import com.xu.util.DateUtil;
 import com.xu.util.DocumentUtil;
 import com.xu.util.HttpClientHandle;
-import com.xu.util.NumberUtil;
 import com.xu.util.StringUtil;
 import com.xu.util.XPathUtil;
 
@@ -37,7 +36,9 @@ import com.xu.util.XPathUtil;
  * @since 1.
  */
 public class SinaStockDailyDownloador {
-	static Logger log = LoggerFactory.getLogger(SinaStockDailyDownloador.class);
+	protected Logger log = LoggerFactory.getLogger(this.getClass());
+
+	public static final BigDecimal BD_100 = BigDecimal.valueOf(100);
 
 	/**
 	 * 下载股票指数数据
@@ -146,47 +147,39 @@ public class SinaStockDailyDownloador {
 					Node dateNode = dateNodes.getLength() > 1 ? dateNodes.item(1) : dateNodes.item(0);
 					String date = StringUtil.replaceBlank(dateNode.getTextContent());
 
-					Integer open = NumberUtil.mul(dailyNodes.item(3).getTextContent(), StockDownloadHelper.STR_100);
-					Integer high = NumberUtil.mul(dailyNodes.item(5).getTextContent(), StockDownloadHelper.STR_100);
-					Integer close = NumberUtil.mul(dailyNodes.item(7).getTextContent(), StockDownloadHelper.STR_100);
-					Integer low = NumberUtil.mul(dailyNodes.item(9).getTextContent(), StockDownloadHelper.STR_100);
+					BigDecimal open = BigDecimal.valueOf(Double.valueOf(dailyNodes.item(3).getTextContent()));
+					BigDecimal high = BigDecimal.valueOf(Double.valueOf(dailyNodes.item(5).getTextContent()));
+					BigDecimal close = BigDecimal.valueOf(Double.valueOf(dailyNodes.item(7).getTextContent()));
+					BigDecimal low = BigDecimal.valueOf(Double.valueOf(dailyNodes.item(9).getTextContent()));
 					String volume = dailyNodes.item(11).getTextContent();
 					String amount = dailyNodes.item(13).getTextContent();
-
-					// log.debug(date + "\t" + open + "\t" + high + "\t" + close
-					// + "\t" + low + "\t" + volume + "\t" + amount);
 
 					StockDaily stockDaily = new StockDaily();
 					stockDaily.setStockId(stock.getStockId());
 					stockDaily.setStockCode(stock.getStockCode());
 					stockDaily.setStockName(stock.getStockName());
 					stockDaily.setDate(DateUtil.stringToDate(date));
-					Integer lastCloseInt = stock.getLastClose() == null ? open : stock.getLastClose();
+					BigDecimal lastCloseInt = stock.getLastClose() == null ? open : stock.getLastClose();
 					stockDaily.setLastClose(lastCloseInt);
 					stockDaily.setOpen(open);
 					stockDaily.setClose(close);
-					stockDaily.setCloseGap(stockDaily.getClose() - stockDaily.getLastClose());
-					BigDecimal closeGap = new BigDecimal(stockDaily.getCloseGap());
-					BigDecimal lastClose = new BigDecimal(stockDaily.getLastClose());
-					Float closeGapRate = closeGap.divide(lastClose, 4, BigDecimal.ROUND_HALF_UP).floatValue() * 100;
+					stockDaily.setCloseGap(stockDaily.getClose().subtract(stockDaily.getLastClose()));
+					BigDecimal closeGapRate = stockDaily.getCloseGap().multiply(BD_100).divide(stockDaily.getLastClose(), 2, BigDecimal.ROUND_HALF_UP);
 					stockDaily.setCloseGapRate(closeGapRate);
 					stockDaily.setHigh(high);
-					stockDaily.setHighGap(stockDaily.getHigh() - stockDaily.getLastClose());
-					BigDecimal highGap = new BigDecimal(stockDaily.getHighGap());
-					Float highGapRate = highGap.divide(lastClose, 4, BigDecimal.ROUND_HALF_UP).floatValue() * 100;
+					stockDaily.setHighGap(stockDaily.getHigh().subtract(stockDaily.getLastClose()));
+					BigDecimal highGapRate = stockDaily.getHighGap().multiply(BD_100).divide(stockDaily.getLastClose(), 2, BigDecimal.ROUND_HALF_UP);
 					stockDaily.setHighGapRate(highGapRate);
 					stockDaily.setLow(low);
-					stockDaily.setLowGap(stockDaily.getLow() - stockDaily.getLastClose());
-					BigDecimal lowGap = new BigDecimal(stockDaily.getLowGap());
-					Float lowGapRate = lowGap.divide(lastClose, 4, BigDecimal.ROUND_HALF_UP).floatValue() * 100;
+					stockDaily.setLowGap(stockDaily.getLow().subtract(stockDaily.getLastClose()));
+					BigDecimal lowGapRate = stockDaily.getLowGap().multiply(BD_100).divide(stockDaily.getLastClose(), 2, BigDecimal.ROUND_HALF_UP);
 					stockDaily.setLowGapRate(lowGapRate);
 					stockDaily.setAmount(Long.valueOf(amount));
 					stockDaily.setVolume(Long.valueOf(volume));
 					stockDaily.setAsset(null);// TODO
-					if (Math.abs(stockDaily.getCloseGapRate()) > 11) {
+					if (Math.abs(stockDaily.getCloseGapRate().intValue()) > 11) {
 						stockDaily.setIsExrights(true);
-						BigDecimal closeGapRate1 = new BigDecimal(stockDaily.getCloseGapRate());
-						int exrights = closeGapRate1.divide(new BigDecimal(10), 0, BigDecimal.ROUND_HALF_UP).intValue() * 10;
+						int exrights = stockDaily.getCloseGapRate().divide(new BigDecimal(10), 0, BigDecimal.ROUND_HALF_UP).intValue() * 10;
 						stockDaily.setExrights(exrights);
 					}
 

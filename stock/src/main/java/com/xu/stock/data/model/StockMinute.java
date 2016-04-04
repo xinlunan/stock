@@ -1,6 +1,7 @@
 package com.xu.stock.data.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -32,7 +33,7 @@ public class StockMinute implements Serializable {
 	// 分钟
 	private Integer minute;
 	// 最低价
-	private Integer price;
+	private BigDecimal price;
 	// 创建日期
 	private Date created;
 	// 更新日期
@@ -86,11 +87,11 @@ public class StockMinute implements Serializable {
 		this.minute = minute;
 	}
 
-	public Integer getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setPrice(Integer price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 

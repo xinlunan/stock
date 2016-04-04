@@ -56,6 +56,10 @@ public class StockTrade implements Serializable {
 	private BigDecimal profit;
 	// 利润率
 	private BigDecimal profitRate;
+	// 最高价收益比例
+	private BigDecimal highProfitRate;
+	// 收盘价收益比例
+	private BigDecimal closeProfitRate;
 	// 交易类型
 	private String tradeType;
 	// 交易性质
@@ -275,6 +279,22 @@ public class StockTrade implements Serializable {
 		return serialVersionUID;
 	}
 
+	public BigDecimal getHighProfitRate() {
+		return highProfitRate;
+	}
+
+	public void setHighProfitRate(BigDecimal highProfitRate) {
+		this.highProfitRate = highProfitRate;
+	}
+
+	public BigDecimal getCloseProfitRate() {
+		return closeProfitRate;
+	}
+
+	public void setCloseProfitRate(BigDecimal closeProfitRate) {
+		this.closeProfitRate = closeProfitRate;
+	}
+
 	@Override
 	public String toString() {
 		return "StockTrade [tradeId=" + tradeId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", stockName="
@@ -282,7 +302,8 @@ public class StockTrade implements Serializable {
 				+ ", buyTradePrice=" + buyTradePrice + ", buyHighPrice=" + buyHighPrice + ", buyClosePrice="
 				+ buyClosePrice + ", sellDate=" + sellDate + ", sellHour=" + sellHour + ", sellMinute=" + sellMinute
 				+ ", sellTradePrice=" + sellTradePrice + ", sellHighPrice=" + sellHighPrice + ", sellClosePrice="
-				+ sellClosePrice + ", profit=" + profit + ", profitRate=" + profitRate + ", tradeType=" + tradeType
+				+ sellClosePrice + ", profit=" + profit + ", profitRate=" + profitRate + ", highProfitRate="
+				+ highProfitRate + ", closeProfitRate=" + closeProfitRate + ", tradeType=" + tradeType
 				+ ", tradeNature=" + tradeNature + ", strategy=" + strategy + ", version=" + version + ", parameters="
 				+ parameters + ", created=" + created + ", updated=" + updated + "]";
 	}

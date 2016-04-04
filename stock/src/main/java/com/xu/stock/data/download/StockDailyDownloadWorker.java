@@ -25,11 +25,12 @@ import com.xu.util.DateUtil;
  * @since 1.
  */
 public class StockDailyDownloadWorker extends Thread {
-	protected static Logger log = LoggerFactory.getLogger(StockDailyDownloadWorker.class);
+	protected Logger log = LoggerFactory.getLogger(this.getClass());
 
 	List<Stock> stocks;
 	IStockService stockService;
 
+	@Override
 	public void run() {
 		log.info("StockDailyWorker run size" + stocks.size());
 

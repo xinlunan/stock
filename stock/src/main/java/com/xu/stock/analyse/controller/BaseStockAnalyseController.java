@@ -32,7 +32,7 @@ import com.xu.util.ThreadUtil;
  */
 @SuppressWarnings("restriction")
 public abstract class BaseStockAnalyseController {
-	protected static Logger log = LoggerFactory.getLogger(BaseStockAnalyseController.class);
+	protected Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Resource
 	private IStockService stockService;

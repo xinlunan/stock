@@ -9,10 +9,11 @@ import javax.annotation.Resource;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.winit.framework.dao.IBaseDao;
-import com.winit.framework.log.BaseLog;
 import com.winit.framework.model.PageContext;
 import com.winit.framework.model.Pager;
 import com.winit.framework.util.GenericsUtils;
@@ -26,7 +27,7 @@ import com.winit.framework.util.GenericsUtils;
  */
 @Service("baseDao")
 public abstract class BaseDao<T extends Serializable> implements IBaseDao<T> {
-	protected static final BaseLog log = BaseLog.getLogger(BaseDao.class);
+	protected Logger log = LoggerFactory.getLogger(this.getClass());
 
 	public static final String SUFFIX_INSERT = ".insert";
 	public static final String SUFFIX_UPDATE = ".update";

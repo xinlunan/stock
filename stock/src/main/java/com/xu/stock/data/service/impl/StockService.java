@@ -9,9 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.xu.stock.data.dao.IStockDailyDao;
 import com.xu.stock.data.dao.IStockDao;
 import com.xu.stock.data.download.StockDownloadHelper;
-import com.xu.stock.data.dao.IStockDailyDao;
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.model.StockDaily;
 import com.xu.stock.data.service.IStockService;
@@ -32,7 +32,8 @@ import com.xu.stock.data.service.IStockService;
 @SuppressWarnings("restriction")
 @Service("stockService")
 public class StockService implements IStockService {
-	static Logger log = LoggerFactory.getLogger(StockService.class);
+	protected Logger log = LoggerFactory.getLogger(this.getClass());
+
 	@Resource
 	private IStockDao stockDao;
 

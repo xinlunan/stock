@@ -31,7 +31,7 @@ import com.xu.util.ThreadUtil;
 @SuppressWarnings("restriction")
 @Service("stockDailyController")
 public class StockDailyController {
-	protected static Logger log = LoggerFactory.getLogger(StockDailyController.class);
+	protected Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Resource
 	private IStockService stockService;

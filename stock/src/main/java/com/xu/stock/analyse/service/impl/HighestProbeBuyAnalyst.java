@@ -34,9 +34,9 @@ public class HighestProbeBuyAnalyst extends BaseStockAnalyseService {
 
 	private Integer lastWaveCycle;
 	private Integer thisWaveCycle;
-	private Integer thisFallRate;
-	private Integer warnRateHigh;
-	private Integer warnRateLow;
+	private BigDecimal thisFallRate;
+	private BigDecimal warnRateHigh;
+	private BigDecimal warnRateLow;
 
 	@Override
 	public List<StockAnalyseStrategy> getAnalyseStrategys() {
@@ -48,13 +48,15 @@ public class HighestProbeBuyAnalyst extends BaseStockAnalyseService {
 		super.setAnalyseStrategy(strategy);
 		this.lastWaveCycle = strategy.getIntValue(HighestProbeBuyArgs.D1_LAST_WAVE_CYCLE);
 		this.thisWaveCycle = strategy.getIntValue(HighestProbeBuyArgs.D2_THIS_WAVE_CYCLE);
-		this.thisFallRate = strategy.getIntValue(HighestProbeBuyArgs.F1_THIS_FALL_RATE);
-		this.warnRateHigh = strategy.getIntValue(HighestProbeBuyArgs.F2_WARN_RATE_HIGH);
-		this.warnRateLow = strategy.getIntValue(HighestProbeBuyArgs.F3_WARN_RATE_LOW);
+		this.thisFallRate = BigDecimal.valueOf(strategy.getDoubleValue(HighestProbeBuyArgs.F1_THIS_FALL_RATE));
+		this.warnRateHigh = BigDecimal.valueOf(strategy.getDoubleValue(HighestProbeBuyArgs.F2_WARN_RATE_HIGH));
+		this.warnRateLow = BigDecimal.valueOf(strategy.getDoubleValue(HighestProbeBuyArgs.F3_WARN_RATE_LOW));
 	}
 
 	@Override
 	public List<StockTrade> doAnalyse(List<StockDaily> dailys) {
+		log.info("analyse stock code:" + dailys.get(0).getStockCode());
+
 		// 找出当前股票的历史最高点的日期
 		List<Integer> highestPoints = scanHighestPoints(dailys);
 
@@ -83,9 +85,9 @@ public class HighestProbeBuyAnalyst extends BaseStockAnalyseService {
 			trade.setBuyDate(stockDaily.getDate());
 			trade.setBuyHour(15);
 			trade.setBuyMinute(0);
-			trade.setBuyTradePrice(BigDecimal.valueOf(stockDaily.getClose()));
-			trade.setBuyHighPrice(BigDecimal.valueOf(stockDaily.getHigh()));
-			trade.setBuyClosePrice(BigDecimal.valueOf(stockDaily.getClose()));
+			trade.setBuyTradePrice(stockDaily.getClose());
+			trade.setBuyHighPrice(stockDaily.getHigh());
+			trade.setBuyClosePrice(stockDaily.getClose());
 
 			trade.setSellDate(null);
 			trade.setSellHour(null);
@@ -96,6 +98,8 @@ public class HighestProbeBuyAnalyst extends BaseStockAnalyseService {
 
 			trade.setProfit(BigDecimal.valueOf(0));
 			trade.setProfitRate(BigDecimal.valueOf(0));
+			trade.setHighProfitRate(BigDecimal.valueOf(0));
+			trade.setCloseProfitRate(BigDecimal.valueOf(0));
 
 			trade.setTradeType(TradeType.BUY);
 			trade.setTradeNature(TradeNature.VIRTUAL);
@@ -125,24 +129,20 @@ public class HighestProbeBuyAnalyst extends BaseStockAnalyseService {
 		for (Integer point : highestPonits) {
 
 			StockDaily highestStockDaily = stockDailys.get(point);
-			Integer highest = highestStockDaily.getClose();
-			Integer warnHigh = highest - BigDecimal.valueOf(highest.longValue())
-					.multiply(BigDecimal.valueOf(warnRateHigh)).divide(BigDecimal.valueOf(100)).intValue();
-			Integer warnLow = highest - BigDecimal.valueOf(highest.longValue())
-					.multiply(BigDecimal.valueOf(warnRateLow)).divide(BigDecimal.valueOf(100)).intValue();
-			Integer lowest = Integer.MAX_VALUE;
-			Integer rate = Integer.MIN_VALUE;
+			BigDecimal highest = highestStockDaily.getClose();
+			BigDecimal warnHigh = highest.subtract(highest.multiply(warnRateHigh).divide(BD_100));
+			BigDecimal warnLow = highest.subtract(highest.multiply(warnRateLow).divide(BD_100));
+			BigDecimal lowest = BigDecimal.valueOf(Integer.MAX_VALUE);
+			BigDecimal rate = BigDecimal.valueOf(Integer.MIN_VALUE);
 			for (int i = point; i < stockDailys.size(); i++) {
-				int current = stockDailys.get(i).getClose();
-				int currentHighest = stockDailys.get(i).getHigh();
-				if (current < lowest) {
+				BigDecimal current = stockDailys.get(i).getClose();
+				BigDecimal currentHighest = stockDailys.get(i).getHigh();
+				if (current.compareTo(lowest) == -1) {
 					lowest = stockDailys.get(i).getClose();
-					Integer closeGap = highest - lowest;
-					rate = BigDecimal.valueOf(closeGap.longValue()).multiply(BigDecimal.valueOf(100))
-							.divide(BigDecimal.valueOf(highest.longValue()), 2, BigDecimal.ROUND_HALF_UP).intValue();
+					BigDecimal closeGap = highest.subtract(lowest);
+					rate = closeGap.multiply(BD_100).divide(highest, 2, BigDecimal.ROUND_HALF_UP);
 				}
-				if (rate > thisFallRate && current >= warnLow && current <= warnHigh && currentHighest < highest) {
-
+				if (rate.compareTo(thisFallRate) == 1 && current.compareTo(warnLow) >= 0 && current.compareTo(warnHigh) <= 0 && currentHighest.compareTo(highest) <= 0) {
 					log.info("buy point:" + stockDailys.get(point).getStockCode() + "\t"
 							+ DateUtil.date2String(stockDailys.get(point).getDate()) + "\t"
 							+ stockDailys.get(point).getClose() + "\t"
@@ -152,7 +152,7 @@ public class HighestProbeBuyAnalyst extends BaseStockAnalyseService {
 					buyPoints.add(stockDailys.get(i));
 					break;
 				}
-				if (current > warnHigh && stockDailys.get(i).getDate().after(stockDailys.get(point).getDate())) {
+				if (current.compareTo(warnHigh) == 1 && stockDailys.get(i).getDate().after(stockDailys.get(point).getDate())) {
 					break;
 				}
 
@@ -180,10 +180,41 @@ public class HighestProbeBuyAnalyst extends BaseStockAnalyseService {
 		List<Integer> highestPoints = new ArrayList<Integer>();
 		for (int index = beginIndex; index < endIndex; index++) {
 			if (isHighest(stockDailys, index, lastWaveCycle, thisWaveCycle)) {
-				highestPoints.add(index);
+				// 是否涨停
+				if (!isRistLimit(stockDailys, index)) {
+					highestPoints.add(index);
+				}
+
 			}
 		}
 		return highestPoints;
+	}
+
+	/**
+	 * 是否涨停
+	 * 
+	 * @param dailys
+	 * @param index
+	 * @return
+	 */
+	protected boolean isRistLimit(List<StockDaily> dailys, int index) {
+		BigDecimal lastPrice = dailys.get(index - 1).getClose();
+		StockDaily thisDaily = dailys.get(index);
+		BigDecimal lastRise = thisDaily.getClose().subtract(lastPrice);
+		BigDecimal lastRiseRate = lastRise.multiply(BD_100).divide(lastPrice, 2, BigDecimal.ROUND_HALF_UP);
+
+		if (lastRiseRate.compareTo(BigDecimal.valueOf(Double.valueOf(9.8))) > 0
+				&& thisDaily.getHigh().compareTo(thisDaily.getClose()) == 0) {
+			return true;
+		}
+
+		if (lastRiseRate.compareTo(BigDecimal.valueOf(Double.valueOf(4.9))) > 0
+				&& lastRiseRate.compareTo(BigDecimal.valueOf(Double.valueOf(5.1))) < 0
+				&& thisDaily.getHigh().compareTo(thisDaily.getClose()) == 0) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -198,12 +229,12 @@ public class HighestProbeBuyAnalyst extends BaseStockAnalyseService {
 	private boolean isHighest(List<StockDaily> stockDailys, int index, int date1, int date2) {
 		for (int i = index - date1; i < index + date2; i++) {
 			if (i < index) {
-				if (stockDailys.get(i).getClose() > stockDailys.get(index).getClose()) {
+				if (stockDailys.get(i).getClose().compareTo(stockDailys.get(index).getClose()) > 0) {
 					return false;
 				}
 			}
 			if (i > index) {
-				if (stockDailys.get(i).getClose() >= stockDailys.get(index).getClose()) {
+				if (stockDailys.get(i).getClose().compareTo(stockDailys.get(index).getClose()) >= 0) {
 					return false;
 				}
 			}

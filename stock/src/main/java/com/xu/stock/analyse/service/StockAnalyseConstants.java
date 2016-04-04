@@ -17,7 +17,7 @@ public interface StockAnalyseConstants {
 
 	public enum StrategyType {
 
-		HIGHEST_PROBE_BUY, HIGHEST_PROBE_SELL, HIGH_LOW_BUY, HIGH_LOW_SELL;
+		HIGHEST_PROBE_BUY, HIGHEST_PROBE_SELL, SERIAL_RISE_BUY, SERIAL_RISE_SELL, GENERAL_RISE_BUY;
 
 	}
 
@@ -34,13 +34,20 @@ public interface StockAnalyseConstants {
 		public static final String EXPECT_RATE = "expect_rate";
 	}
 
-	public interface HighLowBuyArgs {
+	public interface SerialRiseBuyArgs {
 		public static final String RISE_DAY = "rise_day";
 		public static final String RISE_RATE = "rise_rate";
 	}
 
-	public interface HighLowSellArgs {
+	public interface GeneralRiseBuyArgs {
+		public static final String RISE_DAY = "rise_day";
+		public static final String RISE_RATE = "rise_rate";
+		public static final String SERIAL_DAY = "serial_day";
+	}
+
+	public interface SerialRiseSellArgs {
 		public static final String EXPECT_RATE = "expect_rate";
+		public static final String HOLD_DAY = "hold_day";
 	}
 
 	public interface TradeType {
