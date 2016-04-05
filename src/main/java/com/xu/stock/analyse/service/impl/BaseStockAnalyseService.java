@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory;
 
 import com.xu.stock.analyse.dao.IStockAnalyseRecordDao;
 import com.xu.stock.analyse.dao.IStockAnalyseStrategyDao;
-import com.xu.stock.analyse.dao.IStockTradeDao;
+import com.xu.stock.analyse.dao.IStockSimulateTradeDao;
 import com.xu.stock.analyse.model.StockAnalyseStrategy;
-import com.xu.stock.analyse.model.StockTrade;
+import com.xu.stock.analyse.model.StockSimulateTrade;
 import com.xu.stock.analyse.service.IStockAnalyseService;
 import com.xu.stock.data.model.StockDaily;
 
@@ -39,7 +39,7 @@ public abstract class BaseStockAnalyseService implements IStockAnalyseService {
 	@Resource
 	protected IStockAnalyseStrategyDao stockAnalyseStrategyDao;
 	@Resource
-	protected IStockTradeDao stockTradeDao;
+	protected IStockSimulateTradeDao stockSimulateTradeDao;
 	@Resource
 	protected IStockAnalyseRecordDao stockAnalyseRecordDao;
 
@@ -53,10 +53,10 @@ public abstract class BaseStockAnalyseService implements IStockAnalyseService {
 			setAnalyseStrategy(analyseStrategy);
 
 			// 分析可购买点
-			List<StockTrade> trades = doAnalyse(dailys);
+			List<StockSimulateTrade> trades = doAnalyse(dailys);
 
 			// 保存购买点
-			stockTradeDao.saveStockTrades(trades);
+			stockSimulateTradeDao.saveStockSimulateTrades(trades);
 		}
 
 	}
@@ -67,7 +67,7 @@ public abstract class BaseStockAnalyseService implements IStockAnalyseService {
 	 * @param dailys
 	 * @return
 	 */
-	public abstract List<StockTrade> doAnalyse(List<StockDaily> dailys);
+	public abstract List<StockSimulateTrade> doAnalyse(List<StockDaily> dailys);
 
 	/**
 	 * 设置分析策略版本

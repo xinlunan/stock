@@ -17,7 +17,7 @@ import java.util.Date;
  * 
  * @since 1.
  */
-public class StockTrade implements Serializable {
+public class StockSimulateTrade implements Serializable {
 	private static final long serialVersionUID = -352228891672124416L;
 
 	// 股票每分钟指数Id
@@ -297,7 +297,7 @@ public class StockTrade implements Serializable {
 
 	@Override
 	public String toString() {
-		return "StockTrade [tradeId=" + tradeId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", stockName="
+		return "StockSimulateTrade [tradeId=" + tradeId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", stockName="
 				+ stockName + ", buyDate=" + buyDate + ", buyHour=" + buyHour + ", buyMinute=" + buyMinute
 				+ ", buyTradePrice=" + buyTradePrice + ", buyHighPrice=" + buyHighPrice + ", buyClosePrice="
 				+ buyClosePrice + ", sellDate=" + sellDate + ", sellHour=" + sellHour + ", sellMinute=" + sellMinute
