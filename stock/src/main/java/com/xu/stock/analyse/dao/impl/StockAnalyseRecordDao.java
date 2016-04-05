@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import com.winit.framework.dao.impl.BaseDao;
 import com.xu.stock.analyse.dao.IStockAnalyseRecordDao;
 import com.xu.stock.analyse.model.StockAnalyseRecord;
-import com.xu.stock.analyse.model.StockTrade;
+import com.xu.stock.analyse.model.StockSimulateTrade;
 
 /**
  * 股票分析记录
@@ -22,7 +22,7 @@ import com.xu.stock.analyse.model.StockTrade;
  * @since 1.
  */
 @Repository("stockAnalyseRecordDao")
-public class StockAnalyseRecordDao extends BaseDao<StockTrade> implements IStockAnalyseRecordDao {
+public class StockAnalyseRecordDao extends BaseDao<StockSimulateTrade> implements IStockAnalyseRecordDao {
 
 	public final String SQL_INSERT_ANALYSE_RECORD = getNameSpace() + "insertAnalyseRecord";
 	public final String SQL_UPDATE_ANALYSE_RECORD = getNameSpace() + "updateAnalyseRecord";

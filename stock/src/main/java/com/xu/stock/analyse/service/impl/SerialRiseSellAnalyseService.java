@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.analyse.model.StockAnalyseStrategy;
-import com.xu.stock.analyse.model.StockTrade;
+import com.xu.stock.analyse.model.StockSimulateTrade;
 import com.xu.stock.analyse.service.StockAnalyseConstants.SerialRiseSellArgs;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeNature;
@@ -39,11 +39,11 @@ public class SerialRiseSellAnalyseService extends BaseStockAnalyseService {
 	}
 
 	@Override
-	public List<StockTrade> doAnalyse(List<StockDaily> dailys) {
+	public List<StockSimulateTrade> doAnalyse(List<StockDaily> dailys) {
 		log.info("analyse stock code:" + dailys.get(0).getStockCode());
 
 		// 获取买入点
-		List<StockTrade> buys = stockTradeDao.getBuyTrades(StrategyType.SERIAL_RISE_BUY, dailys.get(0).getStockCode());
+		List<StockSimulateTrade> buys = stockSimulateTradeDao.getBuyTrades(StrategyType.SERIAL_RISE_BUY, dailys.get(0).getStockCode());
 
 		// 分析卖出点
 		return analyseSellPoints(dailys, buys);
@@ -56,29 +56,29 @@ public class SerialRiseSellAnalyseService extends BaseStockAnalyseService {
 	 * @param buys
 	 * @return
 	 */
-	private List<StockTrade> analyseSellPoints(List<StockDaily> dailys, List<StockTrade> buys) {
-		List<StockTrade> sells = new ArrayList<StockTrade>();
-		for (StockTrade stockTrade : buys) {
-            StockDaily nextDaily = StockAnalyseUtil.getSellStockDaily(dailys, stockTrade.getBuyDate(), holdDay);
+	private List<StockSimulateTrade> analyseSellPoints(List<StockDaily> dailys, List<StockSimulateTrade> buys) {
+		List<StockSimulateTrade> sells = new ArrayList<StockSimulateTrade>();
+		for (StockSimulateTrade stockSimulateTrade : buys) {
+            StockDaily nextDaily = StockAnalyseUtil.getSellStockDaily(dailys, stockSimulateTrade.getBuyDate(), holdDay);
 			if (nextDaily != null) {
-				StockTrade trade = new StockTrade();
+				StockSimulateTrade trade = new StockSimulateTrade();
 
 				trade.setStockId(nextDaily.getStockId());
 				trade.setStockCode(nextDaily.getStockCode());
 				trade.setStockName(nextDaily.getStockName());
 
-				trade.setBuyDate(stockTrade.getBuyDate());
-				trade.setBuyHour(stockTrade.getBuyHour());
-				trade.setBuyMinute(stockTrade.getBuyMinute());
-				trade.setBuyTradePrice(stockTrade.getBuyTradePrice());
-				trade.setBuyHighPrice(stockTrade.getBuyHighPrice());
-				trade.setBuyClosePrice(stockTrade.getBuyClosePrice());
+				trade.setBuyDate(stockSimulateTrade.getBuyDate());
+				trade.setBuyHour(stockSimulateTrade.getBuyHour());
+				trade.setBuyMinute(stockSimulateTrade.getBuyMinute());
+				trade.setBuyTradePrice(stockSimulateTrade.getBuyTradePrice());
+				trade.setBuyHighPrice(stockSimulateTrade.getBuyHighPrice());
+				trade.setBuyClosePrice(stockSimulateTrade.getBuyClosePrice());
 
 				trade.setSellDate(nextDaily.getDate());
 				trade.setSellHour(15);
 				trade.setSellMinute(0);
 				BigDecimal expectRate = BigDecimal.valueOf(strategy.getDoubleValue(SerialRiseSellArgs.EXPECT_RATE)).divide(BD_100,4, BigDecimal.ROUND_HALF_UP);// 期望收益
-				BigDecimal expectSellPrice = stockTrade.getBuyTradePrice().add(stockTrade.getBuyTradePrice().multiply(expectRate));
+				BigDecimal expectSellPrice = stockSimulateTrade.getBuyTradePrice().add(stockSimulateTrade.getBuyTradePrice().multiply(expectRate));
 				if (expectSellPrice.compareTo(nextDaily.getHigh()) <= 0) {
 					trade.setSellTradePrice(expectSellPrice);
 				} else {

@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.analyse.model.StockAnalyseStrategy;
-import com.xu.stock.analyse.model.StockTrade;
+import com.xu.stock.analyse.model.StockSimulateTrade;
 import com.xu.stock.analyse.service.StockAnalyseConstants.SerialRiseBuyArgs;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeNature;
@@ -40,14 +40,14 @@ public class SerialRiseBuyAnalyseService extends BaseStockAnalyseService {
 	}
 
 	@Override
-	public List<StockTrade> doAnalyse(List<StockDaily> dailys) {
+	public List<StockSimulateTrade> doAnalyse(List<StockDaily> dailys) {
 		log.info("analyse stock code:" + dailys.get(0).getStockCode());
 
 		// 找出当前股票的连接增长的日期
 		List<StockDaily> buyDailyPoints = scanRisePoints(dailys);
 
 		// 得到购入时间点
-		return buildStockTrades(buyDailyPoints);
+		return buildStockSimulateTrades(buyDailyPoints);
 	}
 
 	/**
@@ -56,10 +56,10 @@ public class SerialRiseBuyAnalyseService extends BaseStockAnalyseService {
 	 * @param buyPoints
 	 * @return
 	 */
-	protected List<StockTrade> buildStockTrades(List<StockDaily> buyPoints) {
-		List<StockTrade> trades = new ArrayList<StockTrade>();
+	protected List<StockSimulateTrade> buildStockSimulateTrades(List<StockDaily> buyPoints) {
+		List<StockSimulateTrade> trades = new ArrayList<StockSimulateTrade>();
 		for (StockDaily stockDaily : buyPoints) {
-			StockTrade trade = new StockTrade();
+			StockSimulateTrade trade = new StockSimulateTrade();
 
 			trade.setStockId(stockDaily.getStockId());
 			trade.setStockCode(stockDaily.getStockCode());
