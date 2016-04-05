@@ -30,7 +30,7 @@ import com.xu.stock.data.model.StockDaily;
 @Service("serialRiseBuyAnalyseService")
 public class SerialRiseBuyAnalyseService extends BaseStockAnalyseService {
 	protected Integer riseDay;
-	private BigDecimal riseRate;
+    protected BigDecimal riseRate;
 
 	@Override
 	public void setAnalyseStrategy(StockAnalyseStrategy strategy) {
@@ -124,80 +124,26 @@ public class SerialRiseBuyAnalyseService extends BaseStockAnalyseService {
 	 */
 	protected boolean isBuyDaily(List<StockDaily> dailys, int index) {
 		// 是否连接上涨
-		if (!isSerialRise(dailys, index)) {
+        if (!StockAnalyseUtil.isSerialRise(dailys, index, riseDay)) {
 			return false;
 		}
 
 		// 增长是否达到预期
-		if (!isRistExpected(dailys, index)) {
+        if (!StockAnalyseUtil.isRistExpected(dailys, index, riseDay, riseRate)) {
 			return false;
 		}
 
 		// 是否涨停
-		if (isRistLimit(dailys, index)) {
+        if (StockAnalyseUtil.isLastDayRiseLimit(dailys, index)) {
 			return false;
 		}
 
 		return true;
 	}
 
-	/**
-	 * 是否涨停
-	 * 
-	 * @param dailys
-	 * @param index
-	 * @return
-	 */
-	protected boolean isRistLimit(List<StockDaily> dailys, int index) {
-		BigDecimal lastPrice = dailys.get(index + riseDay - 1).getClose();
-		StockDaily thisDaily = dailys.get(index + riseDay);
-		BigDecimal lastRise = thisDaily.getClose().subtract(lastPrice);
-		BigDecimal lastRiseRate = lastRise.multiply(BD_100).divide(lastPrice, 2, BigDecimal.ROUND_HALF_UP);
 
-		if (lastRiseRate.compareTo(BigDecimal.valueOf(Double.valueOf(9.8))) > 0
-				&& thisDaily.getHigh().compareTo(thisDaily.getClose()) == 0) {
-			return true;
-		}
 
-		if (lastRiseRate.compareTo(BigDecimal.valueOf(Double.valueOf(4.9))) > 0
-				&& lastRiseRate.compareTo(BigDecimal.valueOf(Double.valueOf(5.1))) < 0
-				&& thisDaily.getHigh().compareTo(thisDaily.getClose()) == 0) {
-			return true;
-		}
 
-		return false;
-	}
-
-	/**
-	 * 增长是否达到预期
-	 * 
-	 * @param dailys
-	 * @param index
-	 * @return
-	 */
-	protected boolean isRistExpected(List<StockDaily> dailys, int index) {
-		// 增长未达到预期
-		BigDecimal fromPrice = dailys.get(index).getClose();
-		BigDecimal allRise = dailys.get(index + riseDay).getClose().subtract(fromPrice);
-		BigDecimal allRiseRate = allRise.multiply(BD_100).divide(fromPrice, 2, BigDecimal.ROUND_HALF_UP);
-		return allRiseRate.compareTo(riseRate) >= 0;
-	}
-
-	/**
-	 * 是否连接上涨
-	 * 
-	 * @param dailys
-	 * @param index
-	 * @return
-	 */
-	protected boolean isSerialRise(List<StockDaily> dailys, int index) {
-		for (int i = index; i < index + riseDay; i++) {
-			if (dailys.get(i).getClose().compareTo(dailys.get(i + 1).getClose()) == 1) {
-				return false;
-			}
-		}
-		return true;
-	}
 
 	@Override
 	public List<StockAnalyseStrategy> getAnalyseStrategys() {
