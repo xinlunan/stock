@@ -2,7 +2,6 @@ package com.xu.stock.analyse.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeNature;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeType;
 import com.xu.stock.data.model.StockDaily;
-import com.xu.util.DateUtil;
 
 /**
  * 最高最低价差价分析
@@ -61,7 +59,7 @@ public class SerialRiseSellAnalyseService extends BaseStockAnalyseService {
 	private List<StockTrade> analyseSellPoints(List<StockDaily> dailys, List<StockTrade> buys) {
 		List<StockTrade> sells = new ArrayList<StockTrade>();
 		for (StockTrade stockTrade : buys) {
-			StockDaily nextDaily = getSellStockDaily(dailys, stockTrade.getBuyDate());
+            StockDaily nextDaily = StockAnalyseUtil.getSellStockDaily(dailys, stockTrade.getBuyDate(), holdDay);
 			if (nextDaily != null) {
 				StockTrade trade = new StockTrade();
 
@@ -112,15 +110,6 @@ public class SerialRiseSellAnalyseService extends BaseStockAnalyseService {
 		return sells;
 	}
 
-	private StockDaily getSellStockDaily(List<StockDaily> dailys, Date date) {
-		for (int i = 0; i < dailys.size() - 1; i++) {
-			StockDaily daily = dailys.get(i);
-			if (DateUtil.dateToString(daily.getDate()).equals(DateUtil.dateToString(date))) {
-				return dailys.get(i + holdDay);
-			}
-		}
-		return null;
-	}
 
 	@Override
 	public List<StockAnalyseStrategy> getAnalyseStrategys() {

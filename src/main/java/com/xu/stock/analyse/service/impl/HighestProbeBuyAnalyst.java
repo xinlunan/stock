@@ -179,9 +179,9 @@ public class HighestProbeBuyAnalyst extends BaseStockAnalyseService {
 
 		List<Integer> highestPoints = new ArrayList<Integer>();
 		for (int index = beginIndex; index < endIndex; index++) {
-			if (isHighest(stockDailys, index, lastWaveCycle, thisWaveCycle)) {
+            if (StockAnalyseUtil.isHighest(stockDailys, index, lastWaveCycle, thisWaveCycle)) {
 				// 是否涨停
-				if (!isRistLimit(stockDailys, index)) {
+                if (!StockAnalyseUtil.isLastDayRiseLimit(stockDailys, index)) {
 					highestPoints.add(index);
 				}
 
@@ -190,56 +190,7 @@ public class HighestProbeBuyAnalyst extends BaseStockAnalyseService {
 		return highestPoints;
 	}
 
-	/**
-	 * 是否涨停
-	 * 
-	 * @param dailys
-	 * @param index
-	 * @return
-	 */
-	protected boolean isRistLimit(List<StockDaily> dailys, int index) {
-		BigDecimal lastPrice = dailys.get(index - 1).getClose();
-		StockDaily thisDaily = dailys.get(index);
-		BigDecimal lastRise = thisDaily.getClose().subtract(lastPrice);
-		BigDecimal lastRiseRate = lastRise.multiply(BD_100).divide(lastPrice, 2, BigDecimal.ROUND_HALF_UP);
 
-		if (lastRiseRate.compareTo(BigDecimal.valueOf(Double.valueOf(9.8))) > 0
-				&& thisDaily.getHigh().compareTo(thisDaily.getClose()) == 0) {
-			return true;
-		}
 
-		if (lastRiseRate.compareTo(BigDecimal.valueOf(Double.valueOf(4.9))) > 0
-				&& lastRiseRate.compareTo(BigDecimal.valueOf(Double.valueOf(5.1))) < 0
-				&& thisDaily.getHigh().compareTo(thisDaily.getClose()) == 0) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * 当前点是不是区间内最高点
-	 * 
-	 * @param stockDailys
-	 * @param index
-	 * @param date1
-	 * @param date2
-	 * @return
-	 */
-	private boolean isHighest(List<StockDaily> stockDailys, int index, int date1, int date2) {
-		for (int i = index - date1; i < index + date2; i++) {
-			if (i < index) {
-				if (stockDailys.get(i).getClose().compareTo(stockDailys.get(index).getClose()) > 0) {
-					return false;
-				}
-			}
-			if (i > index) {
-				if (stockDailys.get(i).getClose().compareTo(stockDailys.get(index).getClose()) >= 0) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
 
 }

@@ -32,6 +32,8 @@ public interface StockAnalyseConstants {
 
 	public interface HighestProbeSellArgs {
 		public static final String EXPECT_RATE = "expect_rate";
+		public static final String HOLD_DAY = "hold_day";
+		public static final String STOP_LOSS = "stop_loss";
 	}
 
 	public interface SerialRiseBuyArgs {
@@ -48,6 +50,7 @@ public interface StockAnalyseConstants {
 	public interface SerialRiseSellArgs {
 		public static final String EXPECT_RATE = "expect_rate";
 		public static final String HOLD_DAY = "hold_day";
+		public static final String STOP_LOSS = "stop_loss";
 	}
 
 	public interface TradeType {
