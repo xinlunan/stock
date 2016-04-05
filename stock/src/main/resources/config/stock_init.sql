@@ -27,7 +27,7 @@ CREATE TABLE `t_stock` (
   `stock_name` varchar(10) DEFAULT NULL COMMENT '股票名称',
   `asset` bigint(20) DEFAULT NULL COMMENT '总资产',
   `last_date` date DEFAULT NULL COMMENT '最后获取指数日期',
-  `last_close` int(11) DEFAULT NULL COMMENT '最后收盘价',
+  `last_close` decimal(10,2) DEFAULT NULL COMMENT '最后收盘价',
   `created` datetime DEFAULT NULL COMMENT '创建日期',
   `updated` datetime DEFAULT NULL COMMENT '更新日期',
   PRIMARY KEY (`stock_id`),
@@ -44,10 +44,11 @@ CREATE TABLE `t_stock_analyse_strategy` (
   `strategy_type` varchar(50) DEFAULT NULL COMMENT '策略类型',
   `version` int(11) DEFAULT NULL COMMENT '参数版本',
   `parameters` varchar(500) DEFAULT NULL COMMENT '策略参数',
+  `enable` int(11) DEFAULT '1' COMMENT '是否启用',
   `created` datetime DEFAULT NULL COMMENT '创建日期',
   `updated` datetime DEFAULT NULL COMMENT '更新日期',
   PRIMARY KEY (`strategy_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5018586 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5018606 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_stock_daily` */
 
@@ -59,17 +60,17 @@ CREATE TABLE `t_stock_daily` (
   `stock_code` char(6) DEFAULT NULL COMMENT '股票代码',
   `stock_name` varchar(10) DEFAULT NULL COMMENT '股票名称',
   `date` date DEFAULT NULL COMMENT '日期',
-  `last_close` int(11) DEFAULT NULL COMMENT '昨天收盘价',
-  `open` int(11) DEFAULT NULL COMMENT '开盘价',
-  `close` int(11) DEFAULT NULL COMMENT '收盘价',
-  `close_gap` int(11) DEFAULT NULL COMMENT '涨跌额',
-  `close_gap_rate` float DEFAULT NULL COMMENT '涨跌幅',
-  `high` int(11) DEFAULT NULL COMMENT '最高价',
-  `low` int(11) DEFAULT NULL COMMENT '最低价',
-  `high_gap` int(11) DEFAULT NULL COMMENT '最高价与昨收差价 high-last_close',
-  `high_gap_rate` float DEFAULT NULL COMMENT '最高价与昨收差价比例 (high-last_close)/last_close',
-  `low_gap` int(11) DEFAULT NULL COMMENT '最低价与昨收差价 low-last_close',
-  `low_gap_rate` float DEFAULT NULL COMMENT '最低价与昨收差价比例 (low-last_close)/last_close',
+  `last_close` decimal(10,2) DEFAULT NULL COMMENT '昨天收盘价',
+  `open` decimal(10,2) DEFAULT NULL COMMENT '开盘价',
+  `close` decimal(10,2) DEFAULT NULL COMMENT '收盘价',
+  `close_gap` decimal(10,2) DEFAULT NULL COMMENT '涨跌额',
+  `close_gap_rate` decimal(10,2) DEFAULT NULL COMMENT '涨跌幅',
+  `high` decimal(10,2) DEFAULT NULL COMMENT '最高价',
+  `low` decimal(10,2) DEFAULT NULL COMMENT '最低价',
+  `high_gap` decimal(10,2) DEFAULT NULL COMMENT '最高价与昨收差价 high-last_close',
+  `high_gap_rate` decimal(10,2) DEFAULT NULL COMMENT '最高价与昨收差价比例 (high-last_close)/last_close',
+  `low_gap` decimal(10,2) DEFAULT NULL COMMENT '最低价与昨收差价 low-last_close',
+  `low_gap_rate` decimal(10,2) DEFAULT NULL COMMENT '最低价与昨收差价比例 (low-last_close)/last_close',
   `amount` bigint(20) DEFAULT NULL COMMENT '成交额',
   `volume` bigint(20) DEFAULT NULL COMMENT '成交量',
   `asset` bigint(20) DEFAULT NULL COMMENT '总资产',
@@ -81,7 +82,7 @@ CREATE TABLE `t_stock_daily` (
   KEY `NewIndex1` (`stock_id`),
   KEY `NewIndex2` (`date`),
   KEY `index_stock_code` (`stock_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=5018608 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5023571 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_stock_minute` */
 
@@ -94,14 +95,14 @@ CREATE TABLE `t_stock_minute` (
   `date` date DEFAULT NULL COMMENT '日期',
   `hour` int(11) DEFAULT NULL COMMENT '小时',
   `minute` int(11) DEFAULT NULL COMMENT '分钟',
-  `price` int(11) DEFAULT NULL COMMENT '当前价',
+  `price` decimal(10,2) DEFAULT NULL COMMENT '当前价',
   `created` datetime DEFAULT NULL COMMENT '创建日期',
   `updated` datetime DEFAULT NULL COMMENT '更新日期',
   PRIMARY KEY (`minute_id`),
   KEY `NewIndex1` (`stock_id`),
   KEY `NewIndex2` (`date`),
   KEY `index_stock_code` (`stock_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=5018584 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_stock_trade` */
 
@@ -112,10 +113,22 @@ CREATE TABLE `t_stock_trade` (
   `stock_id` int(11) DEFAULT NULL COMMENT '股票Id',
   `stock_code` char(6) DEFAULT NULL COMMENT '股票代码',
   `stock_name` varchar(10) DEFAULT NULL COMMENT '股票名称',
-  `date` date DEFAULT NULL COMMENT '日期',
-  `hour` int(11) DEFAULT NULL COMMENT '小时',
-  `minute` int(11) DEFAULT NULL COMMENT '分钟',
-  `price` int(11) DEFAULT NULL COMMENT '当前价',
+  `buy_date` date DEFAULT NULL COMMENT '购买日期',
+  `buy_trade_price` decimal(10,2) DEFAULT NULL COMMENT '购买价',
+  `sell_date` date DEFAULT NULL COMMENT '卖出日',
+  `sell_trade_price` decimal(10,2) DEFAULT NULL COMMENT '卖出价',
+  `profit` decimal(10,2) DEFAULT NULL COMMENT '利润',
+  `profit_rate` decimal(10,2) DEFAULT NULL COMMENT '利润率',
+  `high_profit_rate` decimal(10,2) DEFAULT NULL COMMENT '最高价收益比例',
+  `close_profit_rate` decimal(10,2) DEFAULT NULL COMMENT '收盘价收益比例',
+  `buy_hour` int(11) DEFAULT NULL COMMENT '购买小时',
+  `buy_minute` int(11) DEFAULT NULL COMMENT '购买分钟',
+  `buy_high_price` decimal(10,2) DEFAULT NULL COMMENT '购买日最高价',
+  `buy_close_price` decimal(10,2) DEFAULT NULL COMMENT '购买日收盘价',
+  `sell_hour` int(11) DEFAULT NULL COMMENT '卖出小时',
+  `sell_minute` int(11) DEFAULT NULL COMMENT '卖出分钟',
+  `sell_high_price` decimal(10,2) DEFAULT NULL COMMENT '卖出日最高价',
+  `sell_close_price` decimal(10,2) DEFAULT NULL COMMENT '卖出日收盘价',
   `trade_type` varchar(10) DEFAULT NULL COMMENT '交易类型：BUY,SELL',
   `trade_nature` varchar(10) DEFAULT NULL COMMENT '交易性质：REAL,VIRTUAL',
   `strategy` varchar(50) DEFAULT NULL COMMENT '策略',
@@ -125,9 +138,11 @@ CREATE TABLE `t_stock_trade` (
   `updated` datetime DEFAULT NULL COMMENT '更新日期',
   PRIMARY KEY (`trade_id`),
   KEY `NewIndex1` (`stock_id`),
-  KEY `NewIndex2` (`date`),
-  KEY `index_stock_code` (`stock_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=5022364 DEFAULT CHARSET=utf8;
+  KEY `NewIndex2` (`buy_date`),
+  KEY `index_stock_code` (`stock_code`),
+  KEY `Index_version` (`version`),
+  KEY `index_strategy` (`strategy`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_sys_config` */
 
