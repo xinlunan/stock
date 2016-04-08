@@ -39,6 +39,8 @@ public class StockMinute implements Serializable {
 	// 更新日期
 	private Date updated;
 
+    private StockDaily        stockDaily;
+
 	public Long getMinuteId() {
 		return minuteId;
 	}
@@ -115,11 +117,20 @@ public class StockMinute implements Serializable {
 		return serialVersionUID;
 	}
 
+    public void setStockDaily(StockDaily stockDaily) {
+        this.stockDaily = stockDaily;
+    }
+
+    public StockDaily getStockDaily() {
+        return this.stockDaily;
+    }
+
 	@Override
 	public String toString() {
 		return "StockMinute [minuteId=" + minuteId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", date="
 				+ date + ", hour=" + hour + ", minute=" + minute + ", price=" + price + ", created=" + created
 				+ ", updated=" + updated + "]";
 	}
+
 
 }

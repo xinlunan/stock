@@ -38,6 +38,8 @@ public class Stock implements Serializable, Comparable<Stock> {
 	// 更新日期
 	private Date updated;
 
+    // 除权系数
+    private BigDecimal        exrights;
 	private List<StockDaily> stockDailys;
 
 	public Integer getStockId() {
@@ -123,5 +125,13 @@ public class Stock implements Serializable, Comparable<Stock> {
 	public int compareTo(Stock stock) {
 		return this.getStockCode().compareTo(stock.getStockCode());
 	}
+
+    public BigDecimal getExrights() {
+        return exrights;
+    }
+
+    public void setExrights(BigDecimal exrights) {
+        this.exrights = exrights;
+    }
 
 }

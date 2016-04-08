@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.json.JSONObject;
-
 import com.xu.stock.data.model.Stock;
 import com.xu.util.DateDiffUtil;
 import com.xu.util.DateUtil;
+
+import net.sf.json.JSONObject;
 
 /**
  * 股票service辅助类
@@ -87,7 +87,8 @@ public class StockDownloadHelper {
 			date = DateUtil.addDay(date, -1);
 			date.setHours(15);
 			date.setMinutes(45);
-			return date;
+            date.setSeconds(0);
+            return DateUtil.stringToDate(DateUtil.date2String(date, "yyyy-MM-dd HH:mm:ss"));
 		}
 	}
 }

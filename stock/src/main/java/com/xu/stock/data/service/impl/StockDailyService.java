@@ -47,7 +47,6 @@ public abstract class StockDailyService implements IStockDailyService {
 				}
 
 				StockDaily stockDaily = repairIndexs.get(i);
-				stockDaily.setStockId(lastIdex.getStockId());
 				stockDaily.setStockCode(lastIdex.getStockCode());
 				stockDaily.setStockName(lastIdex.getStockName());
 				stockDaily.setLastClose(lastIdex.getClose());

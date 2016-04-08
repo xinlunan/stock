@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.data.dao.IStockMinuteDao;
+import com.xu.stock.data.download.SinaStockMinuteDownloador;
 import com.xu.stock.data.model.StockMinute;
 import com.xu.stock.data.service.IStockMinuteService;
 
@@ -36,7 +37,14 @@ public class StockMinuteService implements IStockMinuteService {
 	private IStockMinuteDao stockMinuteDao;
 
 	public List<StockMinute> getStockMinutes(String stockCode, Date date) {
-		return stockMinuteDao.getStockMinutes(stockCode, date);
+
+        List<StockMinute> stockMinutes = stockMinuteDao.getStockMinutes(stockCode, date);
+        if(stockMinutes==null|| stockMinutes.isEmpty()){
+            stockMinutes = SinaStockMinuteDownloador.download(stockCode, date);
+
+            saveStockMinutes(stockMinutes);
+        }
+        return stockMinutes;
 	}
 
 	public void saveStockMinutes(List<StockMinute> stockMinutes) {
