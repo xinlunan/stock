@@ -308,4 +308,14 @@ public class StockSimulateTrade implements Serializable {
 				+ parameters + ", created=" + created + ", updated=" + updated + "]";
 	}
 
+    public BigDecimal getExrights() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void setExrights(BigDecimal exrights) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

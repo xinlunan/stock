@@ -190,28 +190,29 @@ public class HighestProbeBuyAnalyst extends BaseStockAnalyseService {
         for (Integer point : highestPonits) {
 
             StockDaily highestStockDaily = stockDailys.get(point);
-            BigDecimal highest = highestStockDaily.getClose();
-            BigDecimal warnHigh = highest.subtract(highest.multiply(buyRateHigh).divide(BD_100));
-            BigDecimal warnLow = highest.subtract(highest.multiply(warnRateLow).divide(BD_100));
-            BigDecimal lowest = BigDecimal.valueOf(Integer.MAX_VALUE);
+            BigDecimal highestCloseExr = highestStockDaily.getClose().multiply(highestStockDaily.getExrights()).multiply(BD_100);
+            BigDecimal warnHighExr = highestCloseExr.subtract(highestCloseExr.multiply(buyRateHigh).divide(BD_100));
+            BigDecimal warnLowExr = highestCloseExr.subtract(highestCloseExr.multiply(warnRateLow).divide(BD_100));
+            BigDecimal lowestExr = BigDecimal.valueOf(Integer.MAX_VALUE);
             BigDecimal rate = BigDecimal.valueOf(Integer.MIN_VALUE);
             for (int i = point + thisWaveCycle; i < stockDailys.size(); i++) {// 从指定点开始遍历
-                BigDecimal current = stockDailys.get(i).getClose();
-                BigDecimal currentHighest = stockDailys.get(i).getHigh();
+                StockDaily thisDaliy = stockDailys.get(i);
+                BigDecimal thisCloseExr = thisDaliy.getClose().multiply(thisDaliy.getExrights()).multiply(BD_100);
+                BigDecimal currentHighestExr = thisDaliy.getHigh().multiply(thisDaliy.getExrights()).multiply(BD_100);
                 // 如果当前价小于最低价
-                if (current.compareTo(lowest) == -1) {
-                    lowest = stockDailys.get(i).getClose();
-                    BigDecimal closeGap = highest.subtract(lowest);
-                    rate = closeGap.multiply(BD_100).divide(highest, 2, BigDecimal.ROUND_HALF_UP);
+                if (thisCloseExr.compareTo(lowestExr) == -1) {
+                    lowestExr = thisDaliy.getClose().multiply(thisDaliy.getExrights()).multiply(BD_100);
+                    BigDecimal closeGapExr = highestCloseExr.subtract(lowestExr);
+                    rate = closeGapExr.multiply(BD_100).divide(highestCloseExr, 2, BigDecimal.ROUND_HALF_UP);
                 }
 
                 // 当前价高于设定范围
-                if (current.compareTo(warnHigh) == 1) {
+                if (thisCloseExr.compareTo(warnHighExr) == 1) {
                     break;
                 }
 
                 // 本次跌幅超设定幅度，与最高点相差比例介于设定的报警范围内，当前最高价小于历史最高价
-                if (rate.compareTo(thisFallRate) == 1 && current.compareTo(warnLow) >= 0 && current.compareTo(warnHigh) <= 0 && currentHighest.compareTo(highest) <= 0) {
+                if (rate.compareTo(thisFallRate) == 1 && thisCloseExr.compareTo(warnLowExr) >= 0 && thisCloseExr.compareTo(warnHighExr) <= 0 && currentHighestExr.compareTo(highestCloseExr) <= 0) {
                     log.info("buy point:" + stockDailys.get(point).getStockCode() + "\t" + DateUtil.date2String(stockDailys.get(point).getDate()) + "\t"
                              + stockDailys.get(point).getClose() + "\t" + DateUtil.date2String(stockDailys.get(i).getDate()) + "\t" + stockDailys.get(i).getClose());
 
