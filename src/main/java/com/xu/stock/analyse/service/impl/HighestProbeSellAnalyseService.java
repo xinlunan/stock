@@ -47,50 +47,51 @@ public class HighestProbeSellAnalyseService extends BaseStockAnalyseService {
 	 */
 	private List<StockSimulateTrade> analyseSellPoints(List<StockDaily> dailys, List<StockSimulateTrade> buys) {
 		List<StockSimulateTrade> sells = new ArrayList<StockSimulateTrade>();
-		for (StockSimulateTrade stockSimulateTrade : buys) {
-            StockDaily nextDaily = StockAnalyseUtil.getSellStockDaily(dailys, stockSimulateTrade.getBuyDate(), holdDay);
-			if (nextDaily != null) {
-				StockSimulateTrade trade = new StockSimulateTrade();
+		for (StockSimulateTrade buy : buys) {
+            StockDaily sellDaily = StockAnalyseUtil.getSellStockDaily(dailys, buy.getBuyDate(), holdDay);
+			if (sellDaily != null) {
+				StockSimulateTrade sell = new StockSimulateTrade();
 
-				trade.setStockCode(nextDaily.getStockCode());
-				trade.setStockName(nextDaily.getStockName());
+				sell.setStockCode(sellDaily.getStockCode());
+				sell.setStockName(sellDaily.getStockName());
 
-				trade.setBuyDate(stockSimulateTrade.getBuyDate());
-				trade.setBuyHour(stockSimulateTrade.getBuyHour());
-				trade.setBuyMinute(stockSimulateTrade.getBuyMinute());
-				trade.setBuyTradePrice(stockSimulateTrade.getBuyTradePrice());
-				trade.setBuyHighPrice(stockSimulateTrade.getBuyHighPrice());
-				trade.setBuyClosePrice(stockSimulateTrade.getBuyClosePrice());
+				sell.setBuyDate(buy.getBuyDate());
+				sell.setBuyHour(buy.getBuyHour());
+				sell.setBuyMinute(buy.getBuyMinute());
+				sell.setBuyTradePrice(buy.getBuyTradePrice());
+				sell.setBuyHighPrice(buy.getBuyHighPrice());
+				sell.setBuyClosePrice(buy.getBuyClosePrice());
+                sell.setExrights(buy.getExrights());
 
-				trade.setSellDate(nextDaily.getDate());
-				trade.setSellHour(15);
-				trade.setSellMinute(0);
+				sell.setSellDate(sellDaily.getDate());
+				sell.setSellHour(15);
+				sell.setSellMinute(0);
 				BigDecimal expectRate = BigDecimal.valueOf(strategy.getDoubleValue(HighestProbeSellArgs.EXPECT_RATE)).divide(BD_100).setScale(4, BigDecimal.ROUND_HALF_UP);// 期望收益
-				BigDecimal expectSellPrice = stockSimulateTrade.getBuyTradePrice().add(stockSimulateTrade.getBuyTradePrice().multiply(expectRate));
-				BigDecimal stopLossPrice = trade.getBuyTradePrice().subtract(trade.getBuyTradePrice().multiply(stopLoss).divide(BD_100));
-                if (nextDaily.getLow().compareTo(stopLossPrice) == -1) {
-					trade.setSellTradePrice(stopLossPrice);
-                } else if (expectSellPrice.compareTo(nextDaily.getHigh()) <= 0) {
-                    trade.setSellTradePrice(expectSellPrice);
+                BigDecimal expectSellPrice = buy.getBuyTradePrice().add(buy.getBuyTradePrice().multiply(expectRate)).multiply(buy.getExrights()).divide(sell.getExrights());
+                BigDecimal stopLossPrice = buy.getBuyTradePrice().subtract(buy.getBuyTradePrice().multiply(stopLoss)).multiply(buy.getExrights()).divide(sell.getExrights());
+                if (sellDaily.getLow().compareTo(stopLossPrice) == -1) {
+                    sell.setSellTradePrice(stopLossPrice);
+                } else if (expectSellPrice.compareTo(sellDaily.getHigh()) <= 0) {
+                    sell.setSellTradePrice(expectSellPrice);
                 } else {
-					trade.setSellTradePrice(nextDaily.getClose());
+					sell.setSellTradePrice(sellDaily.getClose());
 				}
-				trade.setSellHighPrice(nextDaily.getHigh());
-				trade.setSellClosePrice(nextDaily.getClose());
+				sell.setSellHighPrice(sellDaily.getHigh());
+				sell.setSellClosePrice(sellDaily.getClose());
 
-				trade.setProfit(trade.getSellTradePrice().subtract(trade.getBuyTradePrice()));
-				trade.setProfitRate(trade.getProfit().multiply(BD_100).divide(trade.getBuyTradePrice(), 4, BigDecimal.ROUND_HALF_UP));
-				trade.setHighProfitRate(trade.getSellHighPrice().subtract(trade.getBuyTradePrice()).multiply(BD_100).divide(trade.getBuyTradePrice(), 4, BigDecimal.ROUND_HALF_UP));
-				trade.setCloseProfitRate(trade.getSellClosePrice().subtract(trade.getBuyTradePrice()).multiply(BD_100).divide(trade.getBuyTradePrice(), 4, BigDecimal.ROUND_HALF_UP));
+				sell.setProfit(sell.getSellTradePrice().subtract(sell.getBuyTradePrice()));
+				sell.setProfitRate(sell.getProfit().multiply(BD_100).divide(sell.getBuyTradePrice(), 4, BigDecimal.ROUND_HALF_UP));
+				sell.setHighProfitRate(sell.getSellHighPrice().subtract(sell.getBuyTradePrice()).multiply(BD_100).divide(sell.getBuyTradePrice(), 4, BigDecimal.ROUND_HALF_UP));
+				sell.setCloseProfitRate(sell.getSellClosePrice().subtract(sell.getBuyTradePrice()).multiply(BD_100).divide(sell.getBuyTradePrice(), 4, BigDecimal.ROUND_HALF_UP));
 
-				trade.setTradeType(TradeType.SELL);
-				trade.setTradeNature(TradeNature.VIRTUAL);
-				trade.setStrategy(StrategyType.HIGHEST_PROBE_SELL.toString());
-				trade.setVersion(strategy.getVersion());
-				trade.setParameters(strategy.getParameters());
-				log.info(trade.toString());
+				sell.setTradeType(TradeType.SELL);
+				sell.setTradeNature(TradeNature.VIRTUAL);
+				sell.setStrategy(StrategyType.HIGHEST_PROBE_SELL.toString());
+				sell.setVersion(strategy.getVersion());
+				sell.setParameters(strategy.getParameters());
+				log.info(sell.toString());
 
-				sells.add(trade);
+				sells.add(sell);
 			}
 		}
 
