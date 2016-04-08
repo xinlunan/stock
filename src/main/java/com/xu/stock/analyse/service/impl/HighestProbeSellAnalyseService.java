@@ -52,7 +52,6 @@ public class HighestProbeSellAnalyseService extends BaseStockAnalyseService {
 			if (nextDaily != null) {
 				StockSimulateTrade trade = new StockSimulateTrade();
 
-				trade.setStockId(nextDaily.getStockId());
 				trade.setStockCode(nextDaily.getStockCode());
 				trade.setStockName(nextDaily.getStockName());
 

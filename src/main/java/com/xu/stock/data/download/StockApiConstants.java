@@ -55,4 +55,21 @@ public interface StockApiConstants {
 
 	}
 
+    public interface Yahoo {
+
+        /** 新浪获取股票指数API地址 */
+        // http://table.finance.yahoo.com/table.csv?s=000001.sz
+        // http://blog.csdn.net/stanmarsh/article/details/9795485 介绍
+        public static final String API_URL_GET_STOCK_INDEX = "http://money.finance.sina.com.cn/corp/go.php/vMS_MarketHistory/stockid/";
+
+    }
+
+    public interface Sohu {
+
+        /** 新浪获取股票指数API地址 */
+        // http://q.stock.sohu.com/hisHq?code=cn_000001&start=20130609&end=20130730
+        public static final String API_URL_GET_STOCK_INDEX = "http://q.stock.sohu.com/hisHq?code=cn_";
+
+    }
+
 }

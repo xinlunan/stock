@@ -4,7 +4,6 @@
 
 	<resultMap type="com.xu.stock.data.model.StockDaily" id="StockDaily">
 		<id property="dailyId" column="daily_id"></id>
-		<id property="stockId" column="stock_id"></id>
 		<id property="stockCode" column="stock_code"></id>
 		<id property="stockName" column="stock_name"></id>
 		<id property="date" column="date"></id>
@@ -19,26 +18,30 @@
 		<id property="highGapRate" column="high_gap_rate"></id>
 		<id property="lowGap" column="low_gap"></id>
 		<id property="lowGapRate" column="low_gap_rate"></id>
+		<id property="exrights" column="exrights"></id>
+		<id property="thisExrights" column="this_exrights"></id>
 		<id property="amount" column="amount"></id>
 		<id property="volume" column="volume"></id>
 		<id property="asset" column="asset"></id>
 		<id property="created" column="created"></id>
 		<id property="updated" column="updated"></id>
-		<id property="isExrights" column="isExrights"></id>
-		<id property="exrights" column="exrights"></id>
 		
 	</resultMap>
+
+	<sql id="columns">
+		stock_code, stock_name, date,last_close, open, close, high, low, 
+		close_gap, close_gap_rate, high_gap, high_gap_rate, low_gap, low_gap_rate,
+		exrights,this_exrights,amount, volume, asset, created, updated
+	</sql>
 	
 	<select id="getStockDaily" resultMap="StockDaily">
-		SELECT 	daily_id, stock_id, stock_code, stock_name, DATE, last_close, OPEN, CLOSE, close_gap, close_gap_rate, 
-			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, isExrights, exrights, created, updated
-	 	FROM t_stock_daily 
+		SELECT 	daily_id, <include refid="columns" />
+		FROM t_stock_daily 
 	 	WHERE stock_code=#{stockCode} and date=#{date};
 	</select>
 		
 	<select id="getLastStockDaily" resultMap="StockDaily">
-		SELECT 	daily_id, stock_id, stock_code, stock_name, DATE, last_close, OPEN, CLOSE, close_gap, close_gap_rate, 
-			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, isExrights, exrights, created, updated
+		SELECT 	daily_id, <include refid="columns" />
 	 	FROM t_stock_daily 
 	 	WHERE stock_code=#{stockCode} and date &lt; #{date}
 	 	ORDER BY date DESC
@@ -46,26 +49,26 @@
 	</select>
 	
 	<select id="getNextStockDaily" resultMap="StockDaily">
-		SELECT 	daily_id, stock_id, stock_code, stock_name, DATE, last_close, OPEN, CLOSE, close_gap, close_gap_rate, 
-			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, isExrights, exrights, created, updated
-	 	FROM t_stock_daily 
+		SELECT 	daily_id, <include refid="columns" />
+		FROM t_stock_daily 
 	 	WHERE stock_code=#{stockCode} and date &gt; #{date}
 	 	ORDER BY date
 	 	LIMIT 1 ;
 	</select>
 	
 	<select id="getStockDailys" resultMap="StockDaily">
-		SELECT 	daily_id, stock_id, stock_code, stock_name, DATE, last_close, OPEN, CLOSE, close_gap, close_gap_rate, 
-			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, isExrights, exrights, created, updated
-	 	FROM t_stock_daily 
+		SELECT 	daily_id, <include refid="columns" />
+		FROM t_stock_daily 
 	 	WHERE stock_code=#{stockCode};
 	</select>
 
 	<insert id="insertStockDaily" flushCache="true">
-		INSERT INTO t_stock_daily (stock_id, stock_code, stock_name, DATE, last_close, OPEN, CLOSE, close_gap, close_gap_rate, 
-			high, low, high_gap, high_gap_rate, low_gap, low_gap_rate, amount, volume, asset, isExrights, exrights, created, updated)
-		VALUES (#{stockId}, #{stockCode}, #{stockName}, #{date}, #{lastClose}, #{open}, #{close}, #{closeGap}, #{closeGapRate}, 
-			#{high}, #{low}, #{highGap}, #{highGapRate}, #{lowGap}, #{lowGapRate}, #{amount}, #{volume}, #{asset}, #{isExrights}, #{exrights},sysdate(),sysdate());
+		INSERT INTO t_stock_daily (<include refid="columns" />)
+		VALUES (
+			#{stockCode}, #{stockName}, #{date},#{lastClose}, #{open}, #{close}, #{high}, #{low},
+			#{closeGap}, #{closeGapRate}, #{highGap}, #{highGapRate}, #{lowGap}, #{lowGapRate}, 
+			#{exrights},#{thisExrights},#{amount}, #{volume}, #{asset}, sysdate(),sysdate()
+		);
 	</insert>
 	
 	<update id="updateStockDaily" flushCache="true">

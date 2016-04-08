@@ -195,7 +195,6 @@ public class EqbQuantStockDailyDownloqdorHepler {
 			}
 
 			StockDaily stockDaily = new StockDaily();
-			stockDaily.setStockId(stock.getStockId());
 			stockDaily.setStockCode(stockCode);
 			stockDaily.setStockName(stockName);
 			stockDaily.setDate(DateUtil.stringToDate(dates.get(i).substring(0, 10)));
@@ -214,8 +213,8 @@ public class EqbQuantStockDailyDownloqdorHepler {
 			stockDaily.setLowGap(stockDaily.getLow().subtract(stockDaily.getLastClose()));
 			BigDecimal lowGapRate = stockDaily.getLowGap().multiply(BD_100).divide(stockDaily.getLastClose(), 2, BigDecimal.ROUND_HALF_UP);
 			stockDaily.setLowGapRate(lowGapRate);
-			stockDaily.setAmount(amounts.get(i).longValue());
-			stockDaily.setVolume(volumes.get(i).longValue());
+            stockDaily.setAmount(BigDecimal.valueOf(amounts.get(i)));
+            stockDaily.setVolume(BigDecimal.valueOf(volumes.get(i)));
 			Long asset = null;
 			stockDaily.setAsset(asset);
 
@@ -251,8 +250,8 @@ public class EqbQuantStockDailyDownloqdorHepler {
 	}
 
 	public static StockDaily parseStockDailyExcel(String file, String fullCode, Date date) throws IOException {
-		Long volume = 0l;
-		Long amount = 0l;
+        BigDecimal volume = BigDecimal.valueOf(0);
+        BigDecimal amount = BigDecimal.valueOf(0);
 		BigDecimal high = BigDecimal.valueOf(Integer.MIN_VALUE);
 		BigDecimal low = BigDecimal.valueOf(Integer.MAX_VALUE);
 		BigDecimal close = BigDecimal.valueOf(0);
@@ -287,15 +286,15 @@ public class EqbQuantStockDailyDownloqdorHepler {
 				if (intPrice.compareTo(low) == -1) {
 					low = intPrice;
 				}
-				volume = volume + Long.valueOf(prices[3]);
-				amount = amount + Long.valueOf(prices[4]);
+                volume = volume.add(BigDecimal.valueOf(Double.valueOf(prices[3])));
+                amount = amount.add(BigDecimal.valueOf(Double.valueOf(prices[4])));
 
 				if (rowNum == list.size() - 1) {
 					open = intPrice;
 				}
 			}
 
-			if (volume != 0 && amount != 0) {
+            if (volume.compareTo(BigDecimal.valueOf(0)) != 0 && amount.compareTo(BigDecimal.valueOf(0)) != 0) {
 				StockDaily stockDaily = new StockDaily();
 				stockDaily.setOpen(open);
 				stockDaily.setClose(close);
@@ -324,8 +323,8 @@ public class EqbQuantStockDailyDownloqdorHepler {
 	 */
 	@SuppressWarnings("deprecation")
 	public static StockDaily parseStockDailyExcel_bak(String file) throws IOException {
-		Long volume = 0l;
-		Long amount = 0l;
+        BigDecimal volume = BigDecimal.valueOf(0);
+        BigDecimal amount = BigDecimal.valueOf(0);
 		BigDecimal high = BigDecimal.valueOf(Integer.MIN_VALUE);
 		BigDecimal low = BigDecimal.valueOf(Integer.MAX_VALUE);
 		BigDecimal close = BigDecimal.valueOf(0);
@@ -353,8 +352,8 @@ public class EqbQuantStockDailyDownloqdorHepler {
 						low = intPrice;
 					}
 				}
-				volume = volume + Long.valueOf(getValue(hssfRow.getCell((short) 3)));
-				amount = amount + Long.valueOf(getValue(hssfRow.getCell((short) 4)));
+                volume = volume.add(BigDecimal.valueOf(Double.valueOf(getValue(hssfRow.getCell((short) 3)))));
+                amount = amount.add(BigDecimal.valueOf(Double.valueOf(getValue(hssfRow.getCell((short) 4)))));
 
 				if (rowNum == hssfSheet.getLastRowNum() - 1) {
 					open = intPrice;

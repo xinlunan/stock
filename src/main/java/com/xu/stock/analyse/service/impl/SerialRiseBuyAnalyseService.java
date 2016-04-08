@@ -61,7 +61,6 @@ public class SerialRiseBuyAnalyseService extends BaseStockAnalyseService {
 		for (StockDaily stockDaily : buyPoints) {
 			StockSimulateTrade trade = new StockSimulateTrade();
 
-			trade.setStockId(stockDaily.getStockId());
 			trade.setStockCode(stockDaily.getStockCode());
 			trade.setStockName(stockDaily.getStockName());
 

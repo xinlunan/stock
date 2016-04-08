@@ -8,251 +8,240 @@ import java.util.Date;
  * @author lunan.xu 股票每日指数
  */
 public class StockDaily implements Serializable, Comparable<StockDaily> {
-	private static final long serialVersionUID = 2643489463991553829L;
 
-	// 股票每日指数Id
-	private Long dailyId;
-	// 股票Id
-	private Integer stockId;
-	// 股票代码
-	private String stockCode;
-	// 股票名称
-	private String stockName;
-	// 日期
-	private Date date;
-	// 昨天收盘价
-	private BigDecimal lastClose;
-	// 开盘价
-	private BigDecimal open;
-	// 收盘价
-	private BigDecimal close;
-	// 涨跌额
-	private BigDecimal closeGap;
-	// 涨跌幅
-	private BigDecimal closeGapRate;
-	// 最高价
-	private BigDecimal high;
-	// 最低价
-	private BigDecimal low;
-	// 最高价与开盘价差价 high-open
-	private BigDecimal highGap;
-	// 最高价与开盘价相差比例 (high-open)/open
-	private BigDecimal highGapRate;
-	// 最低价与开盘价差价 低 low-open
-	private BigDecimal lowGap;
-	// 最低价与开盘价相差比例 (low-open)/open
-	private BigDecimal lowGapRate;
-	// 成交额
-	private Long amount;
-	// 成交量
-	private Long volume;
-	// 总资产
-	private Long asset;
-	// 创建日期
-	private Date created;
-	// 更新日期
-	private Date updated;
-	// 是否除权
-	private Boolean isExrights;
+    private static final long serialVersionUID = 2643489463991553829L;
 
-	private Integer exrights;
+    // 股票每日指数Id
+    private Long              dailyId;
+    // 股票代码
+    private String            stockCode;
+    // 股票名称
+    private String            stockName;
+    // 日期
+    private Date              date;
+    // 昨天收盘价
+    private Double        lastClose;
+    // 开盘价
+    private Double        open;
+    // 收盘价
+    private Double        close;
+    // 涨跌额
+    private Double        closeGap;
+    // 涨跌幅
+    private Double        closeGapRate;
+    // 最高价
+    private Double        high;
+    // 最低价
+    private Double        low;
+    // 最高价与开盘价差价 high-open
+    private Double        highGap;
+    // 最高价与开盘价相差比例 (high-open)/open
+    private Double        highGapRate;
+    // 最低价与开盘价差价 低 low-open
+    private Double        lowGap;
+    // 最低价与开盘价相差比例 (low-open)/open
+    private Double        lowGapRate;
+    // 除权系数
+    private Double        exrights;
+    // 本次除权系数
+    private Double        thisExrights;
+    // 成交额
+    private Double        amount;
+    // 成交量
+    private Double        volume;
+    // 总资产
+    private Long              asset;
+    // 创建日期
+    private Date              created;
+    // 更新日期
+    private Date              updated;
 
-	public Integer getExrights() {
-		return exrights;
-	}
+    public BigDecimal getExrights() {
+        return BigDecimal.valueOf(exrights);
+    }
 
-	public void setExrights(Integer exrights) {
-		this.exrights = exrights;
-	}
+    public void setExrights(BigDecimal exrights) {
+        this.exrights = exrights.doubleValue();
+    }
 
-	public Long getDailyId() {
-		return dailyId;
-	}
+    public Long getDailyId() {
+        return dailyId;
+    }
 
-	public void setDailyId(Long dailyId) {
-		this.dailyId = dailyId;
-	}
+    public void setDailyId(Long dailyId) {
+        this.dailyId = dailyId;
+    }
 
-	public Integer getStockId() {
-		return stockId;
-	}
+    public String getStockCode() {
+        return stockCode;
+    }
 
-	public void setStockId(Integer stockId) {
-		this.stockId = stockId;
-	}
+    public void setStockCode(String stockCode) {
+        this.stockCode = stockCode;
+    }
 
-	public String getStockCode() {
-		return stockCode;
-	}
+    public String getStockName() {
+        return stockName;
+    }
 
-	public void setStockCode(String stockCode) {
-		this.stockCode = stockCode;
-	}
+    public void setStockName(String stockName) {
+        this.stockName = stockName;
+    }
 
-	public String getStockName() {
-		return stockName;
-	}
+    public Date getDate() {
+        return date;
+    }
 
-	public void setStockName(String stockName) {
-		this.stockName = stockName;
-	}
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
-	public Date getDate() {
-		return date;
-	}
+    public BigDecimal getLastClose() {
+        return BigDecimal.valueOf(lastClose);
+    }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+    public void setLastClose(BigDecimal lastClose) {
+        this.lastClose = lastClose.doubleValue();
+    }
 
-	public BigDecimal getLastClose() {
-		return lastClose;
-	}
+    public BigDecimal getOpen() {
+        return BigDecimal.valueOf(open);
+    }
 
-	public void setLastClose(BigDecimal lastClose) {
-		this.lastClose = lastClose;
-	}
+    public void setOpen(BigDecimal open) {
+        this.open = open.doubleValue();
+    }
 
-	public BigDecimal getOpen() {
-		return open;
-	}
+    public BigDecimal getClose() {
+        return BigDecimal.valueOf(close);
+    }
 
-	public void setOpen(BigDecimal open) {
-		this.open = open;
-	}
+    public void setClose(BigDecimal close) {
+        this.close = close.doubleValue();
+    }
 
-	public BigDecimal getClose() {
-		return close;
-	}
+    public BigDecimal getCloseGap() {
+        return BigDecimal.valueOf(closeGap);
+    }
 
-	public void setClose(BigDecimal close) {
-		this.close = close;
-	}
+    public void setCloseGap(BigDecimal closeGap) {
+        this.closeGap = closeGap.doubleValue();
+    }
 
-	public BigDecimal getCloseGap() {
-		return closeGap;
-	}
+    public BigDecimal getCloseGapRate() {
+        return BigDecimal.valueOf(closeGapRate);
+    }
 
-	public void setCloseGap(BigDecimal closeGap) {
-		this.closeGap = closeGap;
-	}
+    public void setCloseGapRate(BigDecimal closeGapRate) {
+        this.closeGapRate = closeGapRate.doubleValue();
+    }
 
-	public BigDecimal getCloseGapRate() {
-		return closeGapRate;
-	}
+    public BigDecimal getHigh() {
+        return BigDecimal.valueOf(high);
+    }
 
-	public void setCloseGapRate(BigDecimal closeGapRate) {
-		this.closeGapRate = closeGapRate;
-	}
+    public void setHigh(BigDecimal high) {
+        this.high = high.doubleValue();
+    }
 
-	public BigDecimal getHigh() {
-		return high;
-	}
+    public BigDecimal getLow() {
+        return BigDecimal.valueOf(low);
+    }
 
-	public void setHigh(BigDecimal high) {
-		this.high = high;
-	}
+    public void setLow(BigDecimal low) {
+        this.low = low.doubleValue();
+    }
 
-	public BigDecimal getLow() {
-		return low;
-	}
+    public BigDecimal getHighGap() {
+        return BigDecimal.valueOf(highGap);
+    }
 
-	public void setLow(BigDecimal low) {
-		this.low = low;
-	}
+    public void setHighGap(BigDecimal highGap) {
+        this.highGap = highGap.doubleValue();
+    }
 
-	public BigDecimal getHighGap() {
-		return highGap;
-	}
+    public BigDecimal getHighGapRate() {
+        return BigDecimal.valueOf(highGapRate);
+    }
 
-	public void setHighGap(BigDecimal highGap) {
-		this.highGap = highGap;
-	}
+    public void setHighGapRate(BigDecimal highGapRate) {
+        this.highGapRate = highGapRate.doubleValue();
+    }
 
-	public BigDecimal getHighGapRate() {
-		return highGapRate;
-	}
+    public BigDecimal getLowGap() {
+        return BigDecimal.valueOf(lowGap);
+    }
 
-	public void setHighGapRate(BigDecimal highGapRate) {
-		this.highGapRate = highGapRate;
-	}
+    public void setLowGap(BigDecimal lowGap) {
+        this.lowGap = lowGap.doubleValue();
+    }
 
-	public BigDecimal getLowGap() {
-		return lowGap;
-	}
+    public BigDecimal getLowGapRate() {
+        return BigDecimal.valueOf(lowGapRate);
+    }
 
-	public void setLowGap(BigDecimal lowGap) {
-		this.lowGap = lowGap;
-	}
+    public void setLowGapRate(BigDecimal lowGapRate) {
+        this.lowGapRate = lowGapRate.doubleValue();
+    }
 
-	public BigDecimal getLowGapRate() {
-		return lowGapRate;
-	}
+    public BigDecimal getAmount() {
+        return BigDecimal.valueOf(amount);
+    }
 
-	public void setLowGapRate(BigDecimal lowGapRate) {
-		this.lowGapRate = lowGapRate;
-	}
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount.doubleValue();
+    }
 
-	public Long getAmount() {
-		return amount;
-	}
+    public BigDecimal getVolume() {
+        return BigDecimal.valueOf(volume);
+    }
 
-	public void setAmount(Long amount) {
-		this.amount = amount;
-	}
+    public void setVolume(BigDecimal volume) {
+        this.volume = volume.doubleValue();
+    }
 
-	public Long getVolume() {
-		return volume;
-	}
+    public Long getAsset() {
+        return asset;
+    }
 
-	public void setVolume(Long volume) {
-		this.volume = volume;
-	}
+    public void setAsset(Long asset) {
+        this.asset = asset;
+    }
 
-	public Long getAsset() {
-		return asset;
-	}
+    public Date getCreated() {
+        return created;
+    }
 
-	public void setAsset(Long asset) {
-		this.asset = asset;
-	}
+    public void setCreated(Date created) {
+        this.created = created;
+    }
 
-	public Date getCreated() {
-		return created;
-	}
+    public Date getUpdated() {
+        return updated;
+    }
 
-	public void setCreated(Date created) {
-		this.created = created;
-	}
+    public void setUpdated(Date updated) {
+        this.updated = updated;
+    }
 
-	public Date getUpdated() {
-		return updated;
-	}
+    public BigDecimal getThisExrights() {
+        return BigDecimal.valueOf(thisExrights);
+    }
 
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
+    public void setThisExrights(BigDecimal thisExrights) {
+        this.thisExrights = thisExrights.doubleValue();
+    }
 
-	public Boolean getIsExrights() {
-		return isExrights;
-	}
+    @Override
+    public String toString() {
+        return "StockDaily [dailyId=" + dailyId + ", stockCode=" + stockCode + ", stockName=" + stockName + ", date=" + date + ", lastClose=" + lastClose + ", open=" + open
+               + ", close=" + close + ", closeGap=" + closeGap + ", closeGapRate=" + closeGapRate + ", high=" + high + ", low=" + low + ", highGap=" + highGap + ", highGapRate="
+               + highGapRate + ", lowGap=" + lowGap + ", lowGapRate=" + lowGapRate + ", exrights=" + exrights + ", thisExrights=" + thisExrights + ", amount=" + amount
+               + ", volume=" + volume + ", asset=" + asset + ", created=" + created + ", updated=" + updated + "]";
+    }
 
-	public void setIsExrights(Boolean isExrights) {
-		this.isExrights = isExrights;
-	}
-
-	@Override
-	public String toString() {
-		return "StockDaily [dailyId=" + dailyId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", stockName="
-				+ stockName + ", date=" + date + ", lastClose=" + lastClose + ", open=" + open + ", close=" + close
-				+ ", closeGap=" + closeGap + ", closeGapRate=" + closeGapRate + ", high=" + high + ", low=" + low
-				+ ", highGap=" + highGap + ", highGapRate=" + highGapRate + ", lowGap=" + lowGap + ", lowGapRate="
-				+ lowGapRate + ", amount=" + amount + ", volume=" + volume + ", asset=" + asset + ", created=" + created
-				+ ", updated=" + updated + ", isExrights=" + isExrights + ", exrights=" + exrights + "]";
-	}
-
-	public int compareTo(StockDaily stockDaily) {
-		return this.getDate().compareTo(stockDaily.getDate());
-	}
+    public int compareTo(StockDaily stockDaily) {
+        return this.getDate().compareTo(stockDaily.getDate());
+    }
 
 }

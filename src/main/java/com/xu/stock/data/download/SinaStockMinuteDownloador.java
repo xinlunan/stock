@@ -16,9 +16,9 @@ import org.w3c.dom.NodeList;
 
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.model.StockDaily;
+import com.xu.stock.data.model.StockMinute;
 import com.xu.util.DateUtil;
 import com.xu.util.DocumentUtil;
-import com.xu.util.HttpClientHandle;
 import com.xu.util.StringUtil;
 import com.xu.util.XPathUtil;
 
@@ -35,48 +35,32 @@ import com.xu.util.XPathUtil;
  * 
  * @since 1.
  */
-public class SinaStockDailyDownloador {
+@SuppressWarnings("unused")
+public class SinaStockMinuteDownloador {
 	protected Logger log = LoggerFactory.getLogger(this.getClass());
 
 	public static final BigDecimal BD_100 = BigDecimal.valueOf(100);
 
 	/**
-	 * 下载股票指数数据
-	 * 
-	 * @param stock
-	 * @return
-	 */
-	public static Stock download(Stock stock) {
-		// 下载数据
-		List<StockDaily> stockDailyes = downloadStockDaily(stock);
+     * 下载股票指数数据
+     * 
+     * @param stockCode
+     * @param date
+     * @return
+     */
+    public static List<StockMinute> download(String stockCode, Date date) {
+        List<StockMinute> stockDailyes = new LinkedList<StockMinute>();
 
-		// 检查有效性
-		reviewStockDaily(stockDailyes);
-
-		stock.setStockDailys(stockDailyes);
-
-		return stock;
-	}
-
-	/**
-	 * 下载历史
-	 * 
-	 * @param stock
-	 * @return
-	 */
-	private static List<StockDaily> downloadStockDaily(Stock stock) {
-		List<StockDaily> stockDailyes = new LinkedList<StockDaily>();
-
-		List<String> urls = buildUrls(stock);// 时间周期大时，要按季度拆分成小的请求
-
-		for (String url : urls) {
-			String html = HttpClientHandle.get(url, "gb2312");
-
-			List<StockDaily> dailys = parseHtml(stock, html);// 解析返回的html
-
-			stockDailyes.addAll(dailys);
-		}
-		return stockDailyes;
+        // List<String> urls = buildUrls(stock);// 时间周期大时，要按季度拆分成小的请求
+        //
+        // for (String url : urls) {
+        // String html = HttpClientHandle.get(url, "gb2312");
+        //
+        // List<StockMinute> dailys = parseHtml(stock, html);// 解析返回的html
+        //
+        // stockDailyes.addAll(dailys);
+        // }
+        return stockDailyes;
 	}
 
 	/**
@@ -129,7 +113,7 @@ public class SinaStockDailyDownloador {
 	 * @param html
 	 * @return
 	 */
-	private static List<StockDaily> parseHtml(Stock stock, String html) {
+    private static List<StockDaily> parseHtml(Stock stock, String html) {
 		List<StockDaily> dailys = new ArrayList<StockDaily>();
 		try {
 			String tempString = html.replaceAll("&nbsp;", "").replaceAll("&", "");
@@ -173,14 +157,17 @@ public class SinaStockDailyDownloador {
 					stockDaily.setLowGap(stockDaily.getLow().subtract(stockDaily.getLastClose()));
 					BigDecimal lowGapRate = stockDaily.getLowGap().multiply(BD_100).divide(stockDaily.getLastClose(), 2, BigDecimal.ROUND_HALF_UP);
 					stockDaily.setLowGapRate(lowGapRate);
-                    stockDaily.setAmount(BigDecimal.valueOf(Double.valueOf(amount)));
-                    stockDaily.setVolume(BigDecimal.valueOf(Double.valueOf(volume)));
-					stockDaily.setAsset(null);// TODO
-					if (Math.abs(stockDaily.getCloseGapRate().intValue()) > 11) {
-                        // stockDaily.setIsExrights(true);
-                        BigDecimal exrights = stockDaily.getCloseGapRate().divide(new BigDecimal(10), 0, BigDecimal.ROUND_HALF_UP);
-						stockDaily.setExrights(exrights);
-					}
+                    // stockDaily.setAmount(Long.valueOf(amount));
+                    // stockDaily.setVolume(Long.valueOf(volume));
+                    // stockDaily.setAsset(null);// TODO
+                    // if (Math.abs(stockDaily.getCloseGapRate().intValue()) >
+                    // 11) {
+                    // stockDaily.setIsExrights(true);
+                    // int exrights = stockDaily.getCloseGapRate().divide(new
+                    // BigDecimal(10), 0, BigDecimal.ROUND_HALF_UP).intValue() *
+                    // 10;
+                    // stockDaily.setExrights(exrights);
+                    // }
 
 					dailys.add(stockDaily);
 
