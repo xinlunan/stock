@@ -4,25 +4,41 @@
 
 	<resultMap type="com.xu.stock.data.model.StockMinute" id="StockMinute">
 		<id property="minuteId" column="minute_id"></id>
-		<id property="stockId" column="stock_id"></id>
 		<id property="stockCode" column="stock_code"></id>
 		<id property="date" column="date"></id>
 		<id property="hour" column="hour"></id>
 		<id property="minute" column="minute"></id>
 		<id property="price" column="price"></id>
+		<id property="exrights" column="exrights"></id>
+		<id property="volume" column="volume"></id>
+		<id property="amount" column="amount"></id>
 		<id property="created" column="created"></id>
 		<id property="updated" column="updated"></id>
 	</resultMap>
 	
-	<select id="getStockMinute" resultMap="StockMinute">
-		SELECT minute_id, stock_id, stock_code, date, hour, minute, price, created, updated
+	<sql id="columns">
+		stock_code, date, hour, minute, price,exrights,volume,amount, created, updated
+	</sql>
+	
+	<select id="getStockMinutes" resultMap="StockMinute">
+		SELECT minute_id, <include refid="columns" />
 	 	FROM t_stock_minute 
-	 	WHERE stock_id=#{stockId} and date=#{date};
+	 	WHERE stock_code=#{stockCode} and date=#{date};
+	</select>
+	
+	<select id="getNearCloseBuyMinute" resultMap="StockMinute">
+		SELECT minute_id, <include refid="columns" />
+	 	FROM t_stock_minute 
+	 	WHERE stock_code=#{stockCode} and date=#{date} and hour=14 and minute>=45
+	 	ORDER BY minute LIMIT 0,1;
 	</select>
 
-	<insert id="insertStockMinute" flushCache="true">
-		INSERT INTO t_stock_minute (stock_id, stock_code, date, hour, minute, price, created, updated)
-		VALUES (#{stockId}, #{stockCode}, #{date}, #{hour}, #{minute}, #{price}, sysdate(), sysdate());
+	<insert id="insertStockMinute" parameterType="ArrayList" flushCache="true">
+		INSERT INTO t_stock_minute (<include refid="columns" />)
+		VALUES 
+		<foreach collection="list" item="obj" index="index" separator="," >  
+			(#{obj.stockCode}, #{obj.date}, #{obj.hour}, #{obj.minute}, #{obj.price}, #{obj.exrights},#{obj.volume},#{obj.amount}, sysdate(), sysdate())
+		</foreach>  
 	</insert>
 	
 </mapper> 

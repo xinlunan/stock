@@ -62,13 +62,16 @@
 	 	WHERE stock_code=#{stockCode};
 	</select>
 
-	<insert id="insertStockDaily" flushCache="true">
+	<insert id="insertStockDaily" parameterType="ArrayList" flushCache="true">
 		INSERT INTO t_stock_daily (<include refid="columns" />)
-		VALUES (
-			#{stockCode}, #{stockName}, #{date},#{lastClose}, #{open}, #{close}, #{high}, #{low},
-			#{closeGap}, #{closeGapRate}, #{highGap}, #{highGapRate}, #{lowGap}, #{lowGapRate}, 
-			#{exrights},#{thisExrights},#{amount}, #{volume}, #{asset}, sysdate(),sysdate()
-		);
+		VALUES 
+		<foreach collection="list" item="obj" index="index" separator="," >  
+		(
+			#{obj.stockCode}, #{obj.stockName}, #{obj.date},#{obj.lastClose}, #{obj.open}, #{obj.close}, #{obj.high}, #{obj.low},
+			#{obj.closeGap}, #{obj.closeGapRate}, #{obj.highGap}, #{obj.highGapRate}, #{obj.lowGap}, #{obj.lowGapRate}, 
+			#{obj.exrights},#{obj.thisExrights},#{obj.amount}, #{obj.volume}, #{obj.asset}, sysdate(),sysdate()
+		)
+		</foreach>
 	</insert>
 	
 	<update id="updateStockDaily" flushCache="true">

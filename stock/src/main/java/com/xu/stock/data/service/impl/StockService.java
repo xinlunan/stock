@@ -58,6 +58,9 @@ public class StockService implements IStockService {
 			Stock exsitStock = stockDao.getStock(stock.getStockCode());
 			if (exsitStock == null) {
 				result = result + stockDao.insertStock(stock);
+            } else if (!exsitStock.getStockName().equals(stock.getStockName())) {
+                exsitStock.setStockName(stock.getStockName());
+                stockDao.updateStock(exsitStock);
 			}
 		}
 
@@ -68,9 +71,16 @@ public class StockService implements IStockService {
 		log.info("更新:" + stock.getStockCode());
 		filterInvalid(stock);
 
-		stockDailyDao.saveStockDailys(stock.getStockDailys());
+        List<StockDaily> dailys = stock.getStockDailys();
+        stockDailyDao.saveStockDailys(dailys);
 
-		stock.setLastDate(StockDownloadHelper.getLastDate());
+        if (stock.getHasException()) {
+            if (!dailys.isEmpty()) {
+                stock.setLastDate(dailys.get(dailys.size() - 1).getDate());
+            }
+        } else {
+            stock.setLastDate(StockDownloadHelper.getLastDate());
+        }
 		stockDao.updateStock(stock);
 	}
 

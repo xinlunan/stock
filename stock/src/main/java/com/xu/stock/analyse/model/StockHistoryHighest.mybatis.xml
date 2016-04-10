@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.stock.analyse.model.StockHistoryHighest">
+
+	<resultMap type="com.xu.stock.analyse.model.StockHistoryHighest" id="StockHistoryHighest">
+		<id property="historyId" column="history_id"></id>
+		<id property="stockCode" column="stock_code"></id>
+		<id property="stockName" column="stock_name"></id>
+		<id property="date" column="date"></id>
+		<id property="hour" column="hour"></id>
+		<id property="minute" column="minute"></id>
+		<id property="open" column="open"></id>
+		<id property="high" column="high"></id>
+		<id property="low" column="low"></id>
+		<id property="close" column="close"></id>
+		<id property="exrights" column="exrights"></id>
+		<id property="created" column="created"></id>
+		<id property="updated" column="updated"></id>
+	</resultMap>
+	
+	<sql id="columns">
+		stock_code,stock_name,date,hour,minute,high_price,low_price,close_price,exrights,created,updated
+	</sql>
+
+	<select id="getHistoryHighests" resultMap="StockHistoryHighest">
+		SELECT record_id,<include refid="columns" /> 
+		FROM t_stock_history_highest
+		WHERE stock_code=#{stockCode};
+	</select>
+
+	<insert id="insertAnalyseRecord" flushCache="true">
+		INSERT INTO t_stock_history_highest (<include refid="columns" />)
+		VALUES (
+			#{stockCode}, #{stockName}, #{date}, #{hour}, #{minute}, #{open},#{high},#{low},#{close},#{exrights},sysdate(),sysdate()
+		);
+	</insert>
+
+</mapper> 

@@ -2,7 +2,7 @@ package com.xu.stock.analyse.dao;
 
 import java.util.List;
 
-import com.xu.stock.analyse.model.StockSimulateTrade;
+import com.xu.stock.analyse.model.StockBuyTrade;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 
 /**
@@ -27,7 +27,7 @@ public interface IStockSimulateTradeDao {
 	 * @param stockCode
 	 * @return
 	 */
-	public List<StockSimulateTrade> getBuyTrades(StrategyType strategy, String stockCode);
+	public List<StockBuyTrade> getBuyTrades(StrategyType strategy, String stockCode);
 
 	/**
 	 * 获取股票交易信息
@@ -35,7 +35,7 @@ public interface IStockSimulateTradeDao {
 	 * @param stockCode
 	 * @return
 	 */
-	public List<StockSimulateTrade> getStockSimulateTrades(String stockCode);
+	public List<StockBuyTrade> getStockSimulateTrades(String stockCode);
 
 	/**
 	 * 是否存在当前交易
@@ -43,7 +43,7 @@ public interface IStockSimulateTradeDao {
 	 * @param trade
 	 * @return
 	 */
-	public boolean existTrade(StockSimulateTrade trade);
+	public boolean existTrade(StockBuyTrade trade);
 
 	/**
 	 * 保存股票交易信息
@@ -51,6 +51,6 @@ public interface IStockSimulateTradeDao {
 	 * @param trades
 	 * @return
 	 */
-	public Integer saveStockSimulateTrades(List<StockSimulateTrade> trades);
+	public Integer saveStockSimulateTrades(List<StockBuyTrade> trades);
 
 }

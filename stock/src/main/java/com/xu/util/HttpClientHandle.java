@@ -51,11 +51,12 @@ public class HttpClientHandle {
 			httpClient.execute(httpGet);//执行请求
 			// 执行get请求
 			CloseableHttpResponse response = httpClient.execute(httpGet);
+            log.debug("http get completed");
 			try {
 				HttpEntity entity = response.getEntity();
 				if (entity != null) {
 					result = EntityUtils.toString(entity, charset);
-					log.debug("http get completed. url: " + url);
+                    log.debug("http get completed,result resolved. url: " + url);
 					log.debug(result);
 				}
 			} finally {
@@ -123,7 +124,7 @@ public class HttpClientHandle {
 	 * 发送 post请求访问本地应用并根据传递参数不同返回不同结果
 	 */
 	public static boolean download(String url, String path) {
-		log.debug("http post url: " + url);
+        log.debug("http download url: " + url);
 		// 创建默认的httpClient实例.
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		try {
@@ -185,6 +186,7 @@ public class HttpClientHandle {
 				log.error("http download close exception", e);
 			}
 		}
+        log.debug("http download end ");
 		return true;
 	}
 

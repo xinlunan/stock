@@ -1,7 +1,6 @@
 package com.xu.stock.data.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -9,113 +8,117 @@ import java.util.Date;
  * 
  * @version
  * 
- * 			<pre>
+ * <pre>
  * Author	Version		Date		Changes
  * lunan.xu 	1.0  		2016年3月30日 	Created
- *
- *          </pre>
+ * </pre>
  * 
  * @since 1.
  */
 public class StockMinute implements Serializable {
-	private static final long serialVersionUID = -352228891672124416L;
 
-	// 股票每分钟指数Id
-	private Long minuteId;
-	// 股票Id
-	private Integer stockId;
-	// 股票代码
-	private String stockCode;
-	// 日期
-	private Date date;
-	// 小时
-	private Integer hour;
-	// 分钟
-	private Integer minute;
-	// 最低价
-	private BigDecimal price;
-	// 创建日期
-	private Date created;
-	// 更新日期
-	private Date updated;
+    private static final long serialVersionUID = -352228891672124416L;
+
+    // 股票每分钟指数Id
+    private Long              minuteId;
+    // 股票代码
+    private String            stockCode;
+    // 日期
+    private Date              date;
+    // 小时
+    private Integer           hour;
+    // 分钟
+    private Integer           minute;
+    // 最低价
+    private Double            price;
+    // 除权系统
+    private Double            exrights;
+    // 成交量
+    private Double            volume;
+    // 成交额
+    private Double            amount;
+    // 创建日期
+    private Date              created;
+    // 更新日期
+    private Date              updated;
 
     private StockDaily        stockDaily;
 
-	public Long getMinuteId() {
-		return minuteId;
-	}
+    public Long getMinuteId() {
+        return minuteId;
+    }
 
-	public void setMinuteId(Long minuteId) {
-		this.minuteId = minuteId;
-	}
+    public void setMinuteId(Long minuteId) {
+        this.minuteId = minuteId;
+    }
 
-	public Integer getStockId() {
-		return stockId;
-	}
+    public String getStockCode() {
+        return stockCode;
+    }
 
-	public void setStockId(Integer stockId) {
-		this.stockId = stockId;
-	}
+    public void setStockCode(String stockCode) {
+        this.stockCode = stockCode;
+    }
 
-	public String getStockCode() {
-		return stockCode;
-	}
+    public Date getDate() {
+        return date;
+    }
 
-	public void setStockCode(String stockCode) {
-		this.stockCode = stockCode;
-	}
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
-	public Date getDate() {
-		return date;
-	}
+    public Integer getHour() {
+        return hour;
+    }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+    public void setHour(Integer hour) {
+        this.hour = hour;
+    }
 
-	public Integer getHour() {
-		return hour;
-	}
+    public Integer getMinute() {
+        return minute;
+    }
 
-	public void setHour(Integer hour) {
-		this.hour = hour;
-	}
+    public void setMinute(Integer minute) {
+        this.minute = minute;
+    }
 
-	public Integer getMinute() {
-		return minute;
-	}
+    public Double getPrice() {
+        return price;
+    }
 
-	public void setMinute(Integer minute) {
-		this.minute = minute;
-	}
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 
-	public BigDecimal getPrice() {
-		return price;
-	}
+    public Double getExrights() {
+        return exrights;
+    }
 
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
+    public void setExrights(Double exrights) {
+        this.exrights = exrights;
+    }
 
-	public Date getCreated() {
-		return created;
-	}
+    public Date getCreated() {
+        return created;
+    }
 
-	public void setCreated(Date created) {
-		this.created = created;
-	}
+    public void setCreated(Date created) {
+        this.created = created;
+    }
 
-	public Date getUpdated() {
-		return updated;
-	}
+    public Date getUpdated() {
+        return updated;
+    }
 
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
+    public void setUpdated(Date updated) {
+        this.updated = updated;
+    }
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
 
     public void setStockDaily(StockDaily stockDaily) {
         this.stockDaily = stockDaily;
@@ -125,12 +128,26 @@ public class StockMinute implements Serializable {
         return this.stockDaily;
     }
 
-	@Override
-	public String toString() {
-		return "StockMinute [minuteId=" + minuteId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", date="
-				+ date + ", hour=" + hour + ", minute=" + minute + ", price=" + price + ", created=" + created
-				+ ", updated=" + updated + "]";
-	}
+    public Double getVolume() {
+        return volume;
+    }
 
+    public void setVolume(Double volume) {
+        this.volume = volume;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    @Override
+    public String toString() {
+        return "StockMinute [minuteId=" + minuteId + ", stockCode=" + stockCode + ", date=" + date + ", hour=" + hour + ", minute=" + minute + ", price=" + price + ", exrights=" + exrights + ", volume=" + volume + ", amount=" + amount
+               + ", created=" + created + ", updated=" + updated + ", stockDaily=" + stockDaily + "]";
+    }
 
 }

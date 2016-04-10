@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.winit.framework.dao.impl.BaseDao;
 import com.xu.stock.data.dao.IStockMinuteDao;
@@ -14,37 +16,40 @@ import com.xu.stock.data.model.StockMinute;
 /**
  * 股票分时指数Dao实现
  * 
- * 
  * @version
  * 
- * 			<pre>
+ * <pre>
  * Author	Version		Date		Changes
  * lunan.xu 	1.0  		2016年3月30日 	Created
- *
- *          </pre>
+ * </pre>
  * 
  * @since 1.
  */
 @Repository("stockMinuteDao")
 public class StockMinuteDao extends BaseDao<StockMinute> implements IStockMinuteDao {
 
-	public final String SQL_GET_STOCK_MINUTE_INDEX = getNameSpace() + "getStockMinute";
-	public final String SQL_INSERT_STOCK_MINUTE_INDEX = getNameSpace() + "insertStockMinute";
+    public final String SQL_GET_STOCK_MINUTES     = getNameSpace() + "getStockMinutes";
+    public final String SQL_GET_STOCK_CLOSE_BUY_MINUTE = getNameSpace() + "getNearCloseBuyMinute";
+    public final String SQL_INSERT_STOCK_MINUTE  = getNameSpace() + "insertStockMinute";
 
-	public Integer saveStockMinutes(List<StockMinute> stockMinutes) {
-		Integer result = 0;
-		for (StockMinute stockMinute : stockMinutes) {
-			getSqlSession().insert(SQL_INSERT_STOCK_MINUTE_INDEX, stockMinute);
-			result++;
-		}
-		return result;
-	}
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Integer saveStockMinutes(List<StockMinute> stockMinutes) {
+        getSqlSession().insert(SQL_INSERT_STOCK_MINUTE, stockMinutes);
+        return stockMinutes.size();
+    }
 
-	public List<StockMinute> getStockMinutes(String stockCode, Date date) {
-		Map<String, Object> paras = new HashMap<String, Object>();
-		paras.put("stockCode", stockCode);
-		paras.put("date", date);
-		return getSqlSession().selectList(SQL_GET_STOCK_MINUTE_INDEX, paras);
-	}
+    public List<StockMinute> getStockMinutes(String stockCode, Date date) {
+        Map<String, Object> paras = new HashMap<String, Object>();
+        paras.put("stockCode", stockCode);
+        paras.put("date", date);
+        return getSqlSession().selectList(SQL_GET_STOCK_MINUTES, paras);
+    }
+
+    public StockMinute getNearCloseBuyMinute(String stockCode, Date date) {
+        Map<String, Object> paras = new HashMap<String, Object>();
+        paras.put("stockCode", stockCode);
+        paras.put("date", date);
+        return getSqlSession().selectOne(SQL_GET_STOCK_CLOSE_BUY_MINUTE, paras);
+    }
 
 }

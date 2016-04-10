@@ -136,12 +136,12 @@ public class StockAnalyseUtil {
     public static boolean isHighest(List<StockDaily> stockDailys, int index, int date1, int date2) {
         for (int i = index - date1; i < index + date2; i++) {
             if (i < index) {
-                if (stockDailys.get(i).getClose().compareTo(stockDailys.get(index).getClose()) > 0) {
+                if (stockDailys.get(i).getClose().multiply(stockDailys.get(i).getExrights()).compareTo(stockDailys.get(index).getClose().multiply(stockDailys.get(index).getExrights())) > 0) {
                     return false;
                 }
             }
             if (i > index) {
-                if (stockDailys.get(i).getClose().compareTo(stockDailys.get(index).getClose()) >= 0) {
+                if (stockDailys.get(i).getClose().multiply(stockDailys.get(i).getExrights()).compareTo(stockDailys.get(index).getClose().multiply(stockDailys.get(index).getExrights())) >= 0) {
                     return false;
                 }
             }

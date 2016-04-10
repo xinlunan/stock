@@ -36,14 +36,11 @@ public class StockDailyDao extends BaseDao<StockDaily> implements IStockDailyDao
 	public final String SQL_DELETE_STOCK_INDEX = getNameSpace() + "deleteStockDaily";
 
 	public Integer saveStockDailys(List<StockDaily> stockDailys) {
-		Integer result = 0;
-		for (StockDaily stockDaily : stockDailys) {
-			// log.debug(stockDaily.toString());
-			getSqlSession().insert(SQL_INSERT_STOCK_INDEX, stockDaily);
-			result++;
-		}
-		return result;
-	}
+        if (!stockDailys.isEmpty()) {
+            getSqlSession().insert(SQL_INSERT_STOCK_INDEX, stockDailys);
+        }
+        return stockDailys.size();
+    }
 
 	public List<StockDaily> getRrightStockDailys(String stockCode) {
 		return getSqlSession().selectList(SQL_GET_STOCK_INDEXS, stockCode);

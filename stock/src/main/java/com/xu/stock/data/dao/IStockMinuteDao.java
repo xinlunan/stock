@@ -37,4 +37,13 @@ public interface IStockMinuteDao {
 	 */
 	public Integer saveStockMinutes(List<StockMinute> stockMinutes);
 
+    /**
+     * 获取收盘前的购买点
+     * 
+     * @param stockCode
+     * @param date
+     * @return
+     */
+    public StockMinute getNearCloseBuyMinute(String stockCode, Date date);
+
 }
