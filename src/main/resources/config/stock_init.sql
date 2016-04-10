@@ -26,7 +26,7 @@ CREATE TABLE `t_stock` (
   `stock_code` char(6) DEFAULT NULL COMMENT '股票代码',
   `stock_name` varchar(10) DEFAULT NULL COMMENT '股票名称',
   `asset` decimal(10,2) DEFAULT NULL COMMENT '总资产',
-  `last_date` datetime DEFAULT NULL COMMENT '最后获取指数日期',
+  `last_date` date DEFAULT NULL COMMENT '最后获取指数日期',
   `last_close` decimal(10,2) DEFAULT NULL COMMENT '最后收盘价',
   `exrights` decimal(15,10) DEFAULT '1.0000000000' COMMENT '除权系数',
   `created` datetime DEFAULT NULL COMMENT '创建日期',
@@ -34,7 +34,7 @@ CREATE TABLE `t_stock` (
   PRIMARY KEY (`stock_id`),
   UNIQUE KEY `index_stock_code` (`stock_code`),
   KEY `index_stock_name` (`stock_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2869 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2872 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_stock_analyse_strategy` */
 
@@ -50,6 +50,41 @@ CREATE TABLE `t_stock_analyse_strategy` (
   `updated` datetime DEFAULT NULL COMMENT '更新日期',
   PRIMARY KEY (`strategy_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5018607 DEFAULT CHARSET=utf8;
+
+/*Table structure for table `t_stock_buy_trade` */
+
+DROP TABLE IF EXISTS `t_stock_buy_trade`;
+
+CREATE TABLE `t_stock_buy_trade` (
+  `trade_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '股票交易Id',
+  `stock_code` char(6) DEFAULT NULL COMMENT '股票代码',
+  `stock_name` varchar(10) DEFAULT NULL COMMENT '股票名称',
+  `buy_date` date DEFAULT NULL COMMENT '购买日期',
+  `buy_trade_price` decimal(10,2) DEFAULT NULL COMMENT '购买价',
+  `sell_date` date DEFAULT NULL COMMENT '卖出日',
+  `sell_trade_price` decimal(10,2) DEFAULT NULL COMMENT '卖出价',
+  `profit` decimal(10,2) DEFAULT NULL COMMENT '利润',
+  `profit_rate` decimal(10,2) DEFAULT NULL COMMENT '利润率',
+  `close_profit_rate` decimal(10,2) DEFAULT NULL COMMENT '收盘价收益比例',
+  `buy_hour` int(11) DEFAULT NULL COMMENT '购买小时',
+  `buy_minute` int(11) DEFAULT NULL COMMENT '购买分钟',
+  `buy_high_price` decimal(10,2) DEFAULT NULL COMMENT '购买日最高价',
+  `high_profit_rate` decimal(10,2) DEFAULT NULL COMMENT '最高价收益比例',
+  `buy_close_price` decimal(10,2) DEFAULT NULL COMMENT '购买日收盘价',
+  `sell_hour` int(11) DEFAULT NULL COMMENT '卖出小时',
+  `sell_minute` int(11) DEFAULT NULL COMMENT '卖出分钟',
+  `sell_high_price` decimal(10,2) DEFAULT NULL COMMENT '卖出日最高价',
+  `sell_close_price` decimal(10,2) DEFAULT NULL COMMENT '卖出日收盘价',
+  `trade_type` varchar(10) DEFAULT NULL COMMENT '交易类型：BUY,SELL',
+  `trade_nature` varchar(10) DEFAULT NULL COMMENT '交易性质：REAL,VIRTUAL',
+  `strategy` varchar(50) DEFAULT NULL COMMENT '策略',
+  `version` int(11) DEFAULT NULL COMMENT '策略版本',
+  `parameters` varchar(500) DEFAULT NULL COMMENT '策略参数',
+  `created` datetime DEFAULT NULL COMMENT '创建日期',
+  `updated` datetime DEFAULT NULL COMMENT '更新日期',
+  PRIMARY KEY (`trade_id`),
+  KEY `index_stock_code` (`stock_code`,`buy_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_stock_daily` */
 
@@ -79,43 +114,30 @@ CREATE TABLE `t_stock_daily` (
   `created` datetime DEFAULT NULL COMMENT '创建日期',
   `updated` datetime DEFAULT NULL COMMENT '更新日期',
   PRIMARY KEY (`daily_id`),
-  KEY `index_stock_code` (`stock_code`,`date`)
-) ENGINE=InnoDB AUTO_INCREMENT=2585 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `index_stock_code` (`stock_code`,`date`)
+) ENGINE=InnoDB AUTO_INCREMENT=5035599 DEFAULT CHARSET=utf8;
 
-/*Table structure for table `t_stock_daily_bak` */
+/*Table structure for table `t_stock_history_highest` */
 
-DROP TABLE IF EXISTS `t_stock_daily_bak`;
+DROP TABLE IF EXISTS `t_stock_history_highest`;
 
-CREATE TABLE `t_stock_daily_bak` (
-  `daily_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '股票每日指数Id',
-  `stock_id` int(11) DEFAULT NULL COMMENT '股票Id',
+CREATE TABLE `t_stock_history_highest` (
+  `history_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '股票每日指数Id',
   `stock_code` char(6) DEFAULT NULL COMMENT '股票代码',
   `stock_name` varchar(10) DEFAULT NULL COMMENT '股票名称',
   `date` date DEFAULT NULL COMMENT '日期',
-  `last_close` decimal(10,2) DEFAULT NULL COMMENT '昨天收盘价',
+  `hour` decimal(10,2) DEFAULT NULL COMMENT '最高时间-小时',
+  `minute` decimal(10,2) DEFAULT NULL COMMENT '最高时间-分钟',
   `open` decimal(10,2) DEFAULT NULL COMMENT '开盘价',
-  `close` decimal(10,2) DEFAULT NULL COMMENT '收盘价',
-  `close_gap` decimal(10,2) DEFAULT NULL COMMENT '涨跌额',
-  `close_gap_rate` decimal(10,2) DEFAULT NULL COMMENT '涨跌幅',
   `high` decimal(10,2) DEFAULT NULL COMMENT '最高价',
   `low` decimal(10,2) DEFAULT NULL COMMENT '最低价',
-  `high_gap` decimal(10,2) DEFAULT NULL COMMENT '最高价与昨收差价 high-last_close',
-  `high_gap_rate` decimal(10,2) DEFAULT NULL COMMENT '最高价与昨收差价比例 (high-last_close)/last_close',
-  `low_gap` decimal(10,2) DEFAULT NULL COMMENT '最低价与昨收差价 low-last_close',
-  `low_gap_rate` decimal(10,2) DEFAULT NULL COMMENT '最低价与昨收差价比例 (low-last_close)/last_close',
-  `amount` bigint(20) DEFAULT NULL COMMENT '成交额',
-  `volume` bigint(20) DEFAULT NULL COMMENT '成交量',
-  `asset` bigint(20) DEFAULT NULL COMMENT '总资产',
-  `is_limit_up` bit(1) DEFAULT NULL COMMENT '是否涨停',
-  `is_limit_down` bit(1) DEFAULT NULL COMMENT '是否跌停',
-  `exrights` decimal(15,10) DEFAULT NULL COMMENT '除权比例',
+  `close` decimal(10,2) DEFAULT NULL COMMENT '收盘价',
+  `exrights` decimal(15,10) DEFAULT NULL COMMENT '除权系数',
   `created` datetime DEFAULT NULL COMMENT '创建日期',
   `updated` datetime DEFAULT NULL COMMENT '更新日期',
-  PRIMARY KEY (`daily_id`),
-  KEY `NewIndex1` (`stock_id`),
-  KEY `NewIndex2` (`date`),
-  KEY `index_stock_code` (`stock_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=5023571 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`history_id`),
+  KEY `index_stock_code` (`stock_code`,`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_stock_minute` */
 
@@ -123,259 +145,19 @@ DROP TABLE IF EXISTS `t_stock_minute`;
 
 CREATE TABLE `t_stock_minute` (
   `minute_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '股票分时指数Id',
-  `stock_id` int(11) DEFAULT NULL COMMENT '股票Id',
   `stock_code` char(6) DEFAULT NULL COMMENT '股票代码',
   `date` date DEFAULT NULL COMMENT '日期',
   `hour` int(11) DEFAULT NULL COMMENT '小时',
   `minute` int(11) DEFAULT NULL COMMENT '分钟',
   `price` decimal(10,2) DEFAULT NULL COMMENT '当前价',
+  `exrights` decimal(15,10) DEFAULT NULL COMMENT '除权系数',
+  `volume` decimal(10,2) DEFAULT NULL COMMENT '成交量',
+  `amount` decimal(10,2) DEFAULT NULL COMMENT '成交额',
   `created` datetime DEFAULT NULL COMMENT '创建日期',
   `updated` datetime DEFAULT NULL COMMENT '更新日期',
   PRIMARY KEY (`minute_id`),
-  KEY `NewIndex1` (`stock_id`),
-  KEY `NewIndex2` (`date`),
-  KEY `index_stock_code` (`stock_code`)
+  KEY `index_stock_code` (`stock_code`,`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Table structure for table `t_stock_simulate_trade` */
-
-DROP TABLE IF EXISTS `t_stock_simulate_trade`;
-
-CREATE TABLE `t_stock_simulate_trade` (
-  `trade_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '股票交易Id',
-  `stock_id` int(11) DEFAULT NULL COMMENT '股票Id',
-  `stock_code` char(6) DEFAULT NULL COMMENT '股票代码',
-  `stock_name` varchar(10) DEFAULT NULL COMMENT '股票名称',
-  `buy_date` date DEFAULT NULL COMMENT '购买日期',
-  `buy_trade_price` decimal(10,2) DEFAULT NULL COMMENT '购买价',
-  `sell_date` date DEFAULT NULL COMMENT '卖出日',
-  `sell_trade_price` decimal(10,2) DEFAULT NULL COMMENT '卖出价',
-  `profit` decimal(10,2) DEFAULT NULL COMMENT '利润',
-  `profit_rate` decimal(10,2) DEFAULT NULL COMMENT '利润率',
-  `close_profit_rate` decimal(10,2) DEFAULT NULL COMMENT '收盘价收益比例',
-  `buy_hour` int(11) DEFAULT NULL COMMENT '购买小时',
-  `buy_minute` int(11) DEFAULT NULL COMMENT '购买分钟',
-  `buy_high_price` decimal(10,2) DEFAULT NULL COMMENT '购买日最高价',
-  `high_profit_rate` decimal(10,2) DEFAULT NULL COMMENT '最高价收益比例',
-  `buy_close_price` decimal(10,2) DEFAULT NULL COMMENT '购买日收盘价',
-  `sell_hour` int(11) DEFAULT NULL COMMENT '卖出小时',
-  `sell_minute` int(11) DEFAULT NULL COMMENT '卖出分钟',
-  `sell_high_price` decimal(10,2) DEFAULT NULL COMMENT '卖出日最高价',
-  `sell_close_price` decimal(10,2) DEFAULT NULL COMMENT '卖出日收盘价',
-  `trade_type` varchar(10) DEFAULT NULL COMMENT '交易类型：BUY,SELL',
-  `trade_nature` varchar(10) DEFAULT NULL COMMENT '交易性质：REAL,VIRTUAL',
-  `strategy` varchar(50) DEFAULT NULL COMMENT '策略',
-  `version` int(11) DEFAULT NULL COMMENT '策略版本',
-  `parameters` varchar(500) DEFAULT NULL COMMENT '策略参数',
-  `created` datetime DEFAULT NULL COMMENT '创建日期',
-  `updated` datetime DEFAULT NULL COMMENT '更新日期',
-  PRIMARY KEY (`trade_id`),
-  KEY `NewIndex1` (`stock_id`),
-  KEY `NewIndex2` (`buy_date`),
-  KEY `index_stock_code` (`stock_code`),
-  KEY `Index_version` (`version`),
-  KEY `index_strategy` (`strategy`)
-) ENGINE=InnoDB AUTO_INCREMENT=211047 DEFAULT CHARSET=utf8;
-
-/*Table structure for table `t_stock_trade_h30` */
-
-DROP TABLE IF EXISTS `t_stock_trade_h30`;
-
-CREATE TABLE `t_stock_trade_h30` (
-  `trade_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '股票交易Id',
-  `stock_id` int(11) DEFAULT NULL COMMENT '股票Id',
-  `stock_code` char(6) DEFAULT NULL COMMENT '股票代码',
-  `stock_name` varchar(10) DEFAULT NULL COMMENT '股票名称',
-  `buy_date` date DEFAULT NULL COMMENT '购买日期',
-  `buy_trade_price` decimal(10,2) DEFAULT NULL COMMENT '购买价',
-  `sell_date` date DEFAULT NULL COMMENT '卖出日',
-  `sell_trade_price` decimal(10,2) DEFAULT NULL COMMENT '卖出价',
-  `profit` decimal(10,2) DEFAULT NULL COMMENT '利润',
-  `profit_rate` decimal(10,2) DEFAULT NULL COMMENT '利润率',
-  `close_profit_rate` decimal(10,2) DEFAULT NULL COMMENT '收盘价收益比例',
-  `buy_hour` int(11) DEFAULT NULL COMMENT '购买小时',
-  `buy_minute` int(11) DEFAULT NULL COMMENT '购买分钟',
-  `buy_high_price` decimal(10,2) DEFAULT NULL COMMENT '购买日最高价',
-  `high_profit_rate` decimal(10,2) DEFAULT NULL COMMENT '最高价收益比例',
-  `buy_close_price` decimal(10,2) DEFAULT NULL COMMENT '购买日收盘价',
-  `sell_hour` int(11) DEFAULT NULL COMMENT '卖出小时',
-  `sell_minute` int(11) DEFAULT NULL COMMENT '卖出分钟',
-  `sell_high_price` decimal(10,2) DEFAULT NULL COMMENT '卖出日最高价',
-  `sell_close_price` decimal(10,2) DEFAULT NULL COMMENT '卖出日收盘价',
-  `trade_type` varchar(10) DEFAULT NULL COMMENT '交易类型：BUY,SELL',
-  `trade_nature` varchar(10) DEFAULT NULL COMMENT '交易性质：REAL,VIRTUAL',
-  `strategy` varchar(50) DEFAULT NULL COMMENT '策略',
-  `version` int(11) DEFAULT NULL COMMENT '策略版本',
-  `parameters` varchar(500) DEFAULT NULL COMMENT '策略参数',
-  `created` datetime DEFAULT NULL COMMENT '创建日期',
-  `updated` datetime DEFAULT NULL COMMENT '更新日期',
-  PRIMARY KEY (`trade_id`),
-  KEY `NewIndex1` (`stock_id`),
-  KEY `NewIndex2` (`buy_date`),
-  KEY `index_stock_code` (`stock_code`),
-  KEY `Index_version` (`version`),
-  KEY `index_strategy` (`strategy`)
-) ENGINE=InnoDB AUTO_INCREMENT=85460 DEFAULT CHARSET=utf8;
-
-/*Table structure for table `t_stock_trade_h30_l40` */
-
-DROP TABLE IF EXISTS `t_stock_trade_h30_l40`;
-
-CREATE TABLE `t_stock_trade_h30_l40` (
-  `trade_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '股票交易Id',
-  `stock_id` int(11) DEFAULT NULL COMMENT '股票Id',
-  `stock_code` char(6) DEFAULT NULL COMMENT '股票代码',
-  `stock_name` varchar(10) DEFAULT NULL COMMENT '股票名称',
-  `buy_date` date DEFAULT NULL COMMENT '购买日期',
-  `buy_trade_price` decimal(10,2) DEFAULT NULL COMMENT '购买价',
-  `sell_date` date DEFAULT NULL COMMENT '卖出日',
-  `sell_trade_price` decimal(10,2) DEFAULT NULL COMMENT '卖出价',
-  `profit` decimal(10,2) DEFAULT NULL COMMENT '利润',
-  `profit_rate` decimal(10,2) DEFAULT NULL COMMENT '利润率',
-  `close_profit_rate` decimal(10,2) DEFAULT NULL COMMENT '收盘价收益比例',
-  `buy_hour` int(11) DEFAULT NULL COMMENT '购买小时',
-  `buy_minute` int(11) DEFAULT NULL COMMENT '购买分钟',
-  `buy_high_price` decimal(10,2) DEFAULT NULL COMMENT '购买日最高价',
-  `high_profit_rate` decimal(10,2) DEFAULT NULL COMMENT '最高价收益比例',
-  `buy_close_price` decimal(10,2) DEFAULT NULL COMMENT '购买日收盘价',
-  `sell_hour` int(11) DEFAULT NULL COMMENT '卖出小时',
-  `sell_minute` int(11) DEFAULT NULL COMMENT '卖出分钟',
-  `sell_high_price` decimal(10,2) DEFAULT NULL COMMENT '卖出日最高价',
-  `sell_close_price` decimal(10,2) DEFAULT NULL COMMENT '卖出日收盘价',
-  `trade_type` varchar(10) DEFAULT NULL COMMENT '交易类型：BUY,SELL',
-  `trade_nature` varchar(10) DEFAULT NULL COMMENT '交易性质：REAL,VIRTUAL',
-  `strategy` varchar(50) DEFAULT NULL COMMENT '策略',
-  `version` int(11) DEFAULT NULL COMMENT '策略版本',
-  `parameters` varchar(500) DEFAULT NULL COMMENT '策略参数',
-  `created` datetime DEFAULT NULL COMMENT '创建日期',
-  `updated` datetime DEFAULT NULL COMMENT '更新日期',
-  PRIMARY KEY (`trade_id`),
-  KEY `NewIndex1` (`stock_id`),
-  KEY `NewIndex2` (`buy_date`),
-  KEY `index_stock_code` (`stock_code`),
-  KEY `Index_version` (`version`),
-  KEY `index_strategy` (`strategy`)
-) ENGINE=InnoDB AUTO_INCREMENT=175756 DEFAULT CHARSET=utf8;
-
-/*Table structure for table `t_stock_trade_h30_l5` */
-
-DROP TABLE IF EXISTS `t_stock_trade_h30_l5`;
-
-CREATE TABLE `t_stock_trade_h30_l5` (
-  `trade_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '股票交易Id',
-  `stock_id` int(11) DEFAULT NULL COMMENT '股票Id',
-  `stock_code` char(6) DEFAULT NULL COMMENT '股票代码',
-  `stock_name` varchar(10) DEFAULT NULL COMMENT '股票名称',
-  `buy_date` date DEFAULT NULL COMMENT '购买日期',
-  `buy_trade_price` decimal(10,2) DEFAULT NULL COMMENT '购买价',
-  `sell_date` date DEFAULT NULL COMMENT '卖出日',
-  `sell_trade_price` decimal(10,2) DEFAULT NULL COMMENT '卖出价',
-  `profit` decimal(10,2) DEFAULT NULL COMMENT '利润',
-  `profit_rate` decimal(10,2) DEFAULT NULL COMMENT '利润率',
-  `close_profit_rate` decimal(10,2) DEFAULT NULL COMMENT '收盘价收益比例',
-  `buy_hour` int(11) DEFAULT NULL COMMENT '购买小时',
-  `buy_minute` int(11) DEFAULT NULL COMMENT '购买分钟',
-  `buy_high_price` decimal(10,2) DEFAULT NULL COMMENT '购买日最高价',
-  `high_profit_rate` decimal(10,2) DEFAULT NULL COMMENT '最高价收益比例',
-  `buy_close_price` decimal(10,2) DEFAULT NULL COMMENT '购买日收盘价',
-  `sell_hour` int(11) DEFAULT NULL COMMENT '卖出小时',
-  `sell_minute` int(11) DEFAULT NULL COMMENT '卖出分钟',
-  `sell_high_price` decimal(10,2) DEFAULT NULL COMMENT '卖出日最高价',
-  `sell_close_price` decimal(10,2) DEFAULT NULL COMMENT '卖出日收盘价',
-  `trade_type` varchar(10) DEFAULT NULL COMMENT '交易类型：BUY,SELL',
-  `trade_nature` varchar(10) DEFAULT NULL COMMENT '交易性质：REAL,VIRTUAL',
-  `strategy` varchar(50) DEFAULT NULL COMMENT '策略',
-  `version` int(11) DEFAULT NULL COMMENT '策略版本',
-  `parameters` varchar(500) DEFAULT NULL COMMENT '策略参数',
-  `created` datetime DEFAULT NULL COMMENT '创建日期',
-  `updated` datetime DEFAULT NULL COMMENT '更新日期',
-  PRIMARY KEY (`trade_id`),
-  KEY `NewIndex1` (`stock_id`),
-  KEY `NewIndex2` (`buy_date`),
-  KEY `index_stock_code` (`stock_code`),
-  KEY `Index_version` (`version`),
-  KEY `index_strategy` (`strategy`)
-) ENGINE=InnoDB AUTO_INCREMENT=338917 DEFAULT CHARSET=utf8;
-
-/*Table structure for table `t_stock_trade_h40` */
-
-DROP TABLE IF EXISTS `t_stock_trade_h40`;
-
-CREATE TABLE `t_stock_trade_h40` (
-  `trade_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '股票交易Id',
-  `stock_id` int(11) DEFAULT NULL COMMENT '股票Id',
-  `stock_code` char(6) DEFAULT NULL COMMENT '股票代码',
-  `stock_name` varchar(10) DEFAULT NULL COMMENT '股票名称',
-  `buy_date` date DEFAULT NULL COMMENT '购买日期',
-  `buy_trade_price` decimal(10,2) DEFAULT NULL COMMENT '购买价',
-  `sell_date` date DEFAULT NULL COMMENT '卖出日',
-  `sell_trade_price` decimal(10,2) DEFAULT NULL COMMENT '卖出价',
-  `profit` decimal(10,2) DEFAULT NULL COMMENT '利润',
-  `profit_rate` decimal(10,2) DEFAULT NULL COMMENT '利润率',
-  `close_profit_rate` decimal(10,2) DEFAULT NULL COMMENT '收盘价收益比例',
-  `buy_hour` int(11) DEFAULT NULL COMMENT '购买小时',
-  `buy_minute` int(11) DEFAULT NULL COMMENT '购买分钟',
-  `buy_high_price` decimal(10,2) DEFAULT NULL COMMENT '购买日最高价',
-  `high_profit_rate` decimal(10,2) DEFAULT NULL COMMENT '最高价收益比例',
-  `buy_close_price` decimal(10,2) DEFAULT NULL COMMENT '购买日收盘价',
-  `sell_hour` int(11) DEFAULT NULL COMMENT '卖出小时',
-  `sell_minute` int(11) DEFAULT NULL COMMENT '卖出分钟',
-  `sell_high_price` decimal(10,2) DEFAULT NULL COMMENT '卖出日最高价',
-  `sell_close_price` decimal(10,2) DEFAULT NULL COMMENT '卖出日收盘价',
-  `trade_type` varchar(10) DEFAULT NULL COMMENT '交易类型：BUY,SELL',
-  `trade_nature` varchar(10) DEFAULT NULL COMMENT '交易性质：REAL,VIRTUAL',
-  `strategy` varchar(50) DEFAULT NULL COMMENT '策略',
-  `version` int(11) DEFAULT NULL COMMENT '策略版本',
-  `parameters` varchar(500) DEFAULT NULL COMMENT '策略参数',
-  `created` datetime DEFAULT NULL COMMENT '创建日期',
-  `updated` datetime DEFAULT NULL COMMENT '更新日期',
-  PRIMARY KEY (`trade_id`),
-  KEY `NewIndex1` (`stock_id`),
-  KEY `NewIndex2` (`buy_date`),
-  KEY `index_stock_code` (`stock_code`),
-  KEY `Index_version` (`version`),
-  KEY `index_strategy` (`strategy`)
-) ENGINE=InnoDB AUTO_INCREMENT=287687 DEFAULT CHARSET=utf8;
-
-/*Table structure for table `t_stock_trade_h5` */
-
-DROP TABLE IF EXISTS `t_stock_trade_h5`;
-
-CREATE TABLE `t_stock_trade_h5` (
-  `trade_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '股票交易Id',
-  `stock_id` int(11) DEFAULT NULL COMMENT '股票Id',
-  `stock_code` char(6) DEFAULT NULL COMMENT '股票代码',
-  `stock_name` varchar(10) DEFAULT NULL COMMENT '股票名称',
-  `buy_date` date DEFAULT NULL COMMENT '购买日期',
-  `buy_trade_price` decimal(10,2) DEFAULT NULL COMMENT '购买价',
-  `sell_date` date DEFAULT NULL COMMENT '卖出日',
-  `sell_trade_price` decimal(10,2) DEFAULT NULL COMMENT '卖出价',
-  `profit` decimal(10,2) DEFAULT NULL COMMENT '利润',
-  `profit_rate` decimal(10,2) DEFAULT NULL COMMENT '利润率',
-  `close_profit_rate` decimal(10,2) DEFAULT NULL COMMENT '收盘价收益比例',
-  `buy_hour` int(11) DEFAULT NULL COMMENT '购买小时',
-  `buy_minute` int(11) DEFAULT NULL COMMENT '购买分钟',
-  `buy_high_price` decimal(10,2) DEFAULT NULL COMMENT '购买日最高价',
-  `high_profit_rate` decimal(10,2) DEFAULT NULL COMMENT '最高价收益比例',
-  `buy_close_price` decimal(10,2) DEFAULT NULL COMMENT '购买日收盘价',
-  `sell_hour` int(11) DEFAULT NULL COMMENT '卖出小时',
-  `sell_minute` int(11) DEFAULT NULL COMMENT '卖出分钟',
-  `sell_high_price` decimal(10,2) DEFAULT NULL COMMENT '卖出日最高价',
-  `sell_close_price` decimal(10,2) DEFAULT NULL COMMENT '卖出日收盘价',
-  `trade_type` varchar(10) DEFAULT NULL COMMENT '交易类型：BUY,SELL',
-  `trade_nature` varchar(10) DEFAULT NULL COMMENT '交易性质：REAL,VIRTUAL',
-  `strategy` varchar(50) DEFAULT NULL COMMENT '策略',
-  `version` int(11) DEFAULT NULL COMMENT '策略版本',
-  `parameters` varchar(500) DEFAULT NULL COMMENT '策略参数',
-  `created` datetime DEFAULT NULL COMMENT '创建日期',
-  `updated` datetime DEFAULT NULL COMMENT '更新日期',
-  PRIMARY KEY (`trade_id`),
-  KEY `NewIndex1` (`stock_id`),
-  KEY `NewIndex2` (`buy_date`),
-  KEY `index_stock_code` (`stock_code`),
-  KEY `Index_version` (`version`),
-  KEY `index_strategy` (`strategy`)
-) ENGINE=InnoDB AUTO_INCREMENT=198990 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_sys_config` */
 

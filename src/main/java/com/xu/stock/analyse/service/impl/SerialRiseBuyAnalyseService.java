@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.analyse.model.StockAnalyseStrategy;
-import com.xu.stock.analyse.model.StockSimulateTrade;
+import com.xu.stock.analyse.model.StockBuyTrade;
 import com.xu.stock.analyse.service.StockAnalyseConstants.SerialRiseBuyArgs;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeNature;
@@ -40,7 +40,7 @@ public class SerialRiseBuyAnalyseService extends BaseStockAnalyseService {
 	}
 
 	@Override
-	public List<StockSimulateTrade> doAnalyse(List<StockDaily> dailys) {
+	public List<StockBuyTrade> doAnalyse(List<StockDaily> dailys) {
 		log.info("analyse stock code:" + dailys.get(0).getStockCode());
 
 		// 找出当前股票的连接增长的日期
@@ -56,10 +56,10 @@ public class SerialRiseBuyAnalyseService extends BaseStockAnalyseService {
 	 * @param buyPoints
 	 * @return
 	 */
-	protected List<StockSimulateTrade> buildStockSimulateTrades(List<StockDaily> buyPoints) {
-		List<StockSimulateTrade> trades = new ArrayList<StockSimulateTrade>();
+	protected List<StockBuyTrade> buildStockSimulateTrades(List<StockDaily> buyPoints) {
+		List<StockBuyTrade> trades = new ArrayList<StockBuyTrade>();
 		for (StockDaily stockDaily : buyPoints) {
-			StockSimulateTrade trade = new StockSimulateTrade();
+			StockBuyTrade trade = new StockBuyTrade();
 
 			trade.setStockCode(stockDaily.getStockCode());
 			trade.setStockName(stockDaily.getStockName());

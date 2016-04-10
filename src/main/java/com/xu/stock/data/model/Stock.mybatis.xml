@@ -41,7 +41,7 @@
 	
 	<update id="updateStock" flushCache="true">
 		UPDATE t_stock 
-		SET asset = #{asset} , last_date = #{lastDate}, last_close = #{lastClose}, exrights = #{exrights}, updated=sysdate()
+		SET stock_name = #{stockName} ,asset = #{asset} , last_date = #{lastDate}, last_close = #{lastClose}, exrights = #{exrights}, updated=sysdate()
 		WHERE stock_id = #{stockId} ;
 	</update>
 

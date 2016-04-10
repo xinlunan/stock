@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.analyse.model.StockAnalyseStrategy;
-import com.xu.stock.analyse.model.StockSimulateTrade;
+import com.xu.stock.analyse.model.StockBuyTrade;
 import com.xu.stock.analyse.service.StockAnalyseConstants.SerialRiseSellArgs;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeNature;
@@ -41,11 +41,11 @@ public class SerialRiseSellAnalyseService extends BaseStockAnalyseService {
 	}
 
 	@Override
-	public List<StockSimulateTrade> doAnalyse(List<StockDaily> dailys) {
+	public List<StockBuyTrade> doAnalyse(List<StockDaily> dailys) {
 		log.info("analyse stock code:" + dailys.get(0).getStockCode());
 
 		// 获取买入点
-		List<StockSimulateTrade> buys = stockSimulateTradeDao.getBuyTrades(StrategyType.SERIAL_RISE_BUY, dailys.get(0).getStockCode());
+		List<StockBuyTrade> buys = stockSimulateTradeDao.getBuyTrades(StrategyType.SERIAL_RISE_BUY, dailys.get(0).getStockCode());
 
 		// 分析卖出点
 		return analyseSellPoints(dailys, buys);
@@ -58,12 +58,12 @@ public class SerialRiseSellAnalyseService extends BaseStockAnalyseService {
 	 * @param buys
 	 * @return
 	 */
-	private List<StockSimulateTrade> analyseSellPoints(List<StockDaily> dailys, List<StockSimulateTrade> buys) {
-		List<StockSimulateTrade> sells = new ArrayList<StockSimulateTrade>();
-        for (StockSimulateTrade buy : buys) {
+	private List<StockBuyTrade> analyseSellPoints(List<StockDaily> dailys, List<StockBuyTrade> buys) {
+		List<StockBuyTrade> sells = new ArrayList<StockBuyTrade>();
+        for (StockBuyTrade buy : buys) {
             StockDaily sellDaily = StockAnalyseUtil.getSellStockDaily(dailys, buy.getBuyDate(), holdDay);
             if (sellDaily != null) {
-                StockSimulateTrade sell = new StockSimulateTrade();
+                StockBuyTrade sell = new StockBuyTrade();
 
                 sell.setStockCode(sellDaily.getStockCode());
                 sell.setStockName(sellDaily.getStockName());

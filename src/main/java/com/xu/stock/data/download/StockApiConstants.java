@@ -22,9 +22,12 @@ public interface StockApiConstants {
 		/** 新浪获取股票指数API地址 */
 		// http://money.finance.sina.com.cn/corp/go.php/vMS_MarketHistory/stockid/601006.phtml?year=2015&jidu=2
 		public static final String API_URL_GET_STOCK_INDEX = "http://money.finance.sina.com.cn/corp/go.php/vMS_MarketHistory/stockid/";
+        // "http://vip.stock.finance.sina.com.cn/corp/go.php/vMS_FuQuanMarketHistory/stockid/000001.phtml?year=2016&jidu=2"
+        public static final String API_URL_GET_FUQUAN_STOCK_INDEX = "http://vip.stock.finance.sina.com.cn/corp/go.php/vMS_FuQuanMarketHistory/stockid/";
 
 		/** 修复股票指数API地址 */
 		// http://market.finance.sina.com.cn/downxls.php?date=2011-07-08&symbol=sh600900
+        // http://stock.gtimg.cn/data/index.php?appn=detail&action=download&c=sh601857&d=20160408
 		public static final String API_URL_REPAIR_STOCK_INDEX = "http://market.finance.sina.com.cn/downxls.php";
 
 		/** 交易明细 */

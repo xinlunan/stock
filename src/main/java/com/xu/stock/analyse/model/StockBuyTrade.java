@@ -17,7 +17,7 @@ import java.util.Date;
  * 
  * @since 1.
  */
-public class StockSimulateTrade implements Serializable {
+public class StockBuyTrade implements Serializable {
 	private static final long serialVersionUID = -352228891672124416L;
 
 	// 股票每分钟指数Id

@@ -9,8 +9,7 @@
      http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
-
-
+     
 	<context:property-placeholder location="classpath*:config/jdbc.properties" />
 
 	<!-- 配置session工厂 -->
@@ -85,13 +84,13 @@
 	</bean>
 
 	<aop:config>
-		<aop:pointcut id="winitServiceMethods" expression="execution(* com.xu.stock.**.service.impl.*.*(..))" />
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="winitServiceMethods" />
+		<aop:pointcut id="businessServiceMethods" expression="execution(* com.xu.stock.**.service.impl.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="businessServiceMethods" />
 	</aop:config>
 	
 	<aop:config>
-		<aop:pointcut id="winitFrameworkMethods" expression="execution(* com.winit.framework.service.impl.*.*(..))" />
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="winitFrameworkMethods" />
+		<aop:pointcut id="frameworkMethods" expression="execution(* com.winit.framework.service.impl.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="frameworkMethods" />
 	</aop:config>
 
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
@@ -101,10 +100,11 @@
 			<tx:method name="get*" read-only="true" />
 			
 			<tx:method name="addTransportLog" propagation="REQUIRES_NEW" rollback-for="Exception" />
+			<tx:method name="downloadStockMinutes" propagation="REQUIRES_NEW" rollback-for="Exception" />
 			<tx:method name="tryLock" propagation="REQUIRES_NEW" rollback-for="Exception" />
 			<tx:method name="unLock" propagation="REQUIRES_NEW" rollback-for="Exception" />
 
-			<tx:method name="*" rollback-for="Exception" />
+			<tx:method name="*" propagation="REQUIRED" rollback-for="Exception" />
 		</tx:attributes>
 	</tx:advice>
 

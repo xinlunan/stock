@@ -22,9 +22,9 @@ public interface StockAnalyseConstants {
         public static final String D1_LAST_WAVE_CYCLE = "d1";
         public static final String D2_THIS_WAVE_CYCLE = "d2";
         public static final String F1_THIS_FALL_RATE  = "f1";
-        public static final String F2_BUY_RATE_HIGH   = "f2";
+        public static final String F2_WARN_RATE_LOW   = "f2";
         public static final String F3_BUY_RATE_LOW    = "f3";
-        public static final String F4_WARN_RATE_LOW   = "f4";
+        public static final String F4_BUY_RATE_HIGH   = "f4";
 
     }
 

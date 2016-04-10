@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.xu.stock.analyse.model.StockSimulateTrade">
+<mapper namespace="com.xu.stock.analyse.model.StockBuyTrade">
 
-	<resultMap type="com.xu.stock.analyse.model.StockSimulateTrade" id="StockSimulateTrade">
+	<resultMap type="com.xu.stock.analyse.model.StockBuyTrade" id="StockBuyTrade">
 		<id property="tradeId" column="trade_id"></id>
-		<id property="stockId" column="stock_id"></id>
 		<id property="stockCode" column="stock_code"></id>
 		<id property="stockName" column="stock_name"></id>
 		<id property="buyDate" column="buy_date"></id>
@@ -33,41 +32,41 @@
 	</resultMap>
 
 	<sql id="columns">
-		stock_id,stock_code,stock_name,
+		stock_code,stock_name,
 		buy_date,buy_hour,buy_minute,buy_trade_price,buy_high_price,buy_close_price,
 		sell_date,sell_hour,sell_minute,sell_trade_price,sell_high_price,sell_close_price,
 		profit,profit_rate,high_profit_rate,close_profit_rate,
 		trade_type,trade_nature,strategy,version,parameters,created,updated
 	</sql>
 
-	<select id="getStockSimulateTrades" resultMap="StockSimulateTrade">
+	<select id="getStockSimulateTrades" resultMap="StockBuyTrade">
 		SELECT trade_id,<include refid="columns" />
-		FROM t_stock_simulate_trade
+		FROM t_stock_buy_trade
 		WHERE stock_code=#{stockCode};
 	</select>
 
-	<select id="getBuyStockSimulateTrade" resultMap="StockSimulateTrade">
+	<select id="getBuyStockSimulateTrade" resultMap="StockBuyTrade">
 		SELECT trade_id,<include refid="columns" />
-		FROM t_stock_simulate_trade
+		FROM t_stock_buy_trade
 		WHERE stock_code=#{stockCode} and trade_type=#{tradeType} and version=#{version} and buy_date=#{buyDate};
 	</select>
 	
-	<select id="getSellStockSimulateTrade" resultMap="StockSimulateTrade">
+	<select id="getSellStockSimulateTrade" resultMap="StockBuyTrade">
 		SELECT trade_id,<include refid="columns" />
-		FROM t_stock_simulate_trade
+		FROM t_stock_buy_trade
 		WHERE stock_code=#{stockCode} and trade_type=#{tradeType} and version=#{version} and sell_date=#{sellDate};
 	</select>
 	
-	<select id="getBuyStockSimulateTrades" resultMap="StockSimulateTrade">
+	<select id="getBuyStockSimulateTrades" resultMap="StockBuyTrade">
 		SELECT trade_id,<include refid="columns" />
-		fROM t_stock_simulate_trade
+		fROM t_stock_buy_trade
 		WHERE strategy=#{strategy} and stock_code=#{stockCode} and trade_type='BUY' ;
 	</select>
 
 	<insert id="insertStockSimulateTrade" flushCache="true">
-		INSERT INTO t_stock_simulate_trade (<include refid="columns" />)
+		INSERT INTO t_stock_buy_trade (<include refid="columns" />)
 		VALUES (
-			#{stockId},#{stockCode},#{stockName},
+			#{stockCode},#{stockName},
 			#{buyDate},#{buyHour},#{buyMinute},#{buyTradePrice},#{buyHighPrice},#{buyClosePrice},
 			#{sellDate},#{sellHour},#{sellMinute},#{sellTradePrice},#{sellHighPrice},#{sellClosePrice},
 			#{profit},#{profitRate},#{highProfitRate},#{closeProfitRate},

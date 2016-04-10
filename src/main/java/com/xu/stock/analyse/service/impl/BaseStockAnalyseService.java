@@ -12,7 +12,7 @@ import com.xu.stock.analyse.dao.IStockAnalyseRecordDao;
 import com.xu.stock.analyse.dao.IStockAnalyseStrategyDao;
 import com.xu.stock.analyse.dao.IStockSimulateTradeDao;
 import com.xu.stock.analyse.model.StockAnalyseStrategy;
-import com.xu.stock.analyse.model.StockSimulateTrade;
+import com.xu.stock.analyse.model.StockBuyTrade;
 import com.xu.stock.analyse.service.IStockAnalyseService;
 import com.xu.stock.data.model.StockDaily;
 
@@ -53,7 +53,7 @@ public abstract class BaseStockAnalyseService implements IStockAnalyseService {
 			setAnalyseStrategy(analyseStrategy);
 
 			// 分析可购买点
-			List<StockSimulateTrade> trades = doAnalyse(dailys);
+			List<StockBuyTrade> trades = doAnalyse(dailys);
 
 			// 保存购买点
 			stockSimulateTradeDao.saveStockSimulateTrades(trades);
@@ -67,7 +67,7 @@ public abstract class BaseStockAnalyseService implements IStockAnalyseService {
 	 * @param dailys
 	 * @return
 	 */
-	public abstract List<StockSimulateTrade> doAnalyse(List<StockDaily> dailys);
+	public abstract List<StockBuyTrade> doAnalyse(List<StockDaily> dailys);
 
 	/**
 	 * 设置分析策略版本

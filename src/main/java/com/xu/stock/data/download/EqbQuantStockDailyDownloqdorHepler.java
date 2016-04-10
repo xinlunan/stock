@@ -239,7 +239,7 @@ public class EqbQuantStockDailyDownloqdorHepler {
 	public static StockDaily getRepairStockDailyByExcel(String fullCode, Date date) throws Exception {
 		String url = buildRepairUrl(fullCode, date);
 
-		String path = "D:\\temp\\" + fullCode + "_" + DateUtil.getDate(date, "yyyyMMdd") + ".xls";
+        String path = "D:\\temp\\" + fullCode + "_" + DateUtil.getDate(date, "yyyyMMdd") + Math.random() + ".csv";
 		boolean download = HttpClientHandle.download(url, path);
 		if (!download) {
 			return null;
