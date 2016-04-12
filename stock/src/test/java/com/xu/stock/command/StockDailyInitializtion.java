@@ -30,7 +30,7 @@ import com.xu.test.BaseTestCase;
 @SuppressWarnings("restriction")
 public class StockDailyInitializtion extends BaseTestCase {
 
-    public static final int      NUM_THREADS = 10;
+    public static final int      NUM_THREADS = 20;
 
 	@Resource
 	private StockDailyController stockDailyController;
