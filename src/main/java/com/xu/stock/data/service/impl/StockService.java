@@ -68,7 +68,7 @@ public class StockService implements IStockService {
 	}
 
 	public void saveStockData(Stock stock) {
-		log.info("更新:" + stock.getStockCode());
+        log.info("更新数据:" + stock.getStockCode());
 		filterInvalid(stock);
 
         List<StockDaily> dailys = stock.getStockDailys();
