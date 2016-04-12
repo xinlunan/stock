@@ -49,7 +49,7 @@ public abstract class StockDailyService implements IStockDailyService {
 				StockDaily stockDaily = repairIndexs.get(i);
 				stockDaily.setStockCode(lastIdex.getStockCode());
 				stockDaily.setStockName(lastIdex.getStockName());
-				stockDaily.setLastClose(lastIdex.getClose());
+                stockDaily.setLastClose(lastIdex.getClose().multiply(lastIdex.getExrights()).divide(stockDaily.getExrights()));
 				stockDaily.setCloseGap(stockDaily.getClose().subtract(stockDaily.getLastClose()));
 				BigDecimal closeGapRate = stockDaily.getCloseGap().multiply(BD_100).divide(stockDaily.getLastClose(), 2, BigDecimal.ROUND_HALF_UP);
 				stockDaily.setCloseGapRate(closeGapRate);

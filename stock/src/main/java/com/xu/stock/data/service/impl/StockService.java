@@ -74,13 +74,6 @@ public class StockService implements IStockService {
         List<StockDaily> dailys = stock.getStockDailys();
         stockDailyDao.saveStockDailys(dailys);
 
-        if (stock.getHasException()) {
-            if (!dailys.isEmpty()) {
-                stock.setLastDate(dailys.get(dailys.size() - 1).getDate());
-            }
-        } else {
-            stock.setLastDate(StockDownloadHelper.getLastDate());
-        }
 		stockDao.updateStock(stock);
 	}
 
@@ -107,6 +100,16 @@ public class StockService implements IStockService {
 			}
 			dailys.removeAll(invalidIndexs);
 		}
+        if (stock.getHasException()) {
+            if (dailys != null && !dailys.isEmpty()) {
+                stock.setLastDate(dailys.get(dailys.size() - 1).getDate());
+                stock.setLastClose(dailys.get(dailys.size() - 1).getLastClose());
+            } else {
+                stock = getStock(stock.getStockCode());
+            }
+        } else {
+            stock.setLastDate(StockDownloadHelper.getLastDate());
+        }
 	}
 
 }
