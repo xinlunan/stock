@@ -43,6 +43,7 @@ public class Stock implements Serializable, Comparable<Stock> {
     private BigDecimal        exrights;
     private List<StockDaily>  stockDailys;
     private Boolean           hasException     = false;
+    private Integer           dailySize        = 0;
 
     public Integer getStockId() {
         return stockId;
@@ -148,8 +149,18 @@ public class Stock implements Serializable, Comparable<Stock> {
         this.hasException = hasException;
     }
 
+    public Integer getDailySize() {
+        return dailySize;
+    }
+
+    public void setDailySize(Integer dailySize) {
+        this.dailySize = dailySize;
+    }
+
     public static long getSerialversionuid() {
         return serialVersionUID;
     }
+
+
 
 }

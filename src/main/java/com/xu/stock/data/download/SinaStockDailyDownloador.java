@@ -23,13 +23,13 @@ import com.xu.util.StringUtil;
 import com.xu.util.XPathUtil;
 
 /**
- * 股票指数控制层辅助类
+ * 新浪日数据下载
  * 
- * @version Revision History
+ * @version
  * 
  * <pre>
- * Author     Version       Date        Changes
- * lunan.xu    1.0           2015-5-29     Created
+ * Author	Version		Date		Changes
+ * lunan.xu 	1.0  		2016年4月11日 	Created
  * </pre>
  * 
  * @since 1.
@@ -153,9 +153,6 @@ public class SinaStockDailyDownloador {
                     StockDaily stockDaily = buildStockDaily(stock, daylyNodes, i);
 
                     dailys.add(stockDaily);
-
-                    stock.setLastClose(stockDaily.getClose());
-                    stock.setAsset(stockDaily.getAsset());
                 }
             }
 
@@ -196,6 +193,8 @@ public class SinaStockDailyDownloador {
 
         setGapRate(stockDaily);
 
+        stock.setLastClose(stockDaily.getClose());
+
         return stockDaily;
     }
 
@@ -215,31 +214,42 @@ public class SinaStockDailyDownloador {
                     NodeList dailyNodes = daylyNodes.item(i).getChildNodes();
                     NodeList dateNodes = dailyNodes.item(1).getChildNodes().item(0).getChildNodes();
                     Node dateNode = nodeLength > 1 ? dateNodes.item(1) : dateNodes.item(0);
+                    dateNode = dateNode == null ? dateNodes.item(0) : dateNode;
                     String date = StringUtil.replaceBlank(dateNode.getTextContent());
+                    date = "".equals(date) ? StringUtil.replaceBlank(daylyNodes.item(i).getChildNodes().item(1).getChildNodes().item(0).getChildNodes().item(1).getTextContent()) : date;
                     BigDecimal exrights = BigDecimal.valueOf(Double.valueOf(dailyNodes.item(15).getTextContent()));
+                    BigDecimal thisExrights = BigDecimal.valueOf(1);
 
                     StockDaily stockDaily = dailys.get(dailyIndex);
                     while (stock.getLastClose() != null && !DateUtil.date2String(stockDaily.getDate()).equals(date)) {
-                        stockDaily.setThisExrights(BigDecimal.valueOf(1));
+                        stockDaily.setThisExrights(thisExrights);
                         stockDaily.setExrights(stock.getExrights());
                         dailyIndex = dailyIndex + 1;
                         stockDaily = dailys.get(dailyIndex);
                     }
-                    BigDecimal thisExrights = BigDecimal.valueOf(1);
                     if (DateUtil.date2String(stockDaily.getDate()).equals(date)) {
                         if (stock.getLastClose() != null && stock.getExrights().compareTo(exrights) != 0) {
                             thisExrights = exrights.divide(stock.getExrights(), 6, BigDecimal.ROUND_HALF_UP);
-                            stockDaily.setLastClose(stockDaily.getLastClose().divide(thisExrights, 2, BigDecimal.ROUND_HALF_UP));
-                            setGapRate(stockDaily);
+                            if (!"2005-01-01".equals(DateUtil.date2String(stock.getLastDate())) || stock.getDailySize() > 0) {
+                                stockDaily.setLastClose(stockDaily.getLastClose().multiply(stock.getExrights()).divide(exrights, 2, BigDecimal.ROUND_HALF_UP));
+                                setGapRate(stockDaily);
+                            }
                         }
                         stockDaily.setThisExrights(thisExrights);
                         stockDaily.setExrights(exrights);
                         stock.setExrights(exrights);
+                        stock.setAsset(stockDaily.getAsset());
+                        stock.setDailySize(stock.getDailySize() + 1);
                         dailyIndex = dailyIndex + 1;
                     } else {
                         throw new RuntimeException();
                     }
                 }
+                if (nodeLength == 0) {
+                    throw new RuntimeException();
+                }
+            } else {
+                throw new RuntimeException();
             }
 
         } catch (Exception e) {

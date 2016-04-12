@@ -45,7 +45,7 @@ public class HttpClientHandle {
 		try {
 			HttpGet httpGet = new HttpGet(url);
 
-			RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(10000).setConnectTimeout(3000)
+            RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60000).setConnectTimeout(5000)
 					.build();//设置请求和传输超时时间
 			httpGet.setConfig(requestConfig);
 			httpClient.execute(httpGet);//执行请求
