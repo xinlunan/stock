@@ -81,5 +81,4 @@ public class StockDailyDao extends BaseDao<StockDaily> implements IStockDailyDao
 		paras.put("date", date);
 		getSqlSession().delete(SQL_DELETE_STOCK_INDEX, paras);
 	}
-
 }

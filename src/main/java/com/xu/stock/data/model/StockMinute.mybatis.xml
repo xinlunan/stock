@@ -9,6 +9,7 @@
 		<id property="hour" column="hour"></id>
 		<id property="minute" column="minute"></id>
 		<id property="price" column="price"></id>
+		<id property="high" column="high"></id>
 		<id property="exrights" column="exrights"></id>
 		<id property="volume" column="volume"></id>
 		<id property="amount" column="amount"></id>
@@ -17,7 +18,7 @@
 	</resultMap>
 	
 	<sql id="columns">
-		stock_code, date, hour, minute, price,exrights,volume,amount, created, updated
+		stock_code, date, hour, minute, price,high, exrights,volume,amount, created, updated
 	</sql>
 	
 	<select id="getStockMinutes" resultMap="StockMinute">
@@ -30,14 +31,14 @@
 		SELECT minute_id, <include refid="columns" />
 	 	FROM t_stock_minute 
 	 	WHERE stock_code=#{stockCode} and date=#{date} and hour=14 and minute>=45
-	 	ORDER BY minute LIMIT 0,1;
+	 	ORDER BY date, hour, minute LIMIT 0,1;
 	</select>
 
 	<insert id="insertStockMinute" parameterType="ArrayList" flushCache="true">
 		INSERT INTO t_stock_minute (<include refid="columns" />)
 		VALUES 
 		<foreach collection="list" item="obj" index="index" separator="," >  
-			(#{obj.stockCode}, #{obj.date}, #{obj.hour}, #{obj.minute}, #{obj.price}, #{obj.exrights},#{obj.volume},#{obj.amount}, sysdate(), sysdate())
+			(#{obj.stockCode}, #{obj.date}, #{obj.hour}, #{obj.minute}, #{obj.price}, #{obj.high}, #{obj.exrights},#{obj.volume},#{obj.amount}, sysdate(), sysdate())
 		</foreach>  
 	</insert>
 	

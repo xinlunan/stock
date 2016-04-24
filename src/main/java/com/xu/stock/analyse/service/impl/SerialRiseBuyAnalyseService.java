@@ -12,6 +12,7 @@ import com.xu.stock.analyse.service.StockAnalyseConstants.SerialRiseBuyArgs;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeNature;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeType;
+import com.xu.stock.analyse.service.uitl.StockAnalyseUtil;
 import com.xu.stock.data.model.StockDaily;
 
 /**

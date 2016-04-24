@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.xu.stock.analyse.model.StockAnalyseStrategy;
 import com.xu.stock.analyse.service.StockAnalyseConstants.GeneralRiseBuyArgs;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
+import com.xu.stock.analyse.service.uitl.StockAnalyseUtil;
 import com.xu.stock.data.model.StockDaily;
 
 /**

@@ -38,6 +38,7 @@ public class StockMinuteDao extends BaseDao<StockMinute> implements IStockMinute
         return stockMinutes.size();
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public List<StockMinute> getStockMinutes(String stockCode, Date date) {
         Map<String, Object> paras = new HashMap<String, Object>();
         paras.put("stockCode", stockCode);

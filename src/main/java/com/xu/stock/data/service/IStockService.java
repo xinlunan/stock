@@ -1,8 +1,10 @@
 package com.xu.stock.data.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.xu.stock.data.model.Stock;
+import com.xu.stock.data.model.StockDaily;
 
 /**
  * 股票service
@@ -56,4 +58,11 @@ public interface IStockService {
 	 */
 	public void saveStockData(Stock stock);
 
+    /**
+     * 根据
+     * 
+     * @param stockCode
+     * @return
+     */
+    public StockDaily getNextDaily(String stockCode, Date date);
 }

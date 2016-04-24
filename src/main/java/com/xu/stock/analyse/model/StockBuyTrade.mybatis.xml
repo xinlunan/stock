@@ -7,6 +7,7 @@
 		<id property="stockCode" column="stock_code"></id>
 		<id property="stockName" column="stock_name"></id>
 		<id property="buyDate" column="buy_date"></id>
+		<id property="exrights" column="exrights"></id>
 		<id property="buyHour" column="buy_hour"></id>
 		<id property="buyMinute" column="buy_minute"></id>
 		<id property="buyTradePrice" column="buy_trade_price"></id>
@@ -33,7 +34,7 @@
 
 	<sql id="columns">
 		stock_code,stock_name,
-		buy_date,buy_hour,buy_minute,buy_trade_price,buy_high_price,buy_close_price,
+		buy_date,exrights,buy_hour,buy_minute,buy_trade_price,buy_high_price,buy_close_price,
 		sell_date,sell_hour,sell_minute,sell_trade_price,sell_high_price,sell_close_price,
 		profit,profit_rate,high_profit_rate,close_profit_rate,
 		trade_type,trade_nature,strategy,version,parameters,created,updated
@@ -67,7 +68,7 @@
 		INSERT INTO t_stock_buy_trade (<include refid="columns" />)
 		VALUES (
 			#{stockCode},#{stockName},
-			#{buyDate},#{buyHour},#{buyMinute},#{buyTradePrice},#{buyHighPrice},#{buyClosePrice},
+			#{buyDate},#{exrights},#{buyHour},#{buyMinute},#{buyTradePrice},#{buyHighPrice},#{buyClosePrice},
 			#{sellDate},#{sellHour},#{sellMinute},#{sellTradePrice},#{sellHighPrice},#{sellClosePrice},
 			#{profit},#{profitRate},#{highProfitRate},#{closeProfitRate},
 			#{tradeType},#{tradeNature},#{strategy},#{version},#{parameters},sysdate(),sysdate()

@@ -1,4 +1,4 @@
-package com.xu.stock.analyse.service.impl;
+package com.xu.stock.analyse.service.uitl;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -131,9 +131,11 @@ public class StockAnalyseUtil {
      * @param index
      * @param date1
      * @param date2
+     * @param thisFallRate
      * @return
      */
     public static boolean isHighest(List<StockDaily> stockDailys, int index, int date1, int date2) {
+
         for (int i = index - date1; i < index + date2; i++) {
             if (i < index) {
                 if (stockDailys.get(i).getClose().multiply(stockDailys.get(i).getExrights()).compareTo(stockDailys.get(index).getClose().multiply(stockDailys.get(index).getExrights())) > 0) {
@@ -146,7 +148,26 @@ public class StockAnalyseUtil {
                 }
             }
         }
+
         return true;
+    }
+
+    /**
+     * 是否是卖出日期
+     * 
+     * @param dailys
+     * @param date
+     * @param holdDay
+     * @return
+     */
+    public static Boolean hasSellDate(List<StockDaily> dailys, Date date, int holdDay) {
+        for (int i = 0; i < dailys.size(); i++) {
+            StockDaily daily = dailys.get(i);
+            if (DateUtil.dateToString(daily.getDate()).equals(DateUtil.dateToString(date))) {
+                return i + holdDay < dailys.size() - 1;
+            }
+        }
+        return false;
     }
 
     /**
@@ -157,14 +178,36 @@ public class StockAnalyseUtil {
      * @param holdDay
      * @return
      */
-    public static StockDaily getSellStockDaily(List<StockDaily> dailys, Date date, int holdDay) {
-        for (int i = 0; i < dailys.size() - 1; i++) {
+    public static StockDaily getSellDaily(List<StockDaily> dailys, Date date, int holdDay) {
+        for (int i = 0; i < dailys.size(); i++) {
             StockDaily daily = dailys.get(i);
             if (DateUtil.dateToString(daily.getDate()).equals(DateUtil.dateToString(date))) {
-                return dailys.get(i + holdDay);
+                if (i + holdDay < dailys.size() - 1) {
+                    return dailys.get(i + holdDay);
+                } else if (i + holdDay == dailys.size() - 1) {
+                    StockDaily lastDaily = dailys.get(i + holdDay);
+                    StockDaily nextDaily = buildNextStockDaily(lastDaily);
+                    return nextDaily;
+                }else{
+                    return null;
+                }
+                
+                
             }
         }
         return null;
+    }
+
+    public static StockDaily buildNextStockDaily(StockDaily lastDaily) {
+        StockDaily nextDaily = new StockDaily();
+        nextDaily.setStockCode(lastDaily.getStockCode());
+        nextDaily.setStockName(lastDaily.getStockName());
+        nextDaily.setLastClose(lastDaily.getClose().multiply(lastDaily.getExrights()));
+        nextDaily.setDate(DateUtil.stringToDate(DateUtil.date2String(new Date())));
+        if (DateUtil.getSrvDate().equals(DateUtil.date2String(lastDaily.getDate()))) {
+            nextDaily.setDate(DateUtil.addDay(nextDaily.getDate(), 1));
+        }
+        return nextDaily;
     }
 
 }

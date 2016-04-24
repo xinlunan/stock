@@ -3,6 +3,9 @@ package com.xu.stock.analyse.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
+import com.xu.stock.data.model.StockDaily;
 
 /**
  * 股票分时指数
@@ -45,6 +48,8 @@ public class StockHistoryHighest implements Serializable {
     private Date              created;
     // 更新日期
     private Date              updated;
+    // 可能购买的日期
+    private List<StockDaily>  buyableDailys;
 
     public Integer getHistoryId() {
         return historyId;
@@ -152,6 +157,16 @@ public class StockHistoryHighest implements Serializable {
 
     public static long getSerialversionuid() {
         return serialVersionUID;
+    }
+
+    
+    public List<StockDaily> getBuyableDailys() {
+        return buyableDailys;
+    }
+
+    
+    public void setBuyableDailys(List<StockDaily> buyableDailys) {
+        this.buyableDailys = buyableDailys;
     }
 
     @Override
