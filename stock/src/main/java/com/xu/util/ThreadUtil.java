@@ -4,11 +4,21 @@ import java.util.List;
 
 public class ThreadUtil {
 
-	/**
-	 * 线程组等待
-	 * 
-	 * @param workers
-	 */
+    private static Boolean hasException = false;
+
+    public static Boolean getHasException() {
+        return hasException;
+    }
+
+    public static void setHasException(Boolean hasException) {
+        ThreadUtil.hasException = hasException;
+    }
+
+    /**
+     * 线程组等待
+     * 
+     * @param workers
+     */
 	public static void threadsJoin(List<Runnable> workers) {
 
 		for (int i = 0; i < workers.size(); i++) {

@@ -24,210 +24,248 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HttpClientHandle {
-	static Logger log = LoggerFactory.getLogger(HttpClientHandle.class);
 
-	@Test
-	public void jUnitTest() {
-		get("http://www.baidu.com");
-	}
+    static Logger log = LoggerFactory.getLogger(HttpClientHandle.class);
 
-	public static String get(String url) {
-		return get(url, "UTF-8");
-	}
+    @Test
+    public void jUnitTest() {
+        get("http://www.baidu.com");
+    }
 
-	/**
-	 * 发送 get请求
-	 */
-	public static String get(String url, String charset) {
-		log.debug("http get url: " + url);
-		String result = null;
-		CloseableHttpClient httpClient = HttpClients.createDefault();
-		try {
-			HttpGet httpGet = new HttpGet(url);
+    public static String get(String url) {
+        return get(url, "UTF-8");
+    }
 
-            RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60000).setConnectTimeout(5000)
-					.build();//设置请求和传输超时时间
-			httpGet.setConfig(requestConfig);
-			httpClient.execute(httpGet);//执行请求
-			// 执行get请求
-			CloseableHttpResponse response = httpClient.execute(httpGet);
-            log.debug("http get completed");
-			try {
-				HttpEntity entity = response.getEntity();
-				if (entity != null) {
-					result = EntityUtils.toString(entity, charset);
-                    log.debug("http get completed,result resolved. url: " + url);
-					log.debug(result);
-				}
-			} finally {
-				response.close();
-			}
-		} catch (Throwable e) {
-			log.error("http get exception", e);
-			throw new RuntimeException(e);
-		} finally {
-			try {
-				// 关闭连接,释放资源
-				httpClient.close();
-			} catch (IOException e) {
-				log.error("http het close exception", e);
-			}
-		}
-		return result;
-	}
+    /**
+     * 发送 get请求
+     */
+    public static String get(String url, String charset) {
+        String result = null;
+        int retry = 3;
+        for (int i = 0; i == 0 || i < retry; i++) {
+            log.debug("http get url: " + url);
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+            try {
+                HttpGet httpGet = new HttpGet(url);
 
-	/**
-	 * 发送 post请求访问本地应用并根据传递参数不同返回不同结果
-	 */
-	public static String post(String url, List<NameValuePair> formparams) {
-		return post(url, formparams, "UTF-8");
-	}
+                RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60000).setConnectTimeout(5000).build();// 设置请求和传输超时时间
+                httpGet.setConfig(requestConfig);
+                httpClient.execute(httpGet);// 执行请求
+                // 执行get请求
+                CloseableHttpResponse response = httpClient.execute(httpGet);
+                log.debug("http get completed");
+                try {
+                    HttpEntity entity = response.getEntity();
+                    if (entity != null) {
+                        result = EntityUtils.toString(entity, charset);
+                        log.debug("http get completed,result resolved. url: " + url);
+                        log.debug(result);
+                    }
+                } finally {
+                    response.close();
+                }
+            } catch (Throwable e) {
+                log.error("http get exception", e);
+                if (i >= retry - 1) {
+                    // 扫异常
+                    throw new RuntimeException(e);
+                } else {
+                    // 重试
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e1) {
+                    }
+                    continue;
+                }
+            } finally {
+                try {
+                    // 关闭连接,释放资源
+                    httpClient.close();
+                } catch (IOException e) {
+                    log.error("http het close exception", e);
+                }
+            }
+        }
 
-	/**
-	 * 发送 post请求访问本地应用并根据传递参数不同返回不同结果
-	 */
-	public static String post(String url, List<NameValuePair> formparams, String encoded) {
-		log.debug("http post url: " + url);
-		String result = "";
-		// 创建默认的httpClient实例.
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		try {
-			// 创建参数队列
-			UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formparams, encoded);
-			// 创建httppost
-			HttpPost httppost = new HttpPost(url);
-			httppost.setEntity(uefEntity);
-			CloseableHttpResponse response = httpclient.execute(httppost);
-			try {
-				HttpEntity entity = response.getEntity();
-				if (entity != null) {
-					result = EntityUtils.toString(entity);
-					log.debug("http get result: " + result);
-				}
-			} finally {
-				response.close();
-			}
-		} catch (Throwable e) {
-			log.error("http get exception", e);
-		} finally {
-			try {
-				// 关闭连接,释放资源
-				httpclient.close();
-			} catch (IOException e) {
-				log.error("http het close exception", e);
-			}
-		}
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * 发送 post请求访问本地应用并根据传递参数不同返回不同结果
-	 */
-	public static boolean download(String url, String path) {
-        log.debug("http download url: " + url);
-		// 创建默认的httpClient实例.
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		try {
-			// 创建参数队列
-			UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(new ArrayList<NameValuePair>());
-			// 创建httppost
-			HttpPost httppost = new HttpPost(url);
-			RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60000).setConnectTimeout(5000)
-					.build();//设置请求和传输超时时间
-			httppost.setConfig(requestConfig);
-			httppost.setEntity(uefEntity);
+    /**
+     * 发送 post请求访问本地应用并根据传递参数不同返回不同结果
+     */
+    public static String post(String url, List<NameValuePair> formparams) {
+        return post(url, formparams, "UTF-8");
+    }
 
-			CloseableHttpResponse response = httpclient.execute(httppost);
-			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				InputStream inputStream = response.getEntity().getContent();
-				byte[] result = readByte(inputStream);
+    /**
+     * 发送 post请求访问本地应用并根据传递参数不同返回不同结果
+     */
+    public static String post(String url, List<NameValuePair> formparams, String encoded) {
+        String result = null;
+        int retry = 3;
+        for (int i = 0; i == 0 || i < retry; i++) {
+            // 创建默认的httpClient实例.
+            CloseableHttpClient httpclient = HttpClients.createDefault();
+            try {
+                // 创建参数队列
+                UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formparams, encoded);
+                // 创建httppost
+                HttpPost httppost = new HttpPost(url);
+                httppost.setEntity(uefEntity);
+                CloseableHttpResponse response = httpclient.execute(httppost);
+                try {
+                    HttpEntity entity = response.getEntity();
+                    if (entity != null) {
+                        result = EntityUtils.toString(entity);
+                        log.debug("http get result: " + result);
+                    }
+                } finally {
+                    response.close();
+                }
+            } catch (Throwable e) {
+                log.error("http get exception", e);
+                if (i >= retry - 1) {
+                    // 扫异常
+                    throw new RuntimeException(e);
+                } else {
+                    // 重试
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e1) {
+                    }
+                    continue;
+                }
+            } finally {
+                try {
+                    // 关闭连接,释放资源
+                    httpclient.close();
+                } catch (IOException e) {
+                    log.error("http het close exception", e);
+                }
+            }
+        }
+        return result;
+    }
 
-				String strRusult = new String(result);
-				if (strRusult.startsWith("<script ")) {
-					return false;
-				}
-				FileOutputStream bw = null;
-				try {
-					// 创建文件对象  
-					File f = new File(path);
-					// 创建文件路径  
-					if (!f.getParentFile().exists())
-						f.getParentFile().mkdirs();
-					if (f.exists()) {
-						f.delete();
-					}
-					// 写入文件  
-					bw = new FileOutputStream(path);
-					bw.write(result);
-					bw.flush();
-				} finally {
-					try {
-						if (bw != null) {
-							bw.close();
-						}
-						if (response != null) {
-							response.close();
-						}
-						if (inputStream != null) {
-							inputStream.close();
-						}
-					} catch (Exception e) {
-						log.error("finally BufferedOutputStream shutdown close", e);
-					}
-				}
-			}
-		} catch (Throwable e) {
-			log.error("http download exception", e);
-			throw new RuntimeException(e);
-		} finally {
-			try {
-				httpclient.close();
-			} catch (IOException e) {
-				log.error("http download close exception", e);
-			}
-		}
+    /**
+     * 发送 post请求访问本地应用并根据传递参数不同返回不同结果
+     */
+    public static boolean download(String url, String path) {
+        int retry = 3;
+        for (int i = 0; i == 0 || i < retry; i++) {
+            log.debug("http download url: " + url);
+            // 创建默认的httpClient实例.
+            CloseableHttpClient httpclient = HttpClients.createDefault();
+            try {
+                // 创建参数队列
+                UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(new ArrayList<NameValuePair>());
+                // 创建httppost
+                HttpPost httppost = new HttpPost(url);
+                RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60000).setConnectTimeout(5000).build();// 设置请求和传输超时时间
+                httppost.setConfig(requestConfig);
+                httppost.setEntity(uefEntity);
+
+                CloseableHttpResponse response = httpclient.execute(httppost);
+                if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                    InputStream inputStream = response.getEntity().getContent();
+                    byte[] result = readByte(inputStream);
+
+                    String strRusult = new String(result);
+                    if (strRusult.startsWith("<script ")) {
+                        return false;
+                    }
+                    FileOutputStream bw = null;
+                    try {
+                        // 创建文件对象
+                        File f = new File(path);
+                        // 创建文件路径
+                        if (!f.getParentFile().exists()) f.getParentFile().mkdirs();
+                        if (f.exists()) {
+                            f.delete();
+                        }
+                        // 写入文件
+                        bw = new FileOutputStream(path);
+                        bw.write(result);
+                        bw.flush();
+                    } finally {
+                        try {
+                            if (bw != null) {
+                                bw.close();
+                            }
+                            if (response != null) {
+                                response.close();
+                            }
+                            if (inputStream != null) {
+                                inputStream.close();
+                            }
+                        } catch (Exception e) {
+                            log.error("finally BufferedOutputStream shutdown close", e);
+                        }
+                    }
+                }
+            } catch (Throwable e) {
+                log.error("http download exception", e);
+                if (i >= retry - 1) {
+                    // 扫异常
+                    throw new RuntimeException(e);
+                } else {
+                    // 重试
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e1) {
+                    }
+                    continue;
+                }
+            } finally {
+                try {
+                    httpclient.close();
+                } catch (IOException e) {
+                    log.error("http download close exception", e);
+                }
+            }
+        }
         log.debug("http download end ");
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * HttpClient连接SSL
-	 */
-	public void ssl() {
-		//TODO
-	}
+    /**
+     * HttpClient连接SSL
+     */
+    public void ssl() {
+        // TODO
+    }
 
-	/**
-	 * 上传文件
-	 */
-	public void upload() {
-		//TODO
-	}
+    /**
+     * 上传文件
+     */
+    public void upload() {
+        // TODO
+    }
 
-	/**
-	 * 读取流
-	 * 
-	 * @param inStream
-	 * @return 字节数组
-	 */
-	public static byte[] readByte(InputStream inStream) {
-		ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
-		try {
-			byte[] buffer = new byte[1024];
-			int len = -1;
-			while ((len = inStream.read(buffer)) != -1) {
-				outSteam.write(buffer, 0, len);
-			}
+    /**
+     * 读取流
+     * 
+     * @param inStream
+     * @return 字节数组
+     */
+    public static byte[] readByte(InputStream inStream) {
+        ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
+        try {
+            byte[] buffer = new byte[1024];
+            int len = -1;
+            while ((len = inStream.read(buffer)) != -1) {
+                outSteam.write(buffer, 0, len);
+            }
 
-			return outSteam.toByteArray();
-		} catch (Exception e) {
-			throw new RuntimeException("读取流失败", e);
-		} finally {
-			try {
-				outSteam.close();
-			} catch (IOException e) {
-				throw new RuntimeException("读取流失败", e);
-			}
-		}
-	}
+            return outSteam.toByteArray();
+        } catch (Exception e) {
+            throw new RuntimeException("读取流失败", e);
+        } finally {
+            try {
+                outSteam.close();
+            } catch (IOException e) {
+                throw new RuntimeException("读取流失败", e);
+            }
+        }
+    }
 }

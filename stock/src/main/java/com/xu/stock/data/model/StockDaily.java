@@ -3,6 +3,7 @@ package com.xu.stock.data.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author lunan.xu 股票每日指数
@@ -55,6 +56,8 @@ public class StockDaily implements Serializable, Comparable<StockDaily> {
     private Date              created;
     // 更新日期
     private Date              updated;
+    // 分时信息
+    private List<StockMinute> minutes;
 
     public BigDecimal getExrights() {
         return BigDecimal.valueOf(exrights);
@@ -230,6 +233,14 @@ public class StockDaily implements Serializable, Comparable<StockDaily> {
 
     public void setThisExrights(BigDecimal thisExrights) {
         this.thisExrights = thisExrights.doubleValue();
+    }
+
+    public List<StockMinute> getMinutes() {
+        return minutes;
+    }
+
+    public void setMinutes(List<StockMinute> minutes) {
+        this.minutes = minutes;
     }
 
     @Override

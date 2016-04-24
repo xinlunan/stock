@@ -17,6 +17,8 @@ public class DateDiffUtil {
 	private final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 	public static void main(String[] args) {
+        System.out.println(DateUtil.date2String(getNextWorkDate(DateUtil.stringToDate("2016-04-15"))));
+
 		// 2015-05-23周六，2015-05-24周日
 		System.out.println(DateDiffUtil.getWorkDay("2015-05-22", "2015-05-23"));
 		System.out.println(DateDiffUtil.getWorkDay("2015-05-23", "2015-05-23"));
@@ -85,7 +87,7 @@ public class DateDiffUtil {
 	}
 
 	// 春节放假三天，定义到2020年
-	public static boolean isHoliday(String year) {
+	public static boolean isHoliday(String date) {
 		List<String> holidays = new ArrayList<String>();
 		holidays.add("2005-02-09");
 		holidays.add("2005-02-10");
@@ -135,9 +137,18 @@ public class DateDiffUtil {
 		holidays.add("2020-01-25");
 		holidays.add("2020-01-26");
 		holidays.add("2020-01-27");
-		if (holidays.contains(year))
+		if (holidays.contains(date))
 			return true;
 		return false;
 	}
 
+    @SuppressWarnings("deprecation")
+    public static Date getNextWorkDate(Date date) {
+        while(true){
+            date= DateUtil.addDay(date, 1);
+            if (!isHoliday(DateUtil.date2String(date)) && date.getDay() != 6 && date.getDay() != 0) {
+                return date;
+            }
+        }
+    }
 }

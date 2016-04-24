@@ -1,6 +1,7 @@
 package com.xu.stock.data.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -111,5 +112,9 @@ public class StockService implements IStockService {
             stock.setLastDate(StockDownloadHelper.getLastDate());
         }
 	}
+
+    public StockDaily getNextDaily(String stockCode, Date date) {
+        return stockDailyDao.getNextStockDaily(stockCode, date);
+    }
 
 }

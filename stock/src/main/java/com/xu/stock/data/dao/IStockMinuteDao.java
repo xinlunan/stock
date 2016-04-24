@@ -27,7 +27,7 @@ public interface IStockMinuteDao {
 	 * @param date
 	 * @return
 	 */
-	public List<StockMinute> getStockMinutes(String stockCode, Date date);
+    public List<StockMinute> getStockMinutes(String stockCode, Date date);
 
 	/**
 	 * 保存股票指数

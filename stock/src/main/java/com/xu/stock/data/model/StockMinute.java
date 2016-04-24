@@ -29,8 +29,10 @@ public class StockMinute implements Serializable {
     private Integer           hour;
     // 分钟
     private Integer           minute;
-    // 最低价
+    // 当前价
     private Double            price;
+    // 当前价
+    private Double            high;
     // 除权系统
     private Double            exrights;
     // 成交量
@@ -90,6 +92,14 @@ public class StockMinute implements Serializable {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Double getHigh() {
+        return high;
+    }
+
+    public void setHigh(Double high) {
+        this.high = high;
     }
 
     public Double getExrights() {

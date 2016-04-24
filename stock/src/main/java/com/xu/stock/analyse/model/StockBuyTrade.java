@@ -9,313 +9,308 @@ import java.util.Date;
  * 
  * @version
  * 
- * 			<pre>
+ * <pre>
  * Author	Version		Date		Changes
  * lunan.xu 	1.0  		2016年3月30日 	Created
- *
- *          </pre>
+ * </pre>
  * 
  * @since 1.
  */
 public class StockBuyTrade implements Serializable {
-	private static final long serialVersionUID = -352228891672124416L;
 
-	// 股票每分钟指数Id
-	private Long tradeId;
-	// 股票Id
-	private Integer stockId;
-	// 股票代码
-	private String stockCode;
-	// 股票名称
-	private String stockName;
-	// 日期
-	private Date buyDate;
-	// 小时
-	private Integer buyHour;
-	// 分钟
-	private Integer buyMinute;
-	// 购买价
-	private BigDecimal buyTradePrice;
-	// 购买日最高价
-	private BigDecimal buyHighPrice;
-	// 购买日收盘价
-	private BigDecimal buyClosePrice;
-	// 日期
-	private Date sellDate;
-	// 小时
-	private Integer sellHour;
-	// 分钟
-	private Integer sellMinute;
-	// 购买价
-	private BigDecimal sellTradePrice;
-	// 购买日最高价
-	private BigDecimal sellHighPrice;
-	// 购买日收盘价
-	private BigDecimal sellClosePrice;
-	// 利润
-	private BigDecimal profit;
-	// 利润率
-	private BigDecimal profitRate;
-	// 最高价收益比例
-	private BigDecimal highProfitRate;
-	// 收盘价收益比例
-	private BigDecimal closeProfitRate;
-	// 交易类型
-	private String tradeType;
-	// 交易性质
-	private String tradeNature;
-	// 策略
-	private String strategy;
-	// 策略版本
-	private Integer version;
-	// 参数
-	private String parameters;
-	// 创建日期
-	private Date created;
-	// 更新日期
-	private Date updated;
+    private static final long serialVersionUID = -352228891672124416L;
 
-	public Long getTradeId() {
-		return tradeId;
-	}
+    // 股票每分钟指数Id
+    private Long              tradeId;
+    // 股票Id
+    private Integer           stockId;
+    // 股票代码
+    private String            stockCode;
+    // 股票名称
+    private String            stockName;
+    // 日期
+    private Date              buyDate;
+    // 小时
+    private Integer           buyHour;
+    // 分钟
+    private Integer           buyMinute;
+    // 购买价
+    private BigDecimal        buyTradePrice;
+    // 购买日最高价
+    private BigDecimal        buyHighPrice;
+    // 购买日收盘价
+    private BigDecimal        buyClosePrice;
+    // 日期
+    private Date              sellDate;
+    // 小时
+    private Integer           sellHour;
+    // 分钟
+    private Integer           sellMinute;
+    // 购买价
+    private BigDecimal        sellTradePrice;
+    // 购买日最高价
+    private BigDecimal        sellHighPrice;
+    // 购买日收盘价
+    private BigDecimal        sellClosePrice;
+    // 利润
+    private BigDecimal        profit;
+    // 利润率
+    private BigDecimal        profitRate;
+    // 最高价收益比例
+    private BigDecimal        highProfitRate;
+    // 收盘价收益比例
+    private BigDecimal        closeProfitRate;
+    // 交易类型
+    private String            tradeType;
+    // 交易性质
+    private String            tradeNature;
+    // 策略
+    private String            strategy;
+    // 策略版本
+    private Integer           version;
+    // 参数
+    private String            parameters;
+    // 创建日期
+    private Date              created;
+    // 更新日期
+    private Date              updated;
 
-	public void setTradeId(Long tradeId) {
-		this.tradeId = tradeId;
-	}
+    private BigDecimal        exrights;
 
-	public Integer getStockId() {
-		return stockId;
-	}
+    public Long getTradeId() {
+        return tradeId;
+    }
 
-	public void setStockId(Integer stockId) {
-		this.stockId = stockId;
-	}
+    public void setTradeId(Long tradeId) {
+        this.tradeId = tradeId;
+    }
 
-	public String getStockCode() {
-		return stockCode;
-	}
+    public Integer getStockId() {
+        return stockId;
+    }
 
-	public void setStockCode(String stockCode) {
-		this.stockCode = stockCode;
-	}
+    public void setStockId(Integer stockId) {
+        this.stockId = stockId;
+    }
 
-	public String getStockName() {
-		return stockName;
-	}
+    public String getStockCode() {
+        return stockCode;
+    }
 
-	public void setStockName(String stockName) {
-		this.stockName = stockName;
-	}
+    public void setStockCode(String stockCode) {
+        this.stockCode = stockCode;
+    }
 
-	public Date getBuyDate() {
-		return buyDate;
-	}
+    public String getStockName() {
+        return stockName;
+    }
 
-	public void setBuyDate(Date buyDate) {
-		this.buyDate = buyDate;
-	}
+    public void setStockName(String stockName) {
+        this.stockName = stockName;
+    }
 
-	public Integer getBuyHour() {
-		return buyHour;
-	}
+    public Date getBuyDate() {
+        return buyDate;
+    }
 
-	public void setBuyHour(Integer buyHour) {
-		this.buyHour = buyHour;
-	}
+    public void setBuyDate(Date buyDate) {
+        this.buyDate = buyDate;
+    }
 
-	public Integer getBuyMinute() {
-		return buyMinute;
-	}
+    public Integer getBuyHour() {
+        return buyHour;
+    }
 
-	public void setBuyMinute(Integer buyMinute) {
-		this.buyMinute = buyMinute;
-	}
+    public void setBuyHour(Integer buyHour) {
+        this.buyHour = buyHour;
+    }
 
-	public BigDecimal getBuyTradePrice() {
-		return buyTradePrice;
-	}
+    public Integer getBuyMinute() {
+        return buyMinute;
+    }
 
-	public void setBuyTradePrice(BigDecimal buyTradePrice) {
-		this.buyTradePrice = buyTradePrice;
-	}
+    public void setBuyMinute(Integer buyMinute) {
+        this.buyMinute = buyMinute;
+    }
 
-	public BigDecimal getBuyHighPrice() {
-		return buyHighPrice;
-	}
+    public BigDecimal getBuyTradePrice() {
+        return buyTradePrice;
+    }
 
-	public void setBuyHighPrice(BigDecimal buyHighPrice) {
-		this.buyHighPrice = buyHighPrice;
-	}
+    public void setBuyTradePrice(BigDecimal buyTradePrice) {
+        this.buyTradePrice = buyTradePrice;
+    }
 
-	public BigDecimal getBuyClosePrice() {
-		return buyClosePrice;
-	}
+    public BigDecimal getBuyHighPrice() {
+        return buyHighPrice;
+    }
 
-	public void setBuyClosePrice(BigDecimal buyClosePrice) {
-		this.buyClosePrice = buyClosePrice;
-	}
+    public void setBuyHighPrice(BigDecimal buyHighPrice) {
+        this.buyHighPrice = buyHighPrice;
+    }
 
-	public Date getSellDate() {
-		return sellDate;
-	}
+    public BigDecimal getBuyClosePrice() {
+        return buyClosePrice;
+    }
 
-	public void setSellDate(Date sellDate) {
-		this.sellDate = sellDate;
-	}
+    public void setBuyClosePrice(BigDecimal buyClosePrice) {
+        this.buyClosePrice = buyClosePrice;
+    }
 
-	public Integer getSellHour() {
-		return sellHour;
-	}
+    public Date getSellDate() {
+        return sellDate;
+    }
 
-	public void setSellHour(Integer sellHour) {
-		this.sellHour = sellHour;
-	}
+    public void setSellDate(Date sellDate) {
+        this.sellDate = sellDate;
+    }
 
-	public Integer getSellMinute() {
-		return sellMinute;
-	}
+    public Integer getSellHour() {
+        return sellHour;
+    }
 
-	public void setSellMinute(Integer sellMinute) {
-		this.sellMinute = sellMinute;
-	}
+    public void setSellHour(Integer sellHour) {
+        this.sellHour = sellHour;
+    }
 
-	public BigDecimal getSellTradePrice() {
-		return sellTradePrice;
-	}
+    public Integer getSellMinute() {
+        return sellMinute;
+    }
 
-	public void setSellTradePrice(BigDecimal sellTradePrice) {
-		this.sellTradePrice = sellTradePrice;
-	}
+    public void setSellMinute(Integer sellMinute) {
+        this.sellMinute = sellMinute;
+    }
 
-	public BigDecimal getSellHighPrice() {
-		return sellHighPrice;
-	}
+    public BigDecimal getSellTradePrice() {
+        return sellTradePrice;
+    }
 
-	public void setSellHighPrice(BigDecimal sellHighPrice) {
-		this.sellHighPrice = sellHighPrice;
-	}
+    public void setSellTradePrice(BigDecimal sellTradePrice) {
+        this.sellTradePrice = sellTradePrice;
+    }
 
-	public BigDecimal getSellClosePrice() {
-		return sellClosePrice;
-	}
+    public BigDecimal getSellHighPrice() {
+        return sellHighPrice;
+    }
 
-	public void setSellClosePrice(BigDecimal sellClosePrice) {
-		this.sellClosePrice = sellClosePrice;
-	}
+    public void setSellHighPrice(BigDecimal sellHighPrice) {
+        this.sellHighPrice = sellHighPrice;
+    }
 
-	public BigDecimal getProfit() {
-		return profit;
-	}
+    public BigDecimal getSellClosePrice() {
+        return sellClosePrice;
+    }
 
-	public void setProfit(BigDecimal profit) {
-		this.profit = profit;
-	}
+    public void setSellClosePrice(BigDecimal sellClosePrice) {
+        this.sellClosePrice = sellClosePrice;
+    }
 
-	public BigDecimal getProfitRate() {
-		return profitRate;
-	}
+    public BigDecimal getProfit() {
+        return profit;
+    }
 
-	public void setProfitRate(BigDecimal profitRate) {
-		this.profitRate = profitRate;
-	}
+    public void setProfit(BigDecimal profit) {
+        this.profit = profit;
+    }
 
-	public String getTradeType() {
-		return tradeType;
-	}
+    public BigDecimal getProfitRate() {
+        return profitRate;
+    }
 
-	public void setTradeType(String tradeType) {
-		this.tradeType = tradeType;
-	}
+    public void setProfitRate(BigDecimal profitRate) {
+        this.profitRate = profitRate;
+    }
 
-	public String getTradeNature() {
-		return tradeNature;
-	}
+    public String getTradeType() {
+        return tradeType;
+    }
 
-	public void setTradeNature(String tradeNature) {
-		this.tradeNature = tradeNature;
-	}
+    public void setTradeType(String tradeType) {
+        this.tradeType = tradeType;
+    }
 
-	public String getStrategy() {
-		return strategy;
-	}
+    public String getTradeNature() {
+        return tradeNature;
+    }
 
-	public void setStrategy(String strategy) {
-		this.strategy = strategy;
-	}
+    public void setTradeNature(String tradeNature) {
+        this.tradeNature = tradeNature;
+    }
 
-	public Integer getVersion() {
-		return version;
-	}
+    public String getStrategy() {
+        return strategy;
+    }
 
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
+    public void setStrategy(String strategy) {
+        this.strategy = strategy;
+    }
 
-	public String getParameters() {
-		return parameters;
-	}
+    public Integer getVersion() {
+        return version;
+    }
 
-	public void setParameters(String parameters) {
-		this.parameters = parameters;
-	}
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 
-	public Date getCreated() {
-		return created;
-	}
+    public String getParameters() {
+        return parameters;
+    }
 
-	public void setCreated(Date created) {
-		this.created = created;
-	}
+    public void setParameters(String parameters) {
+        this.parameters = parameters;
+    }
 
-	public Date getUpdated() {
-		return updated;
-	}
+    public Date getCreated() {
+        return created;
+    }
 
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
+    public void setCreated(Date created) {
+        this.created = created;
+    }
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+    public Date getUpdated() {
+        return updated;
+    }
 
-	public BigDecimal getHighProfitRate() {
-		return highProfitRate;
-	}
+    public void setUpdated(Date updated) {
+        this.updated = updated;
+    }
 
-	public void setHighProfitRate(BigDecimal highProfitRate) {
-		this.highProfitRate = highProfitRate;
-	}
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
 
-	public BigDecimal getCloseProfitRate() {
-		return closeProfitRate;
-	}
+    public BigDecimal getHighProfitRate() {
+        return highProfitRate;
+    }
 
-	public void setCloseProfitRate(BigDecimal closeProfitRate) {
-		this.closeProfitRate = closeProfitRate;
-	}
+    public void setHighProfitRate(BigDecimal highProfitRate) {
+        this.highProfitRate = highProfitRate;
+    }
 
-	@Override
-	public String toString() {
-		return "StockSimulateTrade [tradeId=" + tradeId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", stockName="
-				+ stockName + ", buyDate=" + buyDate + ", buyHour=" + buyHour + ", buyMinute=" + buyMinute
-				+ ", buyTradePrice=" + buyTradePrice + ", buyHighPrice=" + buyHighPrice + ", buyClosePrice="
-				+ buyClosePrice + ", sellDate=" + sellDate + ", sellHour=" + sellHour + ", sellMinute=" + sellMinute
-				+ ", sellTradePrice=" + sellTradePrice + ", sellHighPrice=" + sellHighPrice + ", sellClosePrice="
-				+ sellClosePrice + ", profit=" + profit + ", profitRate=" + profitRate + ", highProfitRate="
-				+ highProfitRate + ", closeProfitRate=" + closeProfitRate + ", tradeType=" + tradeType
-				+ ", tradeNature=" + tradeNature + ", strategy=" + strategy + ", version=" + version + ", parameters="
-				+ parameters + ", created=" + created + ", updated=" + updated + "]";
-	}
+    public BigDecimal getCloseProfitRate() {
+        return closeProfitRate;
+    }
+
+    public void setCloseProfitRate(BigDecimal closeProfitRate) {
+        this.closeProfitRate = closeProfitRate;
+    }
+
+    @Override
+    public String toString() {
+        return "StockSimulateTrade [tradeId=" + tradeId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", stockName=" + stockName + ", buyDate=" + buyDate + ", buyHour=" + buyHour + ", buyMinute=" + buyMinute + ", buyTradePrice="
+               + buyTradePrice + ", buyHighPrice=" + buyHighPrice + ", buyClosePrice=" + buyClosePrice + ", sellDate=" + sellDate + ", sellHour=" + sellHour + ", sellMinute=" + sellMinute + ", sellTradePrice=" + sellTradePrice
+               + ", sellHighPrice=" + sellHighPrice + ", sellClosePrice=" + sellClosePrice + ", profit=" + profit + ", profitRate=" + profitRate + ", highProfitRate=" + highProfitRate + ", closeProfitRate=" + closeProfitRate
+               + ", tradeType=" + tradeType + ", tradeNature=" + tradeNature + ", strategy=" + strategy + ", version=" + version + ", parameters=" + parameters + ", created=" + created + ", updated=" + updated + "]";
+    }
 
     public BigDecimal getExrights() {
-        // TODO Auto-generated method stub
-        return null;
+        return exrights;
     }
 
     public void setExrights(BigDecimal exrights) {
-        // TODO Auto-generated method stub
-
+        this.exrights = exrights;
     }
 
 }

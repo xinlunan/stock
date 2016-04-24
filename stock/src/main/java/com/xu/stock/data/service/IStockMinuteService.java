@@ -25,32 +25,31 @@ public interface IStockMinuteService {
      * 
      * @param stockMinutes
      */
-    public void saveStockMinutes(List<StockMinute> stockMinutes);
+    public void saveStockDailyMinutes(String stockCode, Date date, List<StockMinute> stockMinutes);
 
     /**
      * 获取当日分时信息
      * 
-     * @param stockDaily
-     * @param date
+     * @param daily
      * @return
      */
-    public List<StockMinute> getStockMinutes(StockDaily stockDaily, Date date);
+    public List<StockMinute> getStockMinutes(StockDaily daily);
 
     /**
      * 获取收盘前购买点,14:45
      * 
      * @param stockDaily
      * @param date
+     * @param nextExrights
      * @return
      */
-    public StockMinute getNearCloseBuyMinute(StockDaily stockDaily, Date date);
+    public StockMinute getNearCloseBuyMinute(StockDaily stockDaily);
 
     /**
      * 下载分时数据
      * 
-     * @param stockDaily
-     * @param date
+     * @param daily
      * @return
      */
-    public List<StockMinute> downloadStockMinutes(StockDaily stockDaily, Date date);
+    public List<StockMinute> downloadStockMinutes(StockDaily daily);
 }

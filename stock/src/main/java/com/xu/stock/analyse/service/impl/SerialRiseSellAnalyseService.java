@@ -12,6 +12,7 @@ import com.xu.stock.analyse.service.StockAnalyseConstants.SerialRiseSellArgs;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeNature;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeType;
+import com.xu.stock.analyse.service.uitl.StockAnalyseUtil;
 import com.xu.stock.data.model.StockDaily;
 
 /**
@@ -61,7 +62,7 @@ public class SerialRiseSellAnalyseService extends BaseStockAnalyseService {
 	private List<StockBuyTrade> analyseSellPoints(List<StockDaily> dailys, List<StockBuyTrade> buys) {
 		List<StockBuyTrade> sells = new ArrayList<StockBuyTrade>();
         for (StockBuyTrade buy : buys) {
-            StockDaily sellDaily = StockAnalyseUtil.getSellStockDaily(dailys, buy.getBuyDate(), holdDay);
+            StockDaily sellDaily = StockAnalyseUtil.getSellDaily(dailys, buy.getBuyDate(), holdDay);
             if (sellDaily != null) {
                 StockBuyTrade sell = new StockBuyTrade();
 

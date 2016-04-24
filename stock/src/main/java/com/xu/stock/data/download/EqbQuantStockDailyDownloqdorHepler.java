@@ -140,7 +140,7 @@ public class EqbQuantStockDailyDownloqdorHepler {
 		String date = DateUtil.getDate(nextDate, "yyyy-MM-dd");
 
 		StringBuffer url = new StringBuffer();
-		url.append(StockApiConstants.Sina.API_URL_REPAIR_STOCK_INDEX).append("?symbol=").append(fullCode);
+		url.append(StockApiConstants.Sina.API_URL_REPAIR_STOCK_MINUTE_INDEX).append("?symbol=").append(fullCode);
 		url.append("&date=").append(date);
 		return url.toString();
 	}

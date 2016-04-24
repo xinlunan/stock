@@ -35,4 +35,5 @@ public interface IStockDailyService {
 	 * @return
 	 */
 	public List<StockDaily> getStockDaily(String stockCode);
+
 }
