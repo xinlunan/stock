@@ -25,6 +25,7 @@ import com.winit.framework.util.GenericsUtils;
  * @date 2014-6-30
  * @typeName BaseDAO
  */
+@SuppressWarnings("restriction")
 @Service("baseDao")
 public abstract class BaseDao<T extends Serializable> implements IBaseDao<T> {
 	protected Logger log = LoggerFactory.getLogger(this.getClass());

@@ -15,10 +15,49 @@ package com.xu.stock.analyse.service;
 public interface StockAnalyseConstants {
 
     public enum StrategyType {
-        HIGHEST_PROBE_BUY, HIGHEST_PROBE_SELL, SERIAL_RISE_BUY, SERIAL_RISE_SELL, GENERAL_RISE_BUY;
+                              HIGHEST_PROBE_BUY, HIGHEST_PROBE_SELL, SERIAL_RISE_BUY, SERIAL_RISE_SELL, GENERAL_RISE_BUY;
+    }
+
+    public interface HighestAnalyseStatus {
+
+        public static final String BUYABLE   = "BUYABLE";
+        public static final String UNBUYABLE = "UNBUYABLE";
+        public static final String ANALYZING = "ANALYZING";
+    }
+
+    public interface StockTradeBuyTime {
+
+        public static final Integer HOUR   = 14;
+        public static final Integer MINUTE = 45;
+    }
+
+    public interface StockSellTime {
+
+        public static final Integer HOUR   = 14;
+        public static final Integer MINUTE = 30;
+    }
+
+    public interface WatchBeginStatus {
+
+        public static final String TRADED    = "TRADED";
+        public static final String UNTRADED  = "UNTRADED";
+        public static final String ANALYZING = "ANALYZING";
+    }
+
+    public interface StockTradeBuyStatus {
+
+        public static final String BOUGHT    = "BOUGHT";
+        public static final String SELLED    = "SELLED";
+    }
+
+    public interface StockTradeBuyAnalyseType {
+
+        public static final String REALTIME = "REALTIME";
+        public static final String CLOSE = "CLOSE";
     }
 
     public interface HighestProbeBuyArgs {
+
         public static final String D1_LAST_WAVE_CYCLE = "d1";
         public static final String D2_THIS_WAVE_CYCLE = "d2";
         public static final String F1_THIS_FALL_RATE  = "f1";

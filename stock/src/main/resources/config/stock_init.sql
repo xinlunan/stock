@@ -51,11 +51,11 @@ CREATE TABLE `t_stock_analyse_strategy` (
   PRIMARY KEY (`strategy_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5018607 DEFAULT CHARSET=utf8;
 
-/*Table structure for table `t_stock_buy_trade` */
+/*Table structure for table `t_stock_trade_buy_trade` */
 
-DROP TABLE IF EXISTS `t_stock_buy_trade`;
+DROP TABLE IF EXISTS `t_stock_trade_buy_trade`;
 
-CREATE TABLE `t_stock_buy_trade` (
+CREATE TABLE `t_stock_trade_buy_trade` (
   `trade_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '股票交易Id',
   `stock_code` char(6) DEFAULT NULL COMMENT '股票代码',
   `stock_name` varchar(10) DEFAULT NULL COMMENT '股票名称',

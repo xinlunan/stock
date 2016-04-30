@@ -2,7 +2,7 @@ package com.xu.stock.analyse.service;
 
 import java.util.List;
 
-import com.xu.stock.analyse.model.StockBuyTrade;
+import com.xu.stock.analyse.model.StockTrade;
 
 /**
  * 股票指数Service
@@ -25,7 +25,7 @@ public interface IStockSimulateTradeService {
 	 * @param stockCode
 	 * @return
 	 */
-	public List<StockBuyTrade> getStockSimulateTrades(String stockCode);
+	public List<StockTrade> getStockSimulateTrades(String stockCode);
 
 	/**
 	 * 根据
@@ -33,5 +33,5 @@ public interface IStockSimulateTradeService {
 	 * @param stockCode
 	 * @return
 	 */
-	public void saveStockSimulateTrades(List<StockBuyTrade> stockSimulateTrades);
+	public void saveStockSimulateTrades(List<StockTrade> stockSimulateTrades);
 }

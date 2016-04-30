@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.xu.stock.analyse.model.StockBuyTrade">
+<mapper namespace="com.xu.stock.analyse.model.StockTrade">
 
-	<resultMap type="com.xu.stock.analyse.model.StockBuyTrade" id="StockBuyTrade">
+	<resultMap type="com.xu.stock.analyse.model.StockTrade" id="StockTrade">
 		<id property="tradeId" column="trade_id"></id>
 		<id property="stockCode" column="stock_code"></id>
 		<id property="stockName" column="stock_name"></id>
@@ -40,32 +40,32 @@
 		trade_type,trade_nature,strategy,version,parameters,created,updated
 	</sql>
 
-	<select id="getStockSimulateTrades" resultMap="StockBuyTrade">
+	<select id="getStockSimulateTrades" resultMap="StockTrade">
 		SELECT trade_id,<include refid="columns" />
-		FROM t_stock_buy_trade
+		FROM t_stock_trade
 		WHERE stock_code=#{stockCode};
 	</select>
 
-	<select id="getBuyStockSimulateTrade" resultMap="StockBuyTrade">
+	<select id="getBuyStockSimulateTrade" resultMap="StockTrade">
 		SELECT trade_id,<include refid="columns" />
-		FROM t_stock_buy_trade
+		FROM t_stock_trade
 		WHERE stock_code=#{stockCode} and trade_type=#{tradeType} and version=#{version} and buy_date=#{buyDate};
 	</select>
 	
-	<select id="getSellStockSimulateTrade" resultMap="StockBuyTrade">
+	<select id="getSellStockSimulateTrade" resultMap="StockTrade">
 		SELECT trade_id,<include refid="columns" />
-		FROM t_stock_buy_trade
+		FROM t_stock_trade
 		WHERE stock_code=#{stockCode} and trade_type=#{tradeType} and version=#{version} and sell_date=#{sellDate};
 	</select>
 	
-	<select id="getBuyStockSimulateTrades" resultMap="StockBuyTrade">
+	<select id="getBuyStockSimulateTrades" resultMap="StockTrade">
 		SELECT trade_id,<include refid="columns" />
-		fROM t_stock_buy_trade
+		fROM t_stock_trade
 		WHERE strategy=#{strategy} and stock_code=#{stockCode} and trade_type='BUY' ;
 	</select>
 
 	<insert id="insertStockSimulateTrade" flushCache="true">
-		INSERT INTO t_stock_buy_trade (<include refid="columns" />)
+		INSERT INTO t_stock_trade (<include refid="columns" />)
 		VALUES (
 			#{stockCode},#{stockName},
 			#{buyDate},#{exrights},#{buyHour},#{buyMinute},#{buyTradePrice},#{buyHighPrice},#{buyClosePrice},

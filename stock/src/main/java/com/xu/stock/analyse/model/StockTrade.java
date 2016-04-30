@@ -16,14 +16,12 @@ import java.util.Date;
  * 
  * @since 1.
  */
-public class StockBuyTrade implements Serializable {
+public class StockTrade implements Serializable {
 
     private static final long serialVersionUID = -352228891672124416L;
 
     // 股票每分钟指数Id
     private Long              tradeId;
-    // 股票Id
-    private Integer           stockId;
     // 股票代码
     private String            stockCode;
     // 股票名称
@@ -83,14 +81,6 @@ public class StockBuyTrade implements Serializable {
 
     public void setTradeId(Long tradeId) {
         this.tradeId = tradeId;
-    }
-
-    public Integer getStockId() {
-        return stockId;
-    }
-
-    public void setStockId(Integer stockId) {
-        this.stockId = stockId;
     }
 
     public String getStockCode() {
@@ -299,10 +289,10 @@ public class StockBuyTrade implements Serializable {
 
     @Override
     public String toString() {
-        return "StockSimulateTrade [tradeId=" + tradeId + ", stockId=" + stockId + ", stockCode=" + stockCode + ", stockName=" + stockName + ", buyDate=" + buyDate + ", buyHour=" + buyHour + ", buyMinute=" + buyMinute + ", buyTradePrice="
-               + buyTradePrice + ", buyHighPrice=" + buyHighPrice + ", buyClosePrice=" + buyClosePrice + ", sellDate=" + sellDate + ", sellHour=" + sellHour + ", sellMinute=" + sellMinute + ", sellTradePrice=" + sellTradePrice
-               + ", sellHighPrice=" + sellHighPrice + ", sellClosePrice=" + sellClosePrice + ", profit=" + profit + ", profitRate=" + profitRate + ", highProfitRate=" + highProfitRate + ", closeProfitRate=" + closeProfitRate
-               + ", tradeType=" + tradeType + ", tradeNature=" + tradeNature + ", strategy=" + strategy + ", version=" + version + ", parameters=" + parameters + ", created=" + created + ", updated=" + updated + "]";
+        return "StockTrade [tradeId=" + tradeId + ", stockCode=" + stockCode + ", stockName=" + stockName + ", buyDate=" + buyDate + ", buyHour=" + buyHour + ", buyMinute=" + buyMinute + ", buyTradePrice=" + buyTradePrice
+               + ", buyHighPrice=" + buyHighPrice + ", buyClosePrice=" + buyClosePrice + ", sellDate=" + sellDate + ", sellHour=" + sellHour + ", sellMinute=" + sellMinute + ", sellTradePrice=" + sellTradePrice + ", sellHighPrice="
+               + sellHighPrice + ", sellClosePrice=" + sellClosePrice + ", profit=" + profit + ", profitRate=" + profitRate + ", highProfitRate=" + highProfitRate + ", closeProfitRate=" + closeProfitRate + ", tradeType=" + tradeType
+               + ", tradeNature=" + tradeNature + ", strategy=" + strategy + ", version=" + version + ", parameters=" + parameters + ", created=" + created + ", updated=" + updated + ", exrights=" + exrights + "]";
     }
 
     public BigDecimal getExrights() {

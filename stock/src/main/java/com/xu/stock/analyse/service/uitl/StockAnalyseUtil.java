@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.xu.stock.analyse.model.StockWatchBegin;
 import com.xu.stock.data.model.StockDaily;
 import com.xu.util.DateUtil;
 
@@ -92,8 +93,7 @@ public class StockAnalyseUtil {
             return true;
         }
 
-        if (lastRiseRate.compareTo(BigDecimal.valueOf(Double.valueOf(4.9))) > 0 && lastRiseRate.compareTo(BigDecimal.valueOf(Double.valueOf(5.1))) < 0
-            && thisDaily.getHigh().compareTo(thisDaily.getClose()) == 0) {
+        if (lastRiseRate.compareTo(BigDecimal.valueOf(Double.valueOf(4.9))) > 0 && lastRiseRate.compareTo(BigDecimal.valueOf(Double.valueOf(5.1))) < 0 && thisDaily.getHigh().compareTo(thisDaily.getClose()) == 0) {
             return true;
         }
 
@@ -105,8 +105,7 @@ public class StockAnalyseUtil {
             return false;
         }
 
-        if (closeGapRate.compareTo(BigDecimal.valueOf(Double.valueOf(9.8))) > 0
-            || (closeGapRate.compareTo(BigDecimal.valueOf(Double.valueOf(4.9))) > 0 && closeGapRate.compareTo(BigDecimal.valueOf(Double.valueOf(5.1))) < 0)) {
+        if (closeGapRate.compareTo(BigDecimal.valueOf(Double.valueOf(9.8))) > 0 || (closeGapRate.compareTo(BigDecimal.valueOf(Double.valueOf(4.9))) > 0 && closeGapRate.compareTo(BigDecimal.valueOf(Double.valueOf(5.1))) < 0)) {
             return true;
         }
 
@@ -117,8 +116,7 @@ public class StockAnalyseUtil {
         if (close.compareTo(high) != 0) {
             return false;
         }
-        if (closeGapRate.compareTo(BigDecimal.valueOf(Double.valueOf(-9.8))) < 0
-            || (closeGapRate.compareTo(BigDecimal.valueOf(Double.valueOf(-4.9))) < 0 && closeGapRate.compareTo(BigDecimal.valueOf(Double.valueOf(-5.1))) > 0)) {
+        if (closeGapRate.compareTo(BigDecimal.valueOf(Double.valueOf(-9.8))) < 0 || (closeGapRate.compareTo(BigDecimal.valueOf(Double.valueOf(-4.9))) < 0 && closeGapRate.compareTo(BigDecimal.valueOf(Double.valueOf(-5.1))) > 0)) {
             return true;
         }
         return false;
@@ -188,11 +186,10 @@ public class StockAnalyseUtil {
                     StockDaily lastDaily = dailys.get(i + holdDay);
                     StockDaily nextDaily = buildNextStockDaily(lastDaily);
                     return nextDaily;
-                }else{
+                } else {
                     return null;
                 }
-                
-                
+
             }
         }
         return null;
@@ -210,4 +207,53 @@ public class StockAnalyseUtil {
         return nextDaily;
     }
 
+    public static boolean isReachFallRate(List<StockDaily> stockDailys, int index, BigDecimal thisFallRate) {
+        StockDaily highestStockDaily = stockDailys.get(index);
+        BigDecimal highestCloseExr = highestStockDaily.getClose().multiply(highestStockDaily.getExrights());
+        BigDecimal lowestCloseExr = highestCloseExr.subtract(highestCloseExr.multiply(thisFallRate).divide(BD_100, 2, BigDecimal.ROUND_HALF_UP));
+        for (int i = index; i < stockDailys.size(); i++) {// 从指定点开始遍历
+            StockDaily thisDaliy = stockDailys.get(i);
+            BigDecimal thisCloseExr = thisDaliy.getClose().multiply(thisDaliy.getExrights());
+
+            // 如果当前已大于历史高点
+            if (thisCloseExr.compareTo(highestCloseExr) == 1) {
+                return false;
+            }
+            // 本次跌幅超设定幅度，与最高点相差比例介于设定的报警范围内，当前最高价小于历史最高价
+            if (thisCloseExr.compareTo(lowestCloseExr) == -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Integer dailyIndex(List<StockDaily> dailys, Date date) {
+        if (dailys != null) {
+            int low = 0;
+            int high = dailys.size() - 1;
+
+            while ((low <= high) && (low <= dailys.size() - 1) && (high <= dailys.size() - 1)) {
+                int middle = (high + low) >> 1;
+                StockDaily daily = dailys.get(middle);
+                int compare = DateUtil.dateToString(daily.getDate()).compareTo(DateUtil.dateToString(date));
+                if (compare == 0) {
+                    return middle;
+                } else if (compare > 0) {
+                    high = middle - 1;
+                } else {
+                    low = middle + 1;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static boolean hasNextDaily(List<StockDaily> dailys, StockWatchBegin watchBegin) {
+        if (dailys != null && dailys.size() > 1) {
+            StockDaily lastDaily = dailys.get(dailys.size() - 1);
+            int compare = DateUtil.dateToString(lastDaily.getDate()).compareTo(DateUtil.dateToString(watchBegin.getDate()));
+            return compare > 0;
+        }
+        return false;
+    }
 }

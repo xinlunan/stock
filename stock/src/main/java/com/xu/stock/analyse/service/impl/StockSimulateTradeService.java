@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.analyse.dao.IStockSimulateTradeDao;
-import com.xu.stock.analyse.model.StockBuyTrade;
+import com.xu.stock.analyse.model.StockTrade;
 import com.xu.stock.analyse.service.IStockSimulateTradeService;
 
 /**
@@ -34,11 +34,11 @@ public class StockSimulateTradeService implements IStockSimulateTradeService {
 	@Resource
 	private IStockSimulateTradeDao stockSimulateTradeDao;
 
-	public List<StockBuyTrade> getStockSimulateTrades(String stockCode) {
+	public List<StockTrade> getStockSimulateTrades(String stockCode) {
 		return stockSimulateTradeDao.getStockSimulateTrades(stockCode);
 	}
 
-	public void saveStockSimulateTrades(List<StockBuyTrade> stockSimulateTrades) {
+	public void saveStockSimulateTrades(List<StockTrade> stockSimulateTrades) {
 		stockSimulateTradeDao.saveStockSimulateTrades(stockSimulateTrades);
 	}
 

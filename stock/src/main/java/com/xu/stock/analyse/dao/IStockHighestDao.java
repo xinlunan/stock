@@ -2,7 +2,7 @@ package com.xu.stock.analyse.dao;
 
 import java.util.List;
 
-import com.xu.stock.analyse.model.StockHistoryHighest;
+import com.xu.stock.analyse.model.StockHighest;
 
 /**
  * 历史最高点
@@ -16,15 +16,16 @@ import com.xu.stock.analyse.model.StockHistoryHighest;
  * 
  * @since 1.
  */
-public interface IStockHistoryHighestDao {
+public interface IStockHighestDao {
 
     /**
      * 获取历史最高价
      * 
      * @param stockCode
+     * @param parameters
      * @return
      */
-    public List<StockHistoryHighest> getHistoryHighests(String stockCode);
+    public List<StockHighest> getHighests(String stockCode, String parameters);
 
 
     /**
@@ -33,6 +34,13 @@ public interface IStockHistoryHighestDao {
      * @param trades
      * @return
      */
-    public Integer saveHistoryHighest(List<StockHistoryHighest> history);
+    public Integer saveHighest(List<StockHighest> history);
+
+    /**
+     * 更新分析过程
+     * 
+     * @param history
+     */
+    public Integer updateHighestAnalyse(StockHighest history);
 
 }

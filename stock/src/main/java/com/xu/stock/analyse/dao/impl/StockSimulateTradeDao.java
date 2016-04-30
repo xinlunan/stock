@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.winit.framework.dao.impl.BaseDao;
 import com.xu.stock.analyse.dao.IStockSimulateTradeDao;
-import com.xu.stock.analyse.model.StockBuyTrade;
+import com.xu.stock.analyse.model.StockTrade;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeType;
 
@@ -27,7 +27,7 @@ import com.xu.stock.analyse.service.StockAnalyseConstants.TradeType;
  * @since 1.
  */
 @Repository("stockSimulateTradeDao")
-public class StockSimulateTradeDao extends BaseDao<StockBuyTrade> implements IStockSimulateTradeDao {
+public class StockSimulateTradeDao extends BaseDao<StockTrade> implements IStockSimulateTradeDao {
 
 	public final String SQL_GET_STOCK_TRADES = getNameSpace() + "getStockSimulateTrades";
 	public final String SQL_GET_BUY_STOCK_TRADE = getNameSpace() + "getBuyStockSimulateTrade";
@@ -35,9 +35,9 @@ public class StockSimulateTradeDao extends BaseDao<StockBuyTrade> implements ISt
 	public final String SQL_INSERT_STOCK_TRADE = getNameSpace() + "insertStockSimulateTrade";
 	public final String SQL_GET_BUY_STOCK_TRADES = getNameSpace() + "getBuyStockSimulateTrades";
 
-	public Integer saveStockSimulateTrades(List<StockBuyTrade> stockSimulateTrades) {
+	public Integer saveStockSimulateTrades(List<StockTrade> stockSimulateTrades) {
 		Integer result = 0;
-		for (StockBuyTrade trade : stockSimulateTrades) {
+		for (StockTrade trade : stockSimulateTrades) {
 			if (!existTrade(trade)) {
 				getSqlSession().insert(SQL_INSERT_STOCK_TRADE, trade);
 			}
@@ -45,8 +45,8 @@ public class StockSimulateTradeDao extends BaseDao<StockBuyTrade> implements ISt
 		return result;
 	}
 
-	public boolean existTrade(StockBuyTrade trade) {
-		StockBuyTrade oldTrade;
+	public boolean existTrade(StockTrade trade) {
+		StockTrade oldTrade;
 		if (TradeType.BUY.equals(trade.getTradeType())) {
 			oldTrade = getSqlSession().selectOne(SQL_GET_BUY_STOCK_TRADE, trade);
 		} else {
@@ -58,13 +58,13 @@ public class StockSimulateTradeDao extends BaseDao<StockBuyTrade> implements ISt
 		return false;
 	}
 
-	public List<StockBuyTrade> getStockSimulateTrades(String stockCode) {
+	public List<StockTrade> getStockSimulateTrades(String stockCode) {
 		Map<String, Object> paras = new HashMap<String, Object>();
 		paras.put("stockCode", stockCode);
 		return getSqlSession().selectList(SQL_GET_STOCK_TRADES, paras);
 	}
 
-	public List<StockBuyTrade> getBuyTrades(StrategyType strategy, String stockCode) {
+	public List<StockTrade> getBuyTrades(StrategyType strategy, String stockCode) {
 		Map<String, Object> paras = new HashMap<String, Object>();
 		paras.put("stockCode", stockCode);
 		paras.put("strategy", strategy.toString());

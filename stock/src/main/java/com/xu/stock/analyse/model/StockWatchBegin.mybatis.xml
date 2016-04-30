@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.stock.analyse.model.StockWatchBegin">
+
+	<resultMap type="com.xu.stock.analyse.model.StockWatchBegin" id="StockWatchBegin">
+		<id property="watchBeginId" column="watch_begin_id"></id>
+		<id property="stockCode" column="stock_code"></id>
+		<id property="stockName" column="stock_name"></id>
+		<id property="strategy" column="strategy"></id>
+		<id property="parameters" column="parameters"></id>
+		<id property="refDate" column="ref_date"></id>
+		<id property="refClose" column="ref_close"></id>
+		<id property="refExrights" column="ref_exrights"></id>
+		<id property="date" column="date"></id>
+		<id property="close" column="close"></id>
+		<id property="exrights" column="exrights"></id>
+		<id property="buyRefLowExr" column="buy_ref_low_exr"></id>
+		<id property="buyRefHighExr" column="buy_ref_high_exr"></id>
+		<id property="analyseStatus" column="analyse_status"></id>
+		<id property="created" column="created"></id>
+		<id property="updated" column="updated"></id>
+	</resultMap>
+	
+	<sql id="columns">
+		stock_code,stock_name,strategy,parameters,ref_date,ref_close,ref_exrights,date,close,exrights,buy_ref_low_exr,buy_ref_high_exr,analyse_status,created,updated
+	</sql>
+
+	<select id="getWatchBegins" resultMap="StockWatchBegin">
+		SELECT watch_begin_id,<include refid="columns" /> 
+		FROM t_stock_watch_begin
+		WHERE stock_code=#{stockCode} and strategy=#{strategy} and parameters=#{parameters} and ref_date=#{refDate};
+	</select>
+	
+	<select id="getUnAnalyseWatchBegins" resultMap="StockWatchBegin">
+		SELECT watch_begin_id,<include refid="columns" /> 
+		FROM t_stock_watch_begin
+		WHERE stock_code=#{stockCode} and strategy=#{strategy} and parameters=#{parameters} and analyse_status='ANALYZING';
+	</select>
+
+	<insert id="insertWatchBegin" flushCache="true" useGeneratedKeys="true" keyProperty="watchBeginId">
+		INSERT INTO t_stock_watch_begin (<include refid="columns" />)
+		VALUES (
+			#{stockCode}, #{stockName}, #{strategy},#{parameters}, #{refDate}, #{refClose}, #{refExrights}, #{date},#{close},#{exrights},#{buyRefLowExr},#{buyRefHighExr},#{analyseStatus},sysdate(),sysdate()
+		);
+	</insert>
+	
+	<insert id="updateStatus" flushCache="true">
+		UPDATE t_stock_watch_begin SET analyse_status=#{analyseStatus} WHERE watch_begin_id = #{watchBeginId};
+	</insert>
+
+</mapper> 
