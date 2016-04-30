@@ -42,8 +42,32 @@ public interface IStockMinuteDao {
      * 
      * @param stockCode
      * @param date
+     * @param hour
+     * @param minute
      * @return
      */
-    public StockMinute getNearCloseBuyMinute(String stockCode, Date date);
+    public StockMinute getHistoryNearCloseBuyMinute(String stockCode, Date date, Integer hour, Integer minute);
+
+    /**
+     * 获取收盘前的购买点
+     * 
+     * @param stockCode
+     * @param date
+     * @param hour
+     * @param minute
+     * @return
+     */
+    public StockMinute getNearCloseBuyMinute(String stockCode, Date date, Integer hour, Integer minute);
+
+    /**
+     * 获取分时信息
+     * 
+     * @param stockCode
+     * @param date
+     * @param hour
+     * @param minute
+     * @return
+     */
+    public StockMinute getStockMinute(String stockCode, Date date, Integer hour, Integer minute);
 
 }

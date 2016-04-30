@@ -48,7 +48,7 @@ public class HttpClientHandle {
             try {
                 HttpGet httpGet = new HttpGet(url);
 
-                RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60000).setConnectTimeout(5000).build();// 设置请求和传输超时时间
+                RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60000).setConnectTimeout(2000).build();// 设置请求和传输超时时间
                 httpGet.setConfig(requestConfig);
                 httpClient.execute(httpGet);// 执行请求
                 // 执行get请求
@@ -65,9 +65,9 @@ public class HttpClientHandle {
                     response.close();
                 }
             } catch (Throwable e) {
-                log.error("http get exception", e);
                 if (i >= retry - 1) {
                     // 扫异常
+                    log.error("http get exception", e);
                     throw new RuntimeException(e);
                 } else {
                     // 重试
@@ -111,6 +111,8 @@ public class HttpClientHandle {
                 UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formparams, encoded);
                 // 创建httppost
                 HttpPost httppost = new HttpPost(url);
+                RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60000).setConnectTimeout(2000).build();// 设置请求和传输超时时间
+                httppost.setConfig(requestConfig);
                 httppost.setEntity(uefEntity);
                 CloseableHttpResponse response = httpclient.execute(httppost);
                 try {
@@ -123,9 +125,9 @@ public class HttpClientHandle {
                     response.close();
                 }
             } catch (Throwable e) {
-                log.error("http get exception", e);
                 if (i >= retry - 1) {
                     // 扫异常
+                    log.error("http get exception", e);
                     throw new RuntimeException(e);
                 } else {
                     // 重试
@@ -161,7 +163,7 @@ public class HttpClientHandle {
                 UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(new ArrayList<NameValuePair>());
                 // 创建httppost
                 HttpPost httppost = new HttpPost(url);
-                RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60000).setConnectTimeout(5000).build();// 设置请求和传输超时时间
+                RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60000).setConnectTimeout(2000).build();// 设置请求和传输超时时间
                 httppost.setConfig(requestConfig);
                 httppost.setEntity(uefEntity);
 
@@ -204,8 +206,8 @@ public class HttpClientHandle {
                     }
                 }
             } catch (Throwable e) {
-                log.error("http download exception", e);
                 if (i >= retry - 1) {
+                    log.error("http download exception", e);
                     // 扫异常
                     throw new RuntimeException(e);
                 } else {

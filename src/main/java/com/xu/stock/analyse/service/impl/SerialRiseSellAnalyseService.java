@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.analyse.model.StockAnalyseStrategy;
-import com.xu.stock.analyse.model.StockBuyTrade;
+import com.xu.stock.analyse.model.StockTrade;
 import com.xu.stock.analyse.service.StockAnalyseConstants.SerialRiseSellArgs;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeNature;
@@ -42,11 +42,11 @@ public class SerialRiseSellAnalyseService extends BaseStockAnalyseService {
 	}
 
 	@Override
-	public List<StockBuyTrade> doAnalyse(List<StockDaily> dailys) {
+	public List<StockTrade> doAnalyse(List<StockDaily> dailys) {
 		log.info("analyse stock code:" + dailys.get(0).getStockCode());
 
 		// 获取买入点
-		List<StockBuyTrade> buys = stockSimulateTradeDao.getBuyTrades(StrategyType.SERIAL_RISE_BUY, dailys.get(0).getStockCode());
+		List<StockTrade> buys = stockSimulateTradeDao.getBuyTrades(StrategyType.SERIAL_RISE_BUY, dailys.get(0).getStockCode());
 
 		// 分析卖出点
 		return analyseSellPoints(dailys, buys);
@@ -59,12 +59,12 @@ public class SerialRiseSellAnalyseService extends BaseStockAnalyseService {
 	 * @param buys
 	 * @return
 	 */
-	private List<StockBuyTrade> analyseSellPoints(List<StockDaily> dailys, List<StockBuyTrade> buys) {
-		List<StockBuyTrade> sells = new ArrayList<StockBuyTrade>();
-        for (StockBuyTrade buy : buys) {
+	private List<StockTrade> analyseSellPoints(List<StockDaily> dailys, List<StockTrade> buys) {
+		List<StockTrade> sells = new ArrayList<StockTrade>();
+        for (StockTrade buy : buys) {
             StockDaily sellDaily = StockAnalyseUtil.getSellDaily(dailys, buy.getBuyDate(), holdDay);
             if (sellDaily != null) {
-                StockBuyTrade sell = new StockBuyTrade();
+                StockTrade sell = new StockTrade();
 
                 sell.setStockCode(sellDaily.getStockCode());
                 sell.setStockName(sellDaily.getStockName());

@@ -30,11 +30,11 @@
 	</insert>
 
 
-	<insert id="updateAnalyseRecord" flushCache="true">
+	<update id="updateAnalyseRecord" flushCache="true">
 		update t_stock_analyse_record 
 		set date=#{date},updated=sysdate() 
 		WHERE stock_code=#{stockCode} and trade_type=#{tradeType} and strategy=#{strategy} and version=#{version};
-	</insert>
+	</update>
 
 
 </mapper> 

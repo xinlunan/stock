@@ -81,7 +81,7 @@ public class StockAnalyse extends BaseTestCase {
 
     @Before
     public void download() {
-        stockDailyController.downloadStockDaily(100);
+        // stockDailyController.downloadStockDaily(100);
     }
 
 }

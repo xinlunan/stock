@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xu.stock.analyse.model.StockTradeSell">
+
+	<resultMap type="com.xu.stock.analyse.model.StockTradeSell" id="StockTradeSell">
+		<id property="tradeId" column="trade_id"></id>
+		<id property="stockCode" column="stock_code"></id>
+		<id property="stockName" column="stock_name"></id>
+		<id property="strategy" column="strategy"></id>
+		<id property="parameters" column="parameters"></id>
+		<id property="nature" column="nature"></id>
+		<id property="buyDate" column="buy_date"></id>
+		<id property="date" column="date"></id>
+		<id property="hour" column="hour"></id>
+		<id property="minute" column="minute"></id>
+		<id property="price" column="price"></id>
+		<id property="exrights" column="exrights"></id>
+		<id property="profitRate" column="profit_rate"></id>
+		<id property="analyseType" column="analyse_type"></id>
+		<id property="created" column="created"></id>
+		<id property="updated" column="updated"></id>
+	</resultMap>
+
+	<sql id="columns">
+		stock_code,stock_name,strategy,parameters,nature,buy_date,date,hour,minute,price,exrights,profit_rate,analyse_type,created,updated
+	</sql>
+
+	<select id="getStockTradeSells" resultMap="StockTradeSell">
+		SELECT trade_id,<include refid="columns" />
+		fROM t_stock_trade_sell
+		WHERE stock_code=#{stockCode} and strategy=#{strategy} and parameters=#{parameters} ;
+	</select>
+	
+	<select id="getBoughtStockTradeSells" resultMap="StockTradeSell">
+		SELECT trade_id,<include refid="columns" />
+		fROM t_stock_trade_sell
+		WHERE stock_code=#{stockCode} and strategy=#{strategy} and parameters=#{parameters} and status='BOUGHT';
+	</select>
+
+	<insert id="insertStockTradeSell" flushCache="true" useGeneratedKeys="true" keyProperty="tradeId">
+		INSERT INTO t_stock_trade_sell (<include refid="columns" />)
+		VALUES (
+			#{stockCode},#{stockName},#{strategy},#{parameters},#{nature},#{buyDate},#{date},#{hour},#{minute},#{price},#{exrights},#{profitRate},#{analyseType},sysdate(),sysdate()
+		);
+	</insert>
+	
+</mapper> 

@@ -10,8 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.xu.stock.analyse.model.StockWatchBegin;
+import com.xu.stock.analyse.service.StockAnalyseConstants.StockTradeBuyTime;
 import com.xu.stock.data.dao.IStockMinuteDao;
-import com.xu.stock.data.download.SinaStockMinuteDownloador;
+import com.xu.stock.data.download.SinaStockMinuteHistoryDownloador;
+import com.xu.stock.data.download.SinaStockMinuteRealtimeDownloador;
 import com.xu.stock.data.model.StockDaily;
 import com.xu.stock.data.model.StockMinute;
 import com.xu.stock.data.service.IStockMinuteService;
@@ -42,7 +45,7 @@ public class StockMinuteService implements IStockMinuteService {
         List<StockMinute> stockMinutes = stockMinuteDao.getStockMinutes(daily.getStockCode(), daily.getDate());
         if (stockMinutes == null || stockMinutes.isEmpty() || !hasLastMinutes(stockMinutes)) {
             // 实时下载
-            stockMinutes = downloadStockMinutes(daily);
+            stockMinutes = downloadHistoryStockMinutes(daily);
         }
         return stockMinutes;
     }
@@ -59,9 +62,9 @@ public class StockMinuteService implements IStockMinuteService {
         return true;
     }
 
-    public List<StockMinute> downloadStockMinutes(StockDaily daily) {
+    public List<StockMinute> downloadHistoryStockMinutes(StockDaily daily) {
         log.info("download begin stock minutes stock_code\t" + daily.getStockCode() + "\t" + DateUtil.date2String(daily.getDate()));
-        List<StockMinute> stockMinutes = SinaStockMinuteDownloador.download(daily);
+        List<StockMinute> stockMinutes = SinaStockMinuteHistoryDownloador.download(daily);
         log.info("download end stock minutes stock_code:" + daily.getStockCode() + "  size:" + stockMinutes.size());
         saveStockDailyMinutes(daily.getStockCode(), daily.getDate(), stockMinutes);
         log.info("save end stock miutes");
@@ -86,18 +89,39 @@ public class StockMinuteService implements IStockMinuteService {
         }
     }
 
-    public StockMinute getNearCloseBuyMinute(StockDaily daily) {
-        StockMinute stockMinute = stockMinuteDao.getNearCloseBuyMinute(daily.getStockCode(), daily.getDate());
+    public StockMinute fetchHistoryNearCloseBuyMinute(StockDaily daily) {
+
+        StockMinute stockMinute = stockMinuteDao.getHistoryNearCloseBuyMinute(daily.getStockCode(), daily.getDate(), StockTradeBuyTime.HOUR, StockTradeBuyTime.MINUTE);
         if (stockMinute == null) {
-            // 实时下载
-            List<StockMinute> stockMinutes = downloadStockMinutes(daily);
+            List<StockMinute> stockMinutes = downloadHistoryStockMinutes(daily);
             for (StockMinute stockMinute2 : stockMinutes) {
-                if (stockMinute2.getHour() == 14 && stockMinute2.getMinute() > 44) {
+                if (stockMinute2.getHour() >= StockTradeBuyTime.HOUR && stockMinute2.getMinute() >= StockTradeBuyTime.MINUTE) {
                     return stockMinute2;
                 }
             }
         }
         return stockMinute;
+    }
+
+    public StockMinute fetchRealNearCloseBuyMinute(StockWatchBegin watchBegin) {
+        StockMinute stockMinute = stockMinuteDao.getNearCloseBuyMinute(watchBegin.getStockCode(), watchBegin.getDate(), StockTradeBuyTime.HOUR, StockTradeBuyTime.MINUTE);
+
+        if (stockMinute == null) {
+            // 实时下载
+            downloadRealtimeStockMinute(watchBegin);
+            stockMinuteDao.getNearCloseBuyMinute(watchBegin.getStockCode(), watchBegin.getDate(), StockTradeBuyTime.HOUR, StockTradeBuyTime.MINUTE);
+        }
+        return stockMinute;
+    }
+
+    private void downloadRealtimeStockMinute(StockWatchBegin watchBegin) {
+        StockMinute stockMinute = SinaStockMinuteRealtimeDownloador.download(watchBegin);
+        StockMinute existMinute = stockMinuteDao.getStockMinute(stockMinute.getStockCode(), stockMinute.getDate(), stockMinute.getHour(), stockMinute.getMinute());
+        if (existMinute == null) {
+            List<StockMinute> stockMinutes = new ArrayList<StockMinute>();
+            stockMinutes.add(stockMinute);
+            stockMinuteDao.saveStockMinutes(stockMinutes);
+        }
     }
 
 }

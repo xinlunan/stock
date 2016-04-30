@@ -25,9 +25,9 @@ import com.xu.util.HttpClientHandle;
  * 
  * @since 1.
  */
-public class SinaStockMinuteDownloador {
+public class SinaStockMinuteHistoryDownloador {
 
-    protected static Logger log = LoggerFactory.getLogger(SinaStockMinuteDownloador.class);
+    protected static Logger log = LoggerFactory.getLogger(SinaStockMinuteHistoryDownloador.class);
 
     /**
      * 下载股票指数数据
@@ -40,9 +40,6 @@ public class SinaStockMinuteDownloador {
 
         String result = HttpClientHandle.get(url, "gb2312");
 
-        if (daily.getDailyId() == null) {
-            daily.setExrights(fetchExrights(daily.getStockCode(), daily.getLastClose()));
-        }
         return parseStockMinutes(result, daily);
     }
 
@@ -69,14 +66,14 @@ public class SinaStockMinuteDownloador {
                 }
             }
         } else {
-            log.error("下载数据不成功");
+            log.error("下载数据不成功" + result);
         }
 
         return minutes;
     }
 
     private static boolean updateStockMinute(String[] tradeInfos, List<StockMinute> minutes) {
-        if (minutes.isEmpty()) {
+        if (minutes.isEmpty() || tradeInfos[0].lastIndexOf(":") < 4) {
             return false;
         }
         Integer hour = Integer.valueOf(tradeInfos[0].substring(0, 2));
@@ -94,52 +91,31 @@ public class SinaStockMinuteDownloador {
     }
 
     private static StockMinute newStockMinute(String[] tradeInfos, StockDaily stockDaily, Double high) {
-        Integer hour = Integer.valueOf(tradeInfos[0].substring(0, 2));
-        Integer minute = Integer.valueOf(tradeInfos[0].substring(3, 5));
-        Double price = Double.valueOf(tradeInfos[1]);
-        Double volume = Double.valueOf(tradeInfos[3]);
-        Double amount = Double.valueOf(tradeInfos[4]) / 10000;
+        if (tradeInfos[0].lastIndexOf(":") > 4) {
 
-        if (price > high) {
-            high = price;
+            Integer hour = Integer.valueOf(tradeInfos[0].substring(0, 2));
+            Integer minute = Integer.valueOf(tradeInfos[0].substring(3, 5));
+            Double price = Double.valueOf(tradeInfos[1]);
+            Double volume = Double.valueOf(tradeInfos[3]);
+            Double amount = Double.valueOf(tradeInfos[4]) / 10000;
+
+            if (price > high) {
+                high = price;
+            }
+
+            StockMinute stockMinute = new StockMinute();
+            stockMinute.setStockCode(stockDaily.getStockCode());
+            stockMinute.setDate(stockDaily.getDate());
+            stockMinute.setHour(hour);
+            stockMinute.setMinute(minute);
+            stockMinute.setPrice(BigDecimal.valueOf(price));
+            stockMinute.setHigh(BigDecimal.valueOf(high));
+            stockMinute.setVolume(volume);
+            stockMinute.setAmount(amount);
+            stockMinute.setExrights(stockDaily.getExrights());
+            return stockMinute;
         }
-
-        StockMinute stockMinute = new StockMinute();
-        stockMinute.setStockCode(stockDaily.getStockCode());
-        stockMinute.setDate(stockDaily.getDate());
-        stockMinute.setHour(hour);
-        stockMinute.setMinute(minute);
-        stockMinute.setPrice(price);
-        stockMinute.setHigh(high);
-        stockMinute.setVolume(volume);
-        stockMinute.setAmount(amount);
-        stockMinute.setExrights(stockDaily.getExrights().doubleValue());
-        return stockMinute;
-    }
-
-    /**
-     * 获取实时除权系数
-     * 
-     * @param stockCode
-     * @param close
-     * @param exrights
-     * @return
-     */
-    private static BigDecimal fetchExrights(String stockCode, BigDecimal close) {
-        String fullStockCode = stockCode.startsWith("6") ? "sh" + stockCode : "sz" + stockCode;
-        String url = StockApiConstants.Sina.API_URL_STOCK_REAL_DETAL + fullStockCode;
-        String result = HttpClientHandle.get(url, "gb2312");
-
-        if (result.length() > 30) {
-            String[] tradeStr = result.split(",");
-            Double newClose = Double.valueOf(tradeStr[2]);
-            
-            return close.divide(BigDecimal.valueOf(newClose), 10, BigDecimal.ROUND_HALF_UP);
-
-        } else {
-            log.error("fetchExrights下载数据不成功");
-        }
-        return BigDecimal.ONE;
+        return null;
     }
 
     /**

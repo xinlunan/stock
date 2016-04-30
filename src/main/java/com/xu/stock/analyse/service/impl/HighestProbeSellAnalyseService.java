@@ -9,8 +9,9 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.analyse.model.StockAnalyseStrategy;
-import com.xu.stock.analyse.model.StockBuyTrade;
+import com.xu.stock.analyse.model.StockTrade;
 import com.xu.stock.analyse.service.StockAnalyseConstants.HighestProbeSellArgs;
+import com.xu.stock.analyse.service.StockAnalyseConstants.StockSellTime;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeNature;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeType;
@@ -40,11 +41,11 @@ public class HighestProbeSellAnalyseService extends BaseStockAnalyseService {
     }
 
     @Override
-    public List<StockBuyTrade> doAnalyse(List<StockDaily> dailys) {
+    public List<StockTrade> doAnalyse(List<StockDaily> dailys) {
         log.info("analyse stock code:" + dailys.get(0).getStockCode());
 
         // 获取买入点
-        List<StockBuyTrade> buys = stockSimulateTradeDao.getBuyTrades(StrategyType.HIGHEST_PROBE_BUY, dailys.get(0).getStockCode());
+        List<StockTrade> buys = stockSimulateTradeDao.getBuyTrades(StrategyType.HIGHEST_PROBE_BUY, dailys.get(0).getStockCode());
 
         // 分析卖出点
         return analyseSellPoints(dailys, buys);
@@ -57,9 +58,9 @@ public class HighestProbeSellAnalyseService extends BaseStockAnalyseService {
      * @param buys
      * @return
      */
-    private List<StockBuyTrade> analyseSellPoints(List<StockDaily> dailys, List<StockBuyTrade> buys) {
-        List<StockBuyTrade> sells = new ArrayList<StockBuyTrade>();
-        for (StockBuyTrade buy : buys) {
+    private List<StockTrade> analyseSellPoints(List<StockDaily> dailys, List<StockTrade> buys) {
+        List<StockTrade> sells = new ArrayList<StockTrade>();
+        for (StockTrade buy : buys) {
             StockDaily stockDaily = StockAnalyseUtil.getSellDaily(dailys, buy.getBuyDate(), holdDay);
             Boolean canSell = false;
             List<StockMinute> minutes = stockMinuteService.getStockMinutes(stockDaily);
@@ -68,25 +69,23 @@ public class HighestProbeSellAnalyseService extends BaseStockAnalyseService {
                     StockMinute stockMinute = minutes.get(i);
                     BigDecimal expectRate = BigDecimal.valueOf(strategy.getDoubleValue(HighestProbeSellArgs.EXPECT_RATE)).divide(BD_100).setScale(4, BigDecimal.ROUND_HALF_UP);// 期望收益
                     BigDecimal thisStopLoss_100 = stopLoss.divide(BD_100).setScale(4, BigDecimal.ROUND_HALF_UP);// 期望收益
-                    BigDecimal expectSellPrice = buy.getBuyTradePrice().add(buy.getBuyTradePrice().multiply(expectRate)).multiply(buy.getExrights()).divide(BigDecimal.valueOf(stockMinute.getExrights()), 4, BigDecimal.ROUND_HALF_UP);
-                    BigDecimal stopLossPrice = buy.getBuyTradePrice().subtract(buy.getBuyTradePrice().multiply(thisStopLoss_100)).multiply(buy.getExrights()).divide(BigDecimal.valueOf(stockMinute.getExrights()),
-                        4,
-                        BigDecimal.ROUND_HALF_UP);
-                    Boolean isStopLoss = BigDecimal.valueOf(stockMinute.getPrice()).compareTo(stopLossPrice) == -1;
-                    Boolean isExpectSell = expectSellPrice.compareTo(BigDecimal.valueOf(stockMinute.getPrice())) <= 0;
-                    Boolean isOnTime = (stockMinute.getHour() >= 14 && stockMinute.getMinute() > 29);
+                    BigDecimal expectSellPrice = buy.getBuyTradePrice().add(buy.getBuyTradePrice().multiply(expectRate)).multiply(buy.getExrights()).divide(stockMinute.getExrights(), 4, BigDecimal.ROUND_HALF_UP);
+                    BigDecimal stopLossPrice = buy.getBuyTradePrice().subtract(buy.getBuyTradePrice().multiply(thisStopLoss_100)).multiply(buy.getExrights()).divide(stockMinute.getExrights(), 4, BigDecimal.ROUND_HALF_UP);
+                    Boolean isStopLoss = stockMinute.getPrice().compareTo(stopLossPrice) == -1;
+                    Boolean isExpectSell = expectSellPrice.compareTo(stockMinute.getPrice()) <= 0;
+                    Boolean isOnTime = (stockMinute.getHour() >= StockSellTime.HOUR && stockMinute.getMinute() >= StockSellTime.MINUTE);
 
                     if (isStopLoss || isExpectSell || isOnTime) {
                         BigDecimal sellPrice = null;
                         if (isStopLoss) {
-                            sellPrice = BigDecimal.valueOf(stockMinute.getPrice());
+                            sellPrice = stockMinute.getPrice();
                         } else if (isExpectSell) {
-                            sellPrice = BigDecimal.valueOf(stockMinute.getPrice());
+                            sellPrice = stockMinute.getPrice();
                         } else {
-                            sellPrice = BigDecimal.valueOf(stockMinute.getPrice());
+                            sellPrice = stockMinute.getPrice();
                         }
 
-                        StockBuyTrade sellTrade = new StockBuyTrade();
+                        StockTrade sellTrade = new StockTrade();
 
                         sellTrade.setStockCode(buy.getStockCode());
                         sellTrade.setStockName(buy.getStockName());
@@ -97,13 +96,13 @@ public class HighestProbeSellAnalyseService extends BaseStockAnalyseService {
                         sellTrade.setBuyTradePrice(buy.getBuyTradePrice());
                         sellTrade.setBuyHighPrice(buy.getBuyHighPrice());
                         sellTrade.setBuyClosePrice(buy.getBuyClosePrice());
-                        sellTrade.setExrights(BigDecimal.valueOf(stockMinute.getExrights()));
+                        sellTrade.setExrights(stockMinute.getExrights());
 
                         sellTrade.setSellDate(stockMinute.getDate());
                         sellTrade.setSellHour(stockMinute.getHour());
                         sellTrade.setSellMinute(stockMinute.getMinute());
                         sellTrade.setSellTradePrice(sellPrice);
-                        sellTrade.setSellHighPrice(BigDecimal.valueOf(stockMinute.getHigh()));
+                        sellTrade.setSellHighPrice(stockMinute.getHigh());
                         sellTrade.setSellClosePrice(sellPrice);
 
                         sellTrade.setProfit(sellTrade.getSellTradePrice().subtract(sellTrade.getBuyTradePrice()));
@@ -133,7 +132,7 @@ public class HighestProbeSellAnalyseService extends BaseStockAnalyseService {
 
                 StockDaily daily = stockService.getNextDaily(buy.getStockCode(), buy.getBuyDate());
                 if (daily != null) {
-                    StockBuyTrade sellTrade = new StockBuyTrade();
+                    StockTrade sellTrade = new StockTrade();
 
                     sellTrade.setStockCode(buy.getStockCode());
                     sellTrade.setStockName(buy.getStockName());

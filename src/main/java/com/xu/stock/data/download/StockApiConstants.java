@@ -39,7 +39,7 @@ public interface StockApiConstants {
 
         /** 实时信息 */
         // http://hq.sinajs.cn/list=sz300360
-        public static final String API_URL_STOCK_REAL_DETAL       = "http://hq.sinajs.cn/list=";
+        public static final String API_URL_STOCK_REALTIME_DETAL       = "http://hq.sinajs.cn/list=";
     }
 
     /**
