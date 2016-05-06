@@ -9,8 +9,10 @@ package com.xu.stock.command;
 
 import javax.annotation.Resource;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import com.xu.stock.analyse.controller.HighestProbeBuyAnalyseController;
 import com.xu.stock.data.controller.StockDailyController;
 import com.xu.test.BaseTestCase;
 
@@ -19,29 +21,31 @@ import com.xu.test.BaseTestCase;
  * 
  * @version Revision History
  * 
- *          <pre>
+ * <pre>
  * Author     Version       Date        Changes
  * lunan.xu    1.0           2015-5-24     Created
- * 
- *          </pre>
+ * </pre>
  * 
  * @since 1.
  */
 @SuppressWarnings("restriction")
-public class StockDailyInitializtion extends BaseTestCase {
+public class StockAnalyseHighestProbe extends BaseTestCase {
 
-    public static final int      NUM_THREADS = 100;
+    public static final int                  NUM_THREADS = 1;
+    @Resource
+    private StockDailyController             stockDailyController;
+    @Resource
+    private HighestProbeBuyAnalyseController highestProbeBuyAnalyseController;
 
-	@Resource
-	private StockDailyController stockDailyController;
+    @Test
+    public void highestProbeBuyAnalyse() {
+        log.info("最高点试探分析购买开始...");
+        highestProbeBuyAnalyseController.analyse(NUM_THREADS);
+        log.info("最高点试探分析购买完成.");
+    }
 
-	/**
-	 * 获取股票指数启动命令
-	 */
-	@Test
-	public void downloadIndex() {
-		log.info("开始初始化股票指数...");
-		stockDailyController.downloadStockDaily(NUM_THREADS);
-		log.info("获取股票指数完成.");
-	}
+    @Before
+    public void download() {
+        // stockDailyController.downloadStockDaily(100);
+    }
 }
