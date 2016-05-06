@@ -1,5 +1,9 @@
 package com.xu.stock.analyse.dao;
 
+import java.util.List;
+
+import com.xu.stock.analyse.model.StockTradeSell;
+
 /**
  * 卖出
  * 
@@ -13,5 +17,31 @@ package com.xu.stock.analyse.dao;
  * @since 1.
  */
 public interface IStockTradeSellDao {
+
+    /**
+     * 保存卖出信息
+     * 
+     * @param sellTrade
+     */
+    public Integer saveTradeSell(StockTradeSell sellTrade);
+
+    /**
+     * 保存卖出信息
+     * 
+     * @param sells
+     * @return
+     */
+    public Integer saveStockTradeSells(List<StockTradeSell> sells);
+
+    /**
+     * 获取卖出交易
+     * 
+     * @param stockCode
+     * @param strategy
+     * @param parameters
+     * @return
+     */
+    public List<StockTradeSell> getStockTradeSells(String stockCode, String strategy, String parameters);
+
 
 }

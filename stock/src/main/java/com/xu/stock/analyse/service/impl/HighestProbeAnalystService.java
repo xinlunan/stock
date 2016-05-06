@@ -31,8 +31,8 @@ import com.xu.stock.data.service.IStockMinuteService;
  * @since 1.
  */
 @SuppressWarnings("restriction")
-@Service("highestProbeBuyAnalyseService")
-public class HighestProbeBuyAnalystService extends BaseStockAnalyseService {
+@Service("highestProbeAnalyseService")
+public class HighestProbeAnalystService extends BaseStockAnalyseService {
 
     private Integer                 lastWaveCycle;
     private Integer                 thisWaveCycle;

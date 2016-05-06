@@ -39,7 +39,7 @@
 		VALUES (#{exchange},#{stockCode},#{stockName},#{asset},#{lastDate},#{lastClose},1,sysdate(),sysdate());
 	</insert>
 	
-	<update id="updateStock" flushCache="true">
+	<update id="updateStock" flushCache="true" useGeneratedKeys="true" keyProperty="stockId">
 		UPDATE t_stock 
 		SET stock_name = #{stockName} ,asset = #{asset} , last_date = #{lastDate}, last_close = #{lastClose}, exrights = #{exrights}, updated=sysdate()
 		WHERE stock_id = #{stockId} ;

@@ -5,25 +5,25 @@ import java.util.List;
 import com.xu.stock.data.model.StockDaily;
 
 /**
- * 购买点分析
+ * 卖出交易分析
  * 
  * @version
  * 
  * <pre>
  * Author	Version		Date		Changes
- * lunan.xu 	1.0  		2016年4月28日 	Created
+ * lunan.xu 	1.0  		2016年4月30日 	Created
  * </pre>
  * 
  * @since 1.
  */
-public interface IStockTradeBuyService {
+public interface IStockTradeSellService {
 
     /**
-     * 分析购买点
+     * 分析卖出信息
      * 
      * @param dailys
      * @param parameters
      */
-    public void analyseStockTradeBuy(List<StockDaily> dailys, String parameters);
+    public void analyseStockTradeSell(List<StockDaily> dailys, String parameters);
 
 }

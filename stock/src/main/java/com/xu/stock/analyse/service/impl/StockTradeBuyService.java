@@ -12,13 +12,12 @@ import org.springframework.stereotype.Service;
 
 import com.xu.stock.analyse.dao.IStockTradeBuyDao;
 import com.xu.stock.analyse.dao.IStockWatchBeginDao;
-import com.xu.stock.analyse.model.StockHighest;
-import com.xu.stock.analyse.model.StockTrade;
 import com.xu.stock.analyse.model.StockTradeBuy;
 import com.xu.stock.analyse.model.StockWatchBegin;
 import com.xu.stock.analyse.service.IStockTradeBuyService;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StockTradeBuyAnalyseType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StockTradeBuyStatus;
+import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeNature;
 import com.xu.stock.analyse.service.StockAnalyseConstants.WatchBeginStatus;
 import com.xu.stock.analyse.service.uitl.StockAnalyseUtil;
@@ -47,11 +46,12 @@ public class StockTradeBuyService implements IStockTradeBuyService {
     @Resource
     private IStockMinuteService stockMinuteService;
     @Resource
-    private IStockTradeBuyDao        stockTradeBuyDao;
+    private IStockTradeBuyDao   stockTradeBuyDao;
     @Resource
     private IStockWatchBeginDao stockWatchBeginDao;
 
-    public void analyseStockTradeBuy(List<StockDaily> dailys, List<StockWatchBegin> watchBegins) {
+    public void analyseStockTradeBuy(List<StockDaily> dailys, String parameters) {
+        List<StockWatchBegin> watchBegins = stockWatchBeginDao.getUnAnalyseWatchBegins(StrategyType.HIGHEST_PROBE_BUY, parameters, dailys.get(0).getStockCode());
         List<StockTradeBuy> buys = new ArrayList<StockTradeBuy>();
         for (StockWatchBegin watchBegin : watchBegins) {
             if (WatchBeginStatus.ANALYZING.equals(watchBegin.getAnalyseStatus())) {
@@ -79,16 +79,16 @@ public class StockTradeBuyService implements IStockTradeBuyService {
      * @return
      */
     private StockMinute fetchStockMinute(List<StockDaily> dailys, StockWatchBegin watchBegin) {
-        StockMinute stockMinute;
+        StockMinute stockMinute = null;
         int dailyIndex = StockAnalyseUtil.dailyIndex(dailys, watchBegin.getDate());
         if (dailyIndex < dailys.size() - 1) {// 下一天也在历史中
             StockDaily nextDaily = dailys.get(dailyIndex + 1);
-            stockMinute = stockMinuteService.fetchHistoryNearCloseBuyMinute(nextDaily);
+            stockMinute = stockMinuteService.fetchHistoryBuyMinute(nextDaily);
             if (stockMinute == null) {
-                stockMinute = buildStockMinute(dailys.get(dailyIndex));
+                stockMinute = buildStockMinute(nextDaily);
             }
         } else {
-            stockMinute = stockMinuteService.fetchRealNearCloseBuyMinute(watchBegin);
+            stockMinute = stockMinuteService.fetchRealtimeBuyMinute(watchBegin);
         }
         return stockMinute;
     }
@@ -120,93 +120,6 @@ public class StockTradeBuyService implements IStockTradeBuyService {
         stockMinute.setHigh(daily.getHigh());
         stockMinute.setExrights(daily.getExrights());
         return stockMinute;
-    }
-
-    /**
-     * 分析购买的时间点
-     * 
-     * @param dailys
-     * @param watchBegins
-     * @return
-     */
-    private void scanBuyMinutePoints(List<StockDaily> dailys, List<StockWatchBegin> watchBegins) {
-
-        for (StockWatchBegin highestPoint : watchBegins) {
-            // List<StockDaily> watchBegins = highestPoint.getWatchBegins();
-            //
-            // for (StockDaily daily : watchBegins) {
-            // BigDecimal buyLowExr =
-            // highestPoint.getClose().subtract(highestPoint.getClose().multiply(buyRateLow).divide(BD_100)).multiply(highestPoint.getExrights());
-            // BigDecimal buyHighExr =
-            // highestPoint.getClose().subtract(highestPoint.getClose().multiply(buyRateHigh).divide(BD_100)).multiply(highestPoint.getExrights());
-            //
-            // StockMinute buyMinute =
-            // stockMinuteService.getNearCloseBuyMinute(daily);
-            // if (buyMinute != null &&
-            // buyLowExr.compareTo(BigDecimal.valueOf(buyMinute.getPrice() *
-            // buyMinute.getExrights())) < 0 &&
-            // buyHighExr.compareTo(BigDecimal.valueOf(buyMinute.getPrice() *
-            // buyMinute.getExrights())) < 0) {
-            // buyMinute.setStockDaily(daily);
-            // daily.getMinutes().add(buyMinute);
-            // }
-            // }
-        }
-    }
-
-    /**
-     * 分析购买的时间点
-     * 
-     * @param buyPoints
-     * @param buyDailyPoints
-     * @return
-     */
-    private List<StockTrade> buildStockSimulateTrades(List<StockHighest> highestPoints) {
-        List<StockTrade> trades = new ArrayList<StockTrade>();
-        for (StockHighest highest : highestPoints) {
-            // for (StockDaily stockDaily : highest.getWatchBegins()) {
-            // StockTrade trade = new StockTrade();
-            //
-            // List<StockMinute> minutes = stockDaily.getMinutes();
-            // if (!minutes.isEmpty()) {
-            // StockMinute stockMinute = minutes.get(0);
-            //
-            // trade.setStockCode(stockDaily.getStockCode());
-            // trade.setStockName(stockDaily.getStockName());
-            //
-            // trade.setBuyDate(stockDaily.getDate());
-            // trade.setExrights(BigDecimal.valueOf(stockMinute.getExrights()).setScale(4,
-            // BigDecimal.ROUND_HALF_UP));
-            // trade.setBuyHour(15);
-            // trade.setBuyMinute(0);
-            // trade.setBuyTradePrice(stockDaily.getClose());
-            // trade.setBuyHighPrice(stockDaily.getHigh());
-            // trade.setBuyClosePrice(stockDaily.getClose());
-            //
-            // trade.setSellDate(stockMinute.getDate());
-            // trade.setSellHour(stockMinute.getHour());
-            // trade.setSellMinute(stockMinute.getMinute());
-            // trade.setSellTradePrice(BigDecimal.valueOf(0));
-            // trade.setSellHighPrice(BigDecimal.valueOf(0));
-            // trade.setSellClosePrice(BigDecimal.valueOf(0));
-            //
-            // trade.setProfit(BigDecimal.valueOf(0));
-            // trade.setProfitRate(BigDecimal.valueOf(0));
-            // trade.setHighProfitRate(BigDecimal.valueOf(0));
-            // trade.setCloseProfitRate(BigDecimal.valueOf(0));
-            //
-            // trade.setTradeType(TradeType.BUY);
-            // trade.setTradeNature(TradeNature.VIRTUAL);
-            // trade.setStrategy(StrategyType.HIGHEST_PROBE_BUY.toString());
-            // trade.setVersion(strategy.getVersion());
-            // trade.setParameters(strategy.getParameters());
-            // log.info(trade.toString());
-            //
-            // trades.add(trade);
-            // }
-            // }
-        }
-        return trades;
     }
 
 }

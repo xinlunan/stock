@@ -1,13 +1,12 @@
 package com.xu.stock.data.dao.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.winit.framework.dao.impl.BaseDao;
 import com.xu.stock.data.dao.IStockMinuteDao;
@@ -28,21 +27,31 @@ import com.xu.stock.data.model.StockMinute;
 @Repository("stockMinuteDao")
 public class StockMinuteDao extends BaseDao<StockMinute> implements IStockMinuteDao {
 
-    public final String SQL_GET_STOCK_MINUTES                  = getNameSpace() + "getStockMinutes";
-    public final String SQL_GET_STOCK_MINUTE                   = getNameSpace() + "getStockMinute";
-    public final String SQL_GET_HISTORY_STOCK_CLOSE_BUY_MINUTE = getNameSpace() + "getHistoryNearCloseBuyMinute";
-    public final String SQL_GET_STOCK_CLOSE_BUY_MINUTE         = getNameSpace() + "getNearCloseBuyMinute";
-    public final String SQL_INSERT_STOCK_MINUTE                = getNameSpace() + "insertStockMinute";
+    private final String SQL_GET_HISTORY_STOCK_MINUTE           = getNameSpace() + "getHistoryMinutes";
+    private final String SQL_GET_REALTIME_STOCK_MINUTE          = getNameSpace() + "getRealtimeMinutes";
+    public final String  SQL_GET_STOCK_MINUTES                  = getNameSpace() + "getStockMinutes";
+    public final String  SQL_GET_STOCK_MINUTE                   = getNameSpace() + "getStockMinute";
+    public final String  SQL_GET_HISTORY_STOCK_CLOSE_BUY_MINUTE = getNameSpace() + "getHistoryNearCloseBuyMinute";
+    public final String  SQL_GET_STOCK_CLOSE_BUY_MINUTE         = getNameSpace() + "getNearCloseBuyMinute";
+    public final String  SQL_INSERT_STOCK_MINUTE                = getNameSpace() + "insertStockMinute";
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Integer saveStockMinutes(List<StockMinute> stockMinutes) {
-        if (!stockMinutes.isEmpty()) {
-            return getSqlSession().insert(SQL_INSERT_STOCK_MINUTE, stockMinutes);
+        Integer result = 0;
+        for (StockMinute stockMinute : stockMinutes) {
+            StockMinute existMinute = getStockMinute(stockMinute.getStockCode(), stockMinute.getDate(), stockMinute.getHour(), stockMinute.getMinute());
+            if (existMinute == null) {
+                result = result + getSqlSession().insert(SQL_INSERT_STOCK_MINUTE, stockMinute);
+            }
         }
-        return 0;
+        return result;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Integer saveStockMinute(StockMinute stockMinute) {
+        List<StockMinute> stockMinutes = new ArrayList<StockMinute>();
+        stockMinutes.add(stockMinute);
+        return saveStockMinutes(stockMinutes);
+    }
+
     public List<StockMinute> getStockMinutes(String stockCode, Date date) {
         Map<String, Object> paras = new HashMap<String, Object>();
         paras.put("stockCode", stockCode);
@@ -59,7 +68,7 @@ public class StockMinuteDao extends BaseDao<StockMinute> implements IStockMinute
         return getSqlSession().selectOne(SQL_GET_HISTORY_STOCK_CLOSE_BUY_MINUTE, paras);
     }
 
-    public StockMinute getNearCloseBuyMinute(String stockCode, Date date, Integer hour, Integer minute) {
+    public StockMinute getRealtimeNearCloseBuyMinute(String stockCode, Date date, Integer hour, Integer minute) {
         Map<String, Object> paras = new HashMap<String, Object>();
         paras.put("stockCode", stockCode);
         paras.put("date", date);
@@ -75,6 +84,20 @@ public class StockMinuteDao extends BaseDao<StockMinute> implements IStockMinute
         paras.put("hour", hour);
         paras.put("minute", minute);
         return getSqlSession().selectOne(SQL_GET_STOCK_MINUTE, paras);
+    }
+
+    public List<StockMinute> getHistoryMinutes(String stockCode, Date date) {
+        Map<String, Object> paras = new HashMap<String, Object>();
+        paras.put("stockCode", stockCode);
+        paras.put("date", date);
+        return getSqlSession().selectList(SQL_GET_HISTORY_STOCK_MINUTE, paras);
+    }
+
+    public List<StockMinute> getRealtimeMinutes(String stockCode, Date date) {
+        Map<String, Object> paras = new HashMap<String, Object>();
+        paras.put("stockCode", stockCode);
+        paras.put("date", date);
+        return getSqlSession().selectList(SQL_GET_REALTIME_STOCK_MINUTE, paras);
     }
 
 }

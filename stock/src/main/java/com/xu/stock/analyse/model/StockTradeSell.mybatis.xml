@@ -31,12 +31,6 @@
 		WHERE stock_code=#{stockCode} and strategy=#{strategy} and parameters=#{parameters} ;
 	</select>
 	
-	<select id="getBoughtStockTradeSells" resultMap="StockTradeSell">
-		SELECT trade_id,<include refid="columns" />
-		fROM t_stock_trade_sell
-		WHERE stock_code=#{stockCode} and strategy=#{strategy} and parameters=#{parameters} and status='BOUGHT';
-	</select>
-
 	<insert id="insertStockTradeSell" flushCache="true" useGeneratedKeys="true" keyProperty="tradeId">
 		INSERT INTO t_stock_trade_sell (<include refid="columns" />)
 		VALUES (

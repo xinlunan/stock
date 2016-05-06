@@ -45,7 +45,8 @@ public class StockWatchBeginService implements IStockWatchBeginService {
     @Resource
     private IStockWatchBeginDao    stockWatchBeginDao;
 
-    public List<StockWatchBegin> analyseBatchBeginByHighest(List<StockDaily> dailys, List<StockHighest> highestPoints, String parameters, BigDecimal thisFallRate, BigDecimal warnRateLow, BigDecimal buyRateLow, BigDecimal buyRateHigh) {
+    public void analyseBatchBeginByHighest(List<StockDaily> dailys, String parameters, BigDecimal thisFallRate, BigDecimal warnRateLow, BigDecimal buyRateLow, BigDecimal buyRateHigh) {
+        List<StockHighest> highestPoints = stockHighestDao.getHighests(dailys.get(0).getStockCode(), parameters);
         for (StockHighest highest : highestPoints) {
             if (HighestAnalyseStatus.ANALYZING.equals(highest.getAnalyseStatus())) {
                 Integer index = StockAnalyseUtil.dailyIndex(dailys, highest.getAnalyseDate());
@@ -92,8 +93,6 @@ public class StockWatchBeginService implements IStockWatchBeginService {
                 stockHighestDao.updateHighestAnalyse(highest);
             }
         }
-
-        return stockWatchBeginDao.getUnAnalyseWatchBegins(StrategyType.HIGHEST_PROBE_BUY, parameters, dailys.get(0).getStockCode());
     }
 
     private StockWatchBegin buildWatchBegin(StockHighest highest, StockDaily thisDaliy, String parameters, BigDecimal buyLowExr, BigDecimal buyHighExr) {
@@ -115,21 +114,4 @@ public class StockWatchBeginService implements IStockWatchBeginService {
         log.info("watch begin\t" + highest.getStockCode() + "\t" + DateUtil.date2String(highest.getDate()) + "\t" + DateUtil.date2String(thisDaliy.getDate()));
         return watchBegin;
     }
-
-    // // 本次跌幅超设定幅度，与最高点相差比例介于设定的报警范围内，当前最高价小于历史最高价
-    // if (lowestCloseExr.compareTo(lowestExr) == 1 &&
-    // thisCloseExr.compareTo(warnLowExr) >= 0 &&
-    // thisCloseExr.compareTo(buyHighExr) <= 0 &&
-    // currentHighestExr.compareTo(highestCloseExr) <= 0) {
-    // StockDaily watchBegin = StockAnalyseUtil.buildNextStockDaily(thisDaliy);
-    // if (i + 1 < dailys.size()) {
-    // watchBegin = dailys.get(i + 1);
-    // }
-    // watchBegin.setMinutes(new ArrayList<StockMinute>());
-    // log.info("add daily\t" + highest.getStockCode() + "\t" +
-    // DateUtil.date2String(highest.getDate()) + "\t" +
-    // DateUtil.date2String(thisDaliy.getDate()));
-    // watchBegins.add(watchBegin);
-    // }
-
 }

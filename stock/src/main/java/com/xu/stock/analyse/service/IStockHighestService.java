@@ -3,7 +3,6 @@ package com.xu.stock.analyse.service;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.xu.stock.analyse.model.StockHighest;
 import com.xu.stock.data.model.StockDaily;
 
 /**
@@ -21,30 +20,13 @@ import com.xu.stock.data.model.StockDaily;
 public interface IStockHighestService {
 
     /**
-     * 保存历史高点
-     * 
-     * @param history
-     */
-    public void saveHighest(List<StockHighest> history);
-
-    /**
-     * 获取历史高点
-     * 
-     * @param stockCode
-     * @param parameters
-     * @return
-     */
-    public List<StockHighest> getHighests(String stockCode, String parameters);
-
-    /**
-     * 统计历史最高点 TODO Add comments here.
+     * 统计历史最高点
      * 
      * @param stockDailys
      * @param parameters
      * @param lastWaveCycle
      * @param thisWaveCycle
      * @param thisFallRate
-     * @return
      */
-    public List<StockHighest> analyseHighestPoints(List<StockDaily> stockDailys, String parameters, Integer lastWaveCycle, Integer thisWaveCycle, BigDecimal thisFallRate);
+    public void analyseHighestPoints(List<StockDaily> stockDailys, String parameters, Integer lastWaveCycle, Integer thisWaveCycle, BigDecimal thisFallRate);
 }

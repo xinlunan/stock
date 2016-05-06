@@ -25,9 +25,10 @@ import com.xu.stock.analyse.model.StockTradeBuy;
 @Repository("stockTradeBuyDao")
 public class StockTradeBuyDao extends BaseDao<StockTradeBuy> implements IStockTradeBuyDao {
 
-    public final String SQL_INSERT_STOCK_BUY      = getNameSpace() + "insertStockTradeBuy";
-    public final String SQL_GET_STOCK_BUYS        = getNameSpace() + "getStockTradeBuys";
-    public final String SQL_GET_BOUGHT_STOCK_BUYS = getNameSpace() + "getBoughtStockTradeBuys";
+    private final String SQL_UPDATE_STOCK_BUY      = getNameSpace() + "updateStatus";
+    public final String  SQL_INSERT_STOCK_BUY      = getNameSpace() + "insertStockTradeBuy";
+    public final String  SQL_GET_STOCK_BUYS        = getNameSpace() + "getStockTradeBuys";
+    public final String  SQL_GET_BOUGHT_STOCK_BUYS = getNameSpace() + "getBoughtStockTradeBuys";
 
     public Integer saveStockTradeBuys(List<StockTradeBuy> buys) {
         Integer result = 0;
@@ -37,16 +38,24 @@ public class StockTradeBuyDao extends BaseDao<StockTradeBuy> implements IStockTr
         return result;
     }
 
-    public List<StockTradeBuy> getStockTradeBuys(String stockCode, String parameters) {
+    public List<StockTradeBuy> getStockTradeBuys(String stockCode, String strategy, String parameters) {
         Map<String, Object> paras = new HashMap<String, Object>();
         paras.put("stockCode", stockCode);
+        paras.put("strategy", strategy);
         paras.put("parameters", parameters);
         return getSqlSession().selectList(SQL_GET_STOCK_BUYS, paras);
     }
 
-    public List<StockTradeBuy> getBoughtStockTradeBuys(String stockCode, String parameters) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<StockTradeBuy> getBoughtStockTradeBuys(String stockCode, String strategy, String parameters) {
+        Map<String, Object> paras = new HashMap<String, Object>();
+        paras.put("stockCode", stockCode);
+        paras.put("strategy", strategy);
+        paras.put("parameters", parameters);
+        return getSqlSession().selectList(SQL_GET_BOUGHT_STOCK_BUYS, paras);
+    }
+
+    public Integer updateStatus(StockTradeBuy buy) {
+        return getSqlSession().insert(SQL_UPDATE_STOCK_BUY, buy);
     }
 
 }
