@@ -66,7 +66,7 @@ public class SinaStockMinuteHistoryDownloador {
                 }
             }
         } else {
-            log.error("下载数据不成功" + result);
+            log.error("下载数据不成功\t" + stockDaily.getStockCode() + "\t" + DateUtil.date2String(stockDaily.getDate()) + "\t" + result);
         }
 
         return minutes;

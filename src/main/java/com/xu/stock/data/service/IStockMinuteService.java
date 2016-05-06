@@ -1,6 +1,5 @@
 package com.xu.stock.data.service;
 
-import java.util.Date;
 import java.util.List;
 
 import com.xu.stock.analyse.model.StockWatchBegin;
@@ -22,41 +21,43 @@ import com.xu.stock.data.model.StockMinute;
 public interface IStockMinuteService {
 
     /**
-     * 保存分时信息
-     * 
-     * @param stockMinutes
-     */
-    public void saveStockDailyMinutes(String stockCode, Date date, List<StockMinute> stockMinutes);
-
-    /**
      * 获取当日分时信息
      * 
      * @param daily
      * @return
      */
-    public List<StockMinute> getStockMinutes(StockDaily daily);
+    public List<StockMinute> fetchStockMinutes(StockDaily daily);
 
     /**
-     * 获取收盘前购买点,14:45
+     * 获取历史购买时刻的分时信息
      * 
      * @param stockDaily
      * @return
      */
-    public StockMinute fetchHistoryNearCloseBuyMinute(StockDaily stockDaily);
+    public StockMinute fetchHistoryBuyMinute(StockDaily stockDaily);
 
     /**
-     * 下载分时数据
-     * 
-     * @param daily
-     * @return
-     */
-    public List<StockMinute> downloadHistoryStockMinutes(StockDaily daily);
-
-    /**
-     * 获取分时数据
+     * 获取实时购买时刻的分时信息
      * 
      * @param watchBegin
      * @return
      */
-    public StockMinute fetchRealNearCloseBuyMinute(StockWatchBegin watchBegin);
+    public StockMinute fetchRealtimeBuyMinute(StockWatchBegin watchBegin);
+
+    /**
+     * 获取历史分时信息
+     * 
+     * @param daily
+     * @return
+     */
+    public List<StockMinute> fetchHistoryMinutes(StockDaily daily);
+
+    /**
+     * 获取实时分时信息
+     * 
+     * @param watchBegin
+     * @return
+     */
+    public List<StockMinute> fetchRealtimeMinute(StockDaily watchBegin);
+
 }

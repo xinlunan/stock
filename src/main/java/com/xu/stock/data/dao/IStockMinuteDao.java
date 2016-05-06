@@ -38,6 +38,13 @@ public interface IStockMinuteDao {
 	public Integer saveStockMinutes(List<StockMinute> stockMinutes);
 
     /**
+     * 保存股票指数
+     * 
+     * @param stockMinute
+     */
+    public Integer saveStockMinute(StockMinute stockMinute);
+
+    /**
      * 获取收盘前的购买点
      * 
      * @param stockCode
@@ -57,7 +64,7 @@ public interface IStockMinuteDao {
      * @param minute
      * @return
      */
-    public StockMinute getNearCloseBuyMinute(String stockCode, Date date, Integer hour, Integer minute);
+    public StockMinute getRealtimeNearCloseBuyMinute(String stockCode, Date date, Integer hour, Integer minute);
 
     /**
      * 获取分时信息
@@ -69,5 +76,9 @@ public interface IStockMinuteDao {
      * @return
      */
     public StockMinute getStockMinute(String stockCode, Date date, Integer hour, Integer minute);
+
+    public List<StockMinute> getHistoryMinutes(String stockCode, Date date);
+
+    public List<StockMinute> getRealtimeMinutes(String stockCode, Date date);
 
 }

@@ -34,21 +34,14 @@ import com.xu.util.DateUtil;
 @SuppressWarnings("restriction")
 @Service("stockHighestService")
 public class StockHighestService implements IStockHighestService {
-    protected Logger                log    = LoggerFactory.getLogger(this.getClass());
+
+    protected Logger         log = LoggerFactory.getLogger(this.getClass());
 
     @Resource
     private IStockHighestDao stockHighestDao;
 
-    public void saveHighest(List<StockHighest> history) {
-        stockHighestDao.saveHighest(history);
-    }
-
-    public List<StockHighest> getHighests(String stockCode, String parameters) {
-        return stockHighestDao.getHighests(stockCode, parameters);
-    }
-
-    public List<StockHighest> analyseHighestPoints(List<StockDaily> stockDailys, String parameters, Integer lastWaveCycle, Integer thisWaveCycle, BigDecimal thisFallRate) {
-        List<StockHighest> highests = getHighests(stockDailys.get(1).getStockCode(), parameters);
+    public void analyseHighestPoints(List<StockDaily> stockDailys, String parameters, Integer lastWaveCycle, Integer thisWaveCycle, BigDecimal thisFallRate) {
+        List<StockHighest> highests = stockHighestDao.getHighests(stockDailys.get(0).getStockCode(), parameters);
 
         List<StockHighest> newHighests = new ArrayList<StockHighest>();
         int beginIndex = highestPointBeginIndex(stockDailys, highests, thisWaveCycle);
@@ -78,10 +71,7 @@ public class StockHighestService implements IStockHighestService {
 
             }
         }
-        saveHighest(newHighests);
-        highests.addAll(newHighests);
-
-        return highests;
+        stockHighestDao.saveHighest(newHighests);
     }
 
     /**

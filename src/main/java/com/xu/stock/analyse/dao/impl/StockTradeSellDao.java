@@ -1,5 +1,6 @@
 package com.xu.stock.analyse.dao.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,16 +38,18 @@ public class StockTradeSellDao extends BaseDao<StockTradeSell> implements IStock
         return result;
     }
 
-    public List<StockTradeSell> getStockTradeSells(String stockCode, String parameters) {
+    public List<StockTradeSell> getStockTradeSells(String stockCode, String strategy, String parameters) {
         Map<String, Object> paras = new HashMap<String, Object>();
         paras.put("stockCode", stockCode);
+        paras.put("strategy", strategy);
         paras.put("parameters", parameters);
         return getSqlSession().selectList(SQL_GET_STOCK_SELLS, paras);
     }
 
-    public List<StockTradeSell> getBoughtStockTradeSells(String stockCode, String parameters) {
-        // TODO Auto-generated method stub
-        return null;
+    public Integer saveTradeSell(StockTradeSell sellTrade) {
+        List<StockTradeSell> sells = new ArrayList<StockTradeSell>();
+        sells.add(sellTrade);
+        return saveStockTradeSells(sells);
     }
 
 }

@@ -63,7 +63,7 @@ public class HighestProbeSellAnalyseService extends BaseStockAnalyseService {
         for (StockTrade buy : buys) {
             StockDaily stockDaily = StockAnalyseUtil.getSellDaily(dailys, buy.getBuyDate(), holdDay);
             Boolean canSell = false;
-            List<StockMinute> minutes = stockMinuteService.getStockMinutes(stockDaily);
+            List<StockMinute> minutes = stockMinuteService.fetchStockMinutes(stockDaily);
             if (minutes.size() > 0) {
                 for (int i = 0; i < minutes.size(); i++) {
                     StockMinute stockMinute = minutes.get(i);

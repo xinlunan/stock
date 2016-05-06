@@ -43,7 +43,7 @@ public class HttpClientHandle {
         String result = null;
         int retry = 3;
         for (int i = 0; i == 0 || i < retry; i++) {
-            log.debug("http get url: " + url);
+            log.info(url);
             CloseableHttpClient httpClient = HttpClients.createDefault();
             try {
                 HttpGet httpGet = new HttpGet(url);
@@ -60,6 +60,7 @@ public class HttpClientHandle {
                         result = EntityUtils.toString(entity, charset);
                         log.debug("http get completed,result resolved. url: " + url);
                         log.debug(result);
+                        return result;
                     }
                 } finally {
                     response.close();
@@ -104,6 +105,7 @@ public class HttpClientHandle {
         String result = null;
         int retry = 3;
         for (int i = 0; i == 0 || i < retry; i++) {
+            log.info(url);
             // 创建默认的httpClient实例.
             CloseableHttpClient httpclient = HttpClients.createDefault();
             try {
@@ -120,6 +122,7 @@ public class HttpClientHandle {
                     if (entity != null) {
                         result = EntityUtils.toString(entity);
                         log.debug("http get result: " + result);
+                        return result;
                     }
                 } finally {
                     response.close();
@@ -155,7 +158,7 @@ public class HttpClientHandle {
     public static boolean download(String url, String path) {
         int retry = 3;
         for (int i = 0; i == 0 || i < retry; i++) {
-            log.debug("http download url: " + url);
+            log.info(url);
             // 创建默认的httpClient实例.
             CloseableHttpClient httpclient = HttpClients.createDefault();
             try {
@@ -189,6 +192,7 @@ public class HttpClientHandle {
                         bw = new FileOutputStream(path);
                         bw.write(result);
                         bw.flush();
+                        return true;
                     } finally {
                         try {
                             if (bw != null) {

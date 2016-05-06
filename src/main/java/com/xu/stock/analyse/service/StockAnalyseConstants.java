@@ -56,6 +56,12 @@ public interface StockAnalyseConstants {
         public static final String CLOSE = "CLOSE";
     }
 
+    public interface StockTradeSellAnalyseType {
+
+        public static final String REALTIME = "REALTIME";
+        public static final String CLOSE    = "CLOSE";
+    }
+
     public interface HighestProbeBuyArgs {
 
         public static final String D1_LAST_WAVE_CYCLE = "d1";

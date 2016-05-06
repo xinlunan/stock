@@ -29,6 +29,7 @@ public class StockAnalyseWorker extends Thread {
                     List<StockDaily> dailys = stockDailyDao.getRrightStockDailys(stock.getStockCode());
                     if (!dailys.isEmpty()) {
                         stockAnalyseService.analyse(dailys);
+                        break;
                     }
 
                 } catch (Exception e) {
