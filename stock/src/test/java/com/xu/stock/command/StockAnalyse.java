@@ -29,7 +29,7 @@ import com.xu.test.BaseTestCase;
 @SuppressWarnings("restriction")
 public class StockAnalyse extends BaseTestCase {
 
-    public static final int                   NUM_THREADS = 1;
+    public static final int                   NUM_THREADS = 10;
 
     @Resource
     private StockDailyController              stockDailyController;

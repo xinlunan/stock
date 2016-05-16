@@ -44,14 +44,18 @@ public class StockMinuteService implements IStockMinuteService {
     @Resource
     private IStockMinuteDao stockMinuteDao;
 
-    public StockMinute fetchHistoryBuyMinute(StockDaily daily) {
+    public StockMinute fetchHistoryNearCloseBuyMinute(StockDaily daily) {
+        boolean isFirstNearClose = false;
         StockMinute existStockMinute = stockMinuteDao.getHistoryNearCloseBuyMinute(daily.getStockCode(), daily.getDate(), StockTradeBuyTime.HOUR, StockTradeBuyTime.MINUTE);
         if (existStockMinute == null) {
             List<StockMinute> stockMinutes = SinaStockMinuteHistoryDownloador.download(daily);
             for (StockMinute stockMinute : stockMinutes) {
                 if (stockMinute.getHour() >= StockTradeBuyTime.HOUR && stockMinute.getMinute() >= StockTradeBuyTime.MINUTE) {
                     stockMinuteDao.saveStockMinute(stockMinute);
-                    return stockMinute;
+                    if (!isFirstNearClose) {
+                        existStockMinute = stockMinute;
+                        isFirstNearClose = true;
+                    }
                 }
             }
         }
@@ -60,16 +64,18 @@ public class StockMinuteService implements IStockMinuteService {
 
     public StockMinute fetchRealtimeBuyMinute(StockWatchBegin watchBegin) {
         StockMinute stockMinute = SinaStockMinuteRealtimeDownloador.download(watchBegin.getStockCode(), watchBegin.getClose(), watchBegin.getExrights());
-        StockMinute existMinute = stockMinuteDao.getStockMinute(stockMinute.getStockCode(), stockMinute.getDate(), stockMinute.getHour(), stockMinute.getMinute());
-        if (existMinute == null) {
-            stockMinuteDao.saveStockMinute(stockMinute);
+        if (stockMinute != null) {
+            StockMinute existMinute = stockMinuteDao.getStockMinute(stockMinute.getStockCode(), stockMinute.getDate(), stockMinute.getHour(), stockMinute.getMinute());
+            if (existMinute == null) {
+                stockMinuteDao.saveStockMinute(stockMinute);
+            }
         }
         return stockMinuteDao.getRealtimeNearCloseBuyMinute(watchBegin.getStockCode(), watchBegin.getDate(), StockTradeBuyTime.HOUR, StockTradeBuyTime.MINUTE);
     }
 
     public List<StockMinute> fetchHistoryMinutes(StockDaily daily) {
         List<StockMinute> stockMinutes = stockMinuteDao.getHistoryMinutes(daily.getStockCode(), daily.getDate());
-        if (stockMinutes == null || stockMinutes.size() < 10) {
+        if (stockMinutes == null || stockMinutes.size() < 20) {
             stockMinutes = SinaStockMinuteHistoryDownloador.download(daily);
             stockMinuteDao.saveStockMinutes(stockMinutes);
         }

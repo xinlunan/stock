@@ -34,7 +34,7 @@ public interface IStockMinuteService {
      * @param stockDaily
      * @return
      */
-    public StockMinute fetchHistoryBuyMinute(StockDaily stockDaily);
+    public StockMinute fetchHistoryNearCloseBuyMinute(StockDaily stockDaily);
 
     /**
      * 获取实时购买时刻的分时信息

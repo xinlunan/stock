@@ -100,8 +100,8 @@ public class StockAnalyseUtil {
         return false;
     }
 
-    public static Boolean isLimitUp(BigDecimal close, BigDecimal closeGapRate, BigDecimal low) {
-        if (close.compareTo(low) != 0) {
+    public static Boolean isLimitUp(BigDecimal close, BigDecimal closeGapRate, BigDecimal high) {
+        if (close.compareTo(high) == -1) {
             return false;
         }
 
@@ -112,8 +112,8 @@ public class StockAnalyseUtil {
         return false;
     }
 
-    public static Boolean isLimitDown(BigDecimal close, BigDecimal closeGapRate, BigDecimal high) {
-        if (close.compareTo(high) != 0) {
+    public static Boolean isLimitDown(BigDecimal close, BigDecimal closeGapRate, BigDecimal low) {
+        if (close.compareTo(low) == 1) {
             return false;
         }
         if (closeGapRate.compareTo(BigDecimal.valueOf(Double.valueOf(-9.8))) < 0 || (closeGapRate.compareTo(BigDecimal.valueOf(Double.valueOf(-4.9))) < 0 && closeGapRate.compareTo(BigDecimal.valueOf(Double.valueOf(-5.1))) > 0)) {
