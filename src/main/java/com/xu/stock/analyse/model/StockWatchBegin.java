@@ -45,6 +45,8 @@ public class StockWatchBegin implements Serializable {
     private BigDecimal        buyRefLowExr;
     // 购买区间最高值
     private BigDecimal        buyRefHighExr;
+    // 购买区间当天最高值
+    private BigDecimal        BuyRefCloseExr;
     // 分析状态：TRADED,UNTRADED,ANALYZING
     private String            analyseStatus;
     // 创建日期
@@ -156,6 +158,14 @@ public class StockWatchBegin implements Serializable {
         this.buyRefHighExr = buyRefHighExr;
     }
 
+    public BigDecimal getBuyRefCloseExr() {
+        return BuyRefCloseExr;
+    }
+
+    public void setBuyRefCloseExr(BigDecimal buyRefCloseExr) {
+        BuyRefCloseExr = buyRefCloseExr;
+    }
+
     public String getAnalyseStatus() {
         return analyseStatus;
     }
@@ -187,8 +197,8 @@ public class StockWatchBegin implements Serializable {
     @Override
     public String toString() {
         return "StockWatchBegin [watchBeginId=" + watchBeginId + ", stockCode=" + stockCode + ", stockName=" + stockName + ", strategy=" + strategy + ", parameters=" + parameters + ", refDate=" + refDate + ", refClose=" + refClose
-               + ", refExrights=" + refExrights + ", lastDate=" + date + ", lastClose=" + close + ", lastExrights=" + exrights + ", buyRefLowExr=" + buyRefLowExr + ", buyRefHighExr=" + buyRefHighExr + ", analyseStatus="
-               + analyseStatus + ", created=" + created + ", updated=" + updated + "]";
+               + ", refExrights=" + refExrights + ", date=" + date + ", close=" + close + ", exrights=" + exrights + ", buyRefLowExr=" + buyRefLowExr + ", buyRefHighExr=" + buyRefHighExr + ", BuyRefCloseExr=" + BuyRefCloseExr
+               + ", analyseStatus=" + analyseStatus + ", created=" + created + ", updated=" + updated + "]";
     }
 
 }

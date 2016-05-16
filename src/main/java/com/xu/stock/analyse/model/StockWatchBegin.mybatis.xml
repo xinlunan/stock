@@ -16,13 +16,14 @@
 		<id property="exrights" column="exrights"></id>
 		<id property="buyRefLowExr" column="buy_ref_low_exr"></id>
 		<id property="buyRefHighExr" column="buy_ref_high_exr"></id>
+		<id property="buyRefCloseExr" column="buy_ref_close_exr"></id>
 		<id property="analyseStatus" column="analyse_status"></id>
 		<id property="created" column="created"></id>
 		<id property="updated" column="updated"></id>
 	</resultMap>
 	
 	<sql id="columns">
-		stock_code,stock_name,strategy,parameters,ref_date,ref_close,ref_exrights,date,close,exrights,buy_ref_low_exr,buy_ref_high_exr,analyse_status,created,updated
+		stock_code,stock_name,strategy,parameters,ref_date,ref_close,ref_exrights,date,close,exrights,buy_ref_low_exr,buy_ref_high_exr,buy_ref_close_exr,analyse_status,created,updated
 	</sql>
 
 	<select id="getWatchBegins" resultMap="StockWatchBegin">
@@ -40,7 +41,7 @@
 	<insert id="insertWatchBegin" flushCache="true" useGeneratedKeys="true" keyProperty="watchBeginId">
 		INSERT INTO t_stock_watch_begin (<include refid="columns" />)
 		VALUES (
-			#{stockCode}, #{stockName}, #{strategy},#{parameters}, #{refDate}, #{refClose}, #{refExrights}, #{date},#{close},#{exrights},#{buyRefLowExr},#{buyRefHighExr},#{analyseStatus},sysdate(),sysdate()
+			#{stockCode}, #{stockName}, #{strategy},#{parameters}, #{refDate}, #{refClose}, #{refExrights}, #{date},#{close},#{exrights},#{buyRefLowExr},#{buyRefHighExr},#{buyRefCloseExr},#{analyseStatus},sysdate(),sysdate()
 		);
 	</insert>
 	

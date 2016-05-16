@@ -157,8 +157,8 @@ public class StockMinute implements Serializable {
 
     @Override
     public String toString() {
-        return "StockMinute [minuteId=" + minuteId + ", stockCode=" + stockCode + ", date=" + date + ", hour=" + hour + ", minute=" + minute + ", price=" + price + ", exrights=" + exrights + ", volume=" + volume + ", amount=" + amount
-               + ", created=" + created + ", updated=" + updated + ", stockDaily=" + stockDaily + "]";
+        return "StockMinute [minuteId=" + minuteId + ", stockCode=" + stockCode + ", date=" + date + ", hour=" + hour + ", minute=" + minute + ", price=" + price + ", high=" + high + ", exrights=" + exrights + ", volume=" + volume
+               + ", amount=" + amount + ", created=" + created + ", updated=" + updated + ", stockDaily=" + stockDaily + "]";
     }
 
 }

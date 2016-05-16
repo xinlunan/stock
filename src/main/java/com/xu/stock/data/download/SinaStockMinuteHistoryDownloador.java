@@ -62,6 +62,9 @@ public class SinaStockMinuteHistoryDownloador {
                 String[] infos = tradeStr[i].split("\t");
                 if (!updateStockMinute(infos, minutes)) {
                     StockMinute minuteInfo = newStockMinute(infos, stockDaily, high);
+                    if (minuteInfo.getHigh().doubleValue() > high) {
+                        high = minuteInfo.getHigh().doubleValue();
+                    }
                     minutes.add(minuteInfo);
                 }
             }

@@ -57,7 +57,7 @@ public class StockWatchBeginService implements IStockWatchBeginService {
                 BigDecimal buyLowExr = highestCloseExr.subtract(highestCloseExr.multiply(buyRateLow).divide(BD_100, 2, BigDecimal.ROUND_HALF_UP));
                 BigDecimal buyHighExr = highestCloseExr.subtract(highestCloseExr.multiply(buyRateHigh).divide(BD_100, 2, BigDecimal.ROUND_HALF_UP));
                 BigDecimal lowestExr = BigDecimal.valueOf(Integer.MAX_VALUE);
-
+                highestCloseExr = highestCloseExr.compareTo(buyHighExr) == 1 ? highestCloseExr : buyHighExr;
                 List<StockWatchBegin> watchBegins = new ArrayList<StockWatchBegin>();
                 for (int i = index + 1; i < dailys.size(); i++) {// 从指定点开始遍历
                     StockDaily thisDaliy = dailys.get(i);
@@ -72,7 +72,6 @@ public class StockWatchBeginService implements IStockWatchBeginService {
                     if (thisCloseExr.compareTo(lowestExr) == -1) {
                         lowestExr = thisDaliy.getClose().multiply(thisDaliy.getExrights());
                     }
-
                     // 当前价高于设定范围
                     if (thisCloseExr.compareTo(buyHighExr) == 1) {
                         if (highest.getWatchBegins().isEmpty() && watchBegins.isEmpty()) {
@@ -83,11 +82,38 @@ public class StockWatchBeginService implements IStockWatchBeginService {
                         break;
                     }
 
-                    // 本次跌幅超设定幅度，与最高点相差比例介于设定的报警范围内，当前最高价小于历史最高价
-                    if (lowestCloseExr.compareTo(lowestExr) == 1 && thisCloseExr.compareTo(warnLowExr) >= 0 && thisCloseExr.compareTo(buyHighExr) <= 0 && currentHighestExr.compareTo(highestCloseExr) <= 0) {
-                        StockWatchBegin watchBegin = buildWatchBegin(highest, thisDaliy, parameters, buyLowExr, buyHighExr);
-                        watchBegins.add(watchBegin);
+                    // 本次跌幅超设定幅度，大于最低预警值
+                    if (lowestCloseExr.compareTo(lowestExr) >= 0 && thisCloseExr.compareTo(warnLowExr) >= 0) {
+                        if (thisCloseExr.compareTo(buyLowExr) >= 0 && thisCloseExr.compareTo(buyHighExr) <= 0 && currentHighestExr.compareTo(highestCloseExr) <= 0) {
+                            // 当天是最佳时机，后面跳过
+                            break;
+                        } else if (thisCloseExr.compareTo(buyHighExr) <= 0) {
+                            StockWatchBegin watchBegin = buildWatchBegin(highest, thisDaliy, parameters, buyLowExr, buyHighExr, highestCloseExr);
+                            watchBegins.add(watchBegin);
+                        }
                     }
+
+                    // // 过滤昨天已成交
+                    // StockDaily lastDaliy = dailys.get(i - 1);
+                    // BigDecimal lastCloseExr =
+                    // lastDaliy.getClose().multiply(lastDaliy.getExrights());
+                    // BigDecimal lastHighExr =
+                    // lastDaliy.getHigh().multiply(lastDaliy.getExrights());
+                    // if (lastCloseExr.compareTo(buyLowExr) == 1 &&
+                    // lastCloseExr.compareTo(buyHighExr) == -1 &&
+                    // lastHighExr.compareTo(highestCloseExr) <= 0) {
+                    // break;
+                    // }
+                    //
+                    // // 本次跌幅超设定幅度，与最高点相差比例介于设定的报警范围内，当前最高价小于历史最高价
+                    // if (lowestCloseExr.compareTo(lowestExr) == 1 &&
+                    // thisCloseExr.compareTo(warnLowExr) >= 0 &&
+                    // thisCloseExr.compareTo(buyHighExr) <= 0 &&
+                    // currentHighestExr.compareTo(highestCloseExr) <= 0) {
+                    // StockWatchBegin watchBegin = buildWatchBegin(highest,
+                    // thisDaliy, parameters, buyLowExr, buyHighExr);
+                    // watchBegins.add(watchBegin);
+                    // }
                 }
                 stockWatchBeginDao.saveWatchBegins(watchBegins);
                 stockHighestDao.updateHighestAnalyse(highest);
@@ -95,7 +121,7 @@ public class StockWatchBeginService implements IStockWatchBeginService {
         }
     }
 
-    private StockWatchBegin buildWatchBegin(StockHighest highest, StockDaily thisDaliy, String parameters, BigDecimal buyLowExr, BigDecimal buyHighExr) {
+    private StockWatchBegin buildWatchBegin(StockHighest highest, StockDaily thisDaliy, String parameters, BigDecimal buyLowExr, BigDecimal buyHighExr, BigDecimal highestCloseExr) {
         StockWatchBegin watchBegin = new StockWatchBegin();
         watchBegin.setStockCode(highest.getStockCode());
         watchBegin.setStockName(highest.getStockName());
@@ -109,6 +135,7 @@ public class StockWatchBeginService implements IStockWatchBeginService {
         watchBegin.setExrights(thisDaliy.getExrights());
         watchBegin.setBuyRefLowExr(buyLowExr);
         watchBegin.setBuyRefHighExr(buyHighExr);
+        watchBegin.setBuyRefCloseExr(highestCloseExr);
         watchBegin.setAnalyseStatus(WatchBeginStatus.ANALYZING);
 
         log.info("watch begin\t" + highest.getStockCode() + "\t" + DateUtil.date2String(highest.getDate()) + "\t" + DateUtil.date2String(thisDaliy.getDate()));
