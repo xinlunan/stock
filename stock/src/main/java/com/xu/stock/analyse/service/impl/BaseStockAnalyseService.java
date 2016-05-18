@@ -33,7 +33,9 @@ import com.xu.stock.data.model.StockDaily;
 public abstract class BaseStockAnalyseService implements IStockAnalyseService {
 	protected Logger log = LoggerFactory.getLogger(this.getClass());
 
-	public static final BigDecimal BD_100 = BigDecimal.valueOf(100);
+    public static final BigDecimal     BD_100 = BigDecimal.valueOf(100);
+    public static final BigDecimal     BD_10  = BigDecimal.valueOf(10);
+    public static final BigDecimal     BD_1   = BigDecimal.valueOf(1);
 	protected StockAnalyseStrategy strategy;
 
 	@Resource

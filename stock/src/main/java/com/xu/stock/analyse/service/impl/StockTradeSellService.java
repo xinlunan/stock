@@ -112,6 +112,7 @@ public class StockTradeSellService implements IStockTradeSellService {
     }
 
     private StockMinute analyseSellMinute(List<StockDaily> dailys, List<StockMinute> minutes, StockTradeBuy buy, int holdDay, int stopLossRate, int expectRateInt) {
+        StockMinute result = null; 
         if (!minutes.isEmpty()) {
             BigDecimal expectRate = BigDecimal.valueOf(expectRateInt).divide(BD_100).setScale(4, BigDecimal.ROUND_HALF_UP);// 期望收益
             BigDecimal thisStopLoss_100 = BigDecimal.valueOf(stopLossRate).divide(BD_100).setScale(4, BigDecimal.ROUND_HALF_UP);
@@ -125,12 +126,12 @@ public class StockTradeSellService implements IStockTradeSellService {
                 Boolean isNearClose = (stockMinute.getHour() >= StockSellTime.HOUR && stockMinute.getMinute() >= StockSellTime.MINUTE);
 
                 if (isStopLoss || isExpectSell || isNearClose) {// 止跌、达到预期、到了接近收盘时间
-                    return stockMinute;
+                    result = stockMinute;
                 }
             }
             log.error("到收盘都没生成卖出交易 ");
-            throw new RuntimeException("到收盘都没生成卖出交易 ");
-        } else {
+        }
+        if (result == null) {
             log.info("没有分时信息\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()));
             if (StockAnalyseUtil.dailyIndex(dailys, buy.getDate()) < dailys.size() - holdDay) {// 历史日期，只是没获取到分时信息。以收盘价成交
                 StockDaily daily = dailys.get(StockAnalyseUtil.dailyIndex(dailys, buy.getDate()) + holdDay);
@@ -141,11 +142,10 @@ public class StockTradeSellService implements IStockTradeSellService {
                 stockMinute.setPrice(daily.getClose());
                 stockMinute.setHigh(daily.getHigh());
                 stockMinute.setExrights(daily.getExrights());
-                return stockMinute;
-            } else {
-                return null;
+                result = stockMinute;
             }
         }
+        return result;
     }
 
     /**

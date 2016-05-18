@@ -38,7 +38,7 @@ public class SinaStockMinuteRealtimeDownloador {
         if (result.length() > 30) {
             String[] infos = result.split(",");
             String[] times = infos[31].split(":");
-            if (!infos[1].equals("0.00")) {// 表示停排
+            if (!infos[1].startsWith("0.00")) {// 表示停排
                 BigDecimal newClose = BigDecimal.valueOf(Double.valueOf(infos[2]));
                 BigDecimal exrights = lastExrights.multiply(lastClose).divide(newClose, 4, BigDecimal.ROUND_HALF_UP);
 

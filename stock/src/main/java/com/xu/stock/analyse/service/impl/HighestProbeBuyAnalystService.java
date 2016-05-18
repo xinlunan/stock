@@ -71,20 +71,32 @@ public class HighestProbeBuyAnalystService extends BaseStockAnalyseService {
     }
 
     @Override
+    @SuppressWarnings("hiding")
     public List<StockTrade> doAnalyse(List<StockDaily> dailys) {
         log.info("analyse stock code:" + dailys.get(0).getStockCode());
+        for (int i = 30; i < 50; i++) {
+            BigDecimal buyRateHigh = BigDecimal.valueOf(0 - i);
+            BigDecimal high = BD_100.subtract(buyRateHigh);
+            if (i > 0) {
+                high = BD_100.multiply(BigDecimal.valueOf(1.01).pow(i)).setScale(0, BigDecimal.ROUND_HALF_UP);
+                buyRateHigh = BD_100.subtract(high);
+            }
+            BigDecimal buyRateLow = BD_100.subtract(high.multiply(BD_100.subtract(BD_1)).divide(BD_100, 1, BigDecimal.ROUND_HALF_UP));
+            BigDecimal warnRateLow = BD_100.subtract(high.multiply(BD_100.subtract(BD_10)).divide(BD_100, 1, BigDecimal.ROUND_HALF_UP));
+            String parameters = lastWaveCycle + "," + thisWaveCycle + "," + thisFallRate + "," + warnRateLow + "," + buyRateLow + "," + buyRateHigh;
 
-        // 找出当前股票的历史最高点的日期
-        stockHighestService.analyseHighestPoints(dailys, parameters, lastWaveCycle, thisWaveCycle, thisFallRate);
+            // 找出当前股票的历史最高点的日期
+            stockHighestService.analyseHighestPoints(dailys, parameters, lastWaveCycle, thisWaveCycle, thisFallRate);
 
-        // 根据最高点找出可能试探突破的观察点
-        stockWatchBeginService.analyseBatchBeginByHighest(dailys, parameters, thisFallRate, warnRateLow, buyRateLow, buyRateHigh);
+            // 根据最高点找出可能试探突破的观察点
+            stockWatchBeginService.analyseBatchBeginByHighest(dailys, parameters, thisFallRate, warnRateLow, buyRateLow, buyRateHigh);
 
-        // 分析买入信息
-        stockTradeBuyService.analyseStockTradeBuy(dailys, parameters);
+            // 分析买入信息
+            stockTradeBuyService.analyseStockTradeBuy(dailys, parameters);
 
-        // 分析卖出信息
-        stockTradeSellService.analyseStockTradeSell(dailys, parameters);
+            // 分析卖出信息
+            stockTradeSellService.analyseStockTradeSell(dailys, parameters);
+        }
         return null;
     }
 
