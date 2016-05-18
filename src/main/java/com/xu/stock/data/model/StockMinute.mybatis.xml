@@ -10,12 +10,13 @@
 		<id property="minute" column="minute"></id>
 		<id property="price" column="price"></id>
 		<id property="high" column="high"></id>
+		<id property="low" column="low"></id>
 		<id property="exrights" column="exrights"></id>
 		<id property="created" column="created"></id>
 	</resultMap>
 	
 	<sql id="columns">
-		stock_code, date, hour, minute, price,high, exrights, created
+		stock_code, date, hour, minute, price,high,low, exrights, created
 	</sql>
 	
 	<select id="getStockMinutes" resultMap="StockMinute">
@@ -62,7 +63,7 @@
 	<insert id="insertStockMinute" flushCache="true" useGeneratedKeys="true" keyProperty="minuteId">
 		INSERT INTO t_stock_minute (<include refid="columns" />)
 		VALUES (
-			#{stockCode}, #{date}, #{hour}, #{minute}, #{price}, #{high}, #{exrights}, sysdate()
+			#{stockCode}, #{date}, #{hour}, #{minute}, #{price}, #{high},#{low}, #{exrights}, sysdate()
 		);
 	</insert>
 	

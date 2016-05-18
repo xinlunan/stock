@@ -49,6 +49,10 @@ public class StockWatchBeginService implements IStockWatchBeginService {
         List<StockHighest> highestPoints = stockHighestDao.getHighests(dailys.get(0).getStockCode(), parameters);
         for (StockHighest highest : highestPoints) {
             if (HighestAnalyseStatus.ANALYZING.equals(highest.getAnalyseStatus())) {
+                if ("300011".equals(highest.getStockCode()) && "2012-04-23".equals(DateUtil.date2String(highest.getDate()))) {
+
+                    log.info("");
+                }
                 Integer index = StockAnalyseUtil.dailyIndex(dailys, highest.getAnalyseDate());
                 StockDaily highestStockDaily = dailys.get(index);
                 BigDecimal highestCloseExr = highestStockDaily.getClose().multiply(highestStockDaily.getExrights());
@@ -92,28 +96,6 @@ public class StockWatchBeginService implements IStockWatchBeginService {
                             watchBegins.add(watchBegin);
                         }
                     }
-
-                    // // 过滤昨天已成交
-                    // StockDaily lastDaliy = dailys.get(i - 1);
-                    // BigDecimal lastCloseExr =
-                    // lastDaliy.getClose().multiply(lastDaliy.getExrights());
-                    // BigDecimal lastHighExr =
-                    // lastDaliy.getHigh().multiply(lastDaliy.getExrights());
-                    // if (lastCloseExr.compareTo(buyLowExr) == 1 &&
-                    // lastCloseExr.compareTo(buyHighExr) == -1 &&
-                    // lastHighExr.compareTo(highestCloseExr) <= 0) {
-                    // break;
-                    // }
-                    //
-                    // // 本次跌幅超设定幅度，与最高点相差比例介于设定的报警范围内，当前最高价小于历史最高价
-                    // if (lowestCloseExr.compareTo(lowestExr) == 1 &&
-                    // thisCloseExr.compareTo(warnLowExr) >= 0 &&
-                    // thisCloseExr.compareTo(buyHighExr) <= 0 &&
-                    // currentHighestExr.compareTo(highestCloseExr) <= 0) {
-                    // StockWatchBegin watchBegin = buildWatchBegin(highest,
-                    // thisDaliy, parameters, buyLowExr, buyHighExr);
-                    // watchBegins.add(watchBegin);
-                    // }
                 }
                 stockWatchBeginDao.saveWatchBegins(watchBegins);
                 stockHighestDao.updateHighestAnalyse(highest);

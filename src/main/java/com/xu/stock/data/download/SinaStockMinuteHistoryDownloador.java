@@ -58,14 +58,20 @@ public class SinaStockMinuteHistoryDownloador {
         if (result.startsWith("成交时间")) {
             String[] tradeStr = result.split("\n");
             Double high = Double.MIN_VALUE;
+            Double low = Double.MAX_VALUE;
             for (int i = tradeStr.length - 2; i > 0; i--) {
                 String[] infos = tradeStr[i].split("\t");
                 if (!updateStockMinute(infos, minutes)) {
-                    StockMinute minuteInfo = newStockMinute(infos, stockDaily, high);
-                    if (minuteInfo.getHigh().doubleValue() > high) {
-                        high = minuteInfo.getHigh().doubleValue();
+                    StockMinute minuteInfo = newStockMinute(infos, stockDaily, high, low);
+                    if (minuteInfo != null) {
+                        if (minuteInfo.getHigh().doubleValue() > high) {
+                            high = minuteInfo.getHigh().doubleValue();
+                        }
+                        if (minuteInfo.getLow().doubleValue() < low) {
+                            low = minuteInfo.getLow().doubleValue();
+                        }
+                        minutes.add(minuteInfo);
                     }
-                    minutes.add(minuteInfo);
                 }
             }
         } else {
@@ -93,8 +99,9 @@ public class SinaStockMinuteHistoryDownloador {
         return false;
     }
 
-    private static StockMinute newStockMinute(String[] tradeInfos, StockDaily stockDaily, Double high) {
+    private static StockMinute newStockMinute(String[] tradeInfos, StockDaily stockDaily, Double high, Double low) {
         if (tradeInfos[0].lastIndexOf(":") > 4) {
+
 
             Integer hour = Integer.valueOf(tradeInfos[0].substring(0, 2));
             Integer minute = Integer.valueOf(tradeInfos[0].substring(3, 5));
@@ -102,8 +109,15 @@ public class SinaStockMinuteHistoryDownloador {
             Double volume = Double.valueOf(tradeInfos[3]);
             Double amount = Double.valueOf(tradeInfos[4]) / 10000;
 
+            if (price == 1 && volume == 0 && amount == 0) {
+                return null;
+            }
+
             if (price > high) {
                 high = price;
+            }
+            if (price < low) {
+                low = price;
             }
 
             StockMinute stockMinute = new StockMinute();
@@ -113,6 +127,7 @@ public class SinaStockMinuteHistoryDownloador {
             stockMinute.setMinute(minute);
             stockMinute.setPrice(BigDecimal.valueOf(price));
             stockMinute.setHigh(BigDecimal.valueOf(high));
+            stockMinute.setLow(BigDecimal.valueOf(low));
             stockMinute.setVolume(volume);
             stockMinute.setAmount(amount);
             stockMinute.setExrights(stockDaily.getExrights());
