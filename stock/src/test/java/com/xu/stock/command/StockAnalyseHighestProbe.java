@@ -31,7 +31,7 @@ import com.xu.test.BaseTestCase;
 @SuppressWarnings("restriction")
 public class StockAnalyseHighestProbe extends BaseTestCase {
 
-    public static final int                  NUM_THREADS = 1;
+    public static final int                  NUM_THREADS = 10;
     @Resource
     private StockDailyController             stockDailyController;
     @Resource
@@ -46,6 +46,6 @@ public class StockAnalyseHighestProbe extends BaseTestCase {
 
     @Before
     public void download() {
-        // stockDailyController.downloadStockDaily(100);
+        stockDailyController.downloadStockDaily(50);
     }
 }

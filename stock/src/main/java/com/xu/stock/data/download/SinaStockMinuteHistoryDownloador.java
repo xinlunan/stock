@@ -105,7 +105,7 @@ public class SinaStockMinuteHistoryDownloador {
 
             Integer hour = Integer.valueOf(tradeInfos[0].substring(0, 2));
             Integer minute = Integer.valueOf(tradeInfos[0].substring(3, 5));
-            Double price = Double.valueOf(tradeInfos[1]);
+            Double price = Double.valueOf("".equals(tradeInfos[1]) ? "1" : tradeInfos[1]);
             Double volume = Double.valueOf(tradeInfos[3]);
             Double amount = Double.valueOf(tradeInfos[4]) / 10000;
 
