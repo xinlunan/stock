@@ -141,6 +141,7 @@ public class StockTradeSellService implements IStockTradeSellService {
                 stockMinute.setMinute(0);
                 stockMinute.setPrice(daily.getClose());
                 stockMinute.setHigh(daily.getHigh());
+                stockMinute.setLow(daily.getLow());
                 stockMinute.setExrights(daily.getExrights());
                 result = stockMinute;
             }

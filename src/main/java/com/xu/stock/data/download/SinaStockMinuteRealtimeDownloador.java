@@ -49,6 +49,7 @@ public class SinaStockMinuteRealtimeDownloador {
                 stockMinute.setMinute(Integer.valueOf(times[1]));
                 stockMinute.setPrice(BigDecimal.valueOf(Double.valueOf(infos[3])));
                 stockMinute.setHigh(BigDecimal.valueOf(Double.valueOf(infos[4])));
+                stockMinute.setLow(BigDecimal.valueOf(Double.valueOf(infos[5])));
                 stockMinute.setVolume(null);
                 stockMinute.setAmount(null);
                 stockMinute.setExrights(exrights);

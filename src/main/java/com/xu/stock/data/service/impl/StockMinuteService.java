@@ -64,7 +64,7 @@ public class StockMinuteService implements IStockMinuteService {
 
     public StockMinute fetchRealtimeBuyMinute(StockWatchBegin watchBegin) {
         StockMinute stockMinute = SinaStockMinuteRealtimeDownloador.download(watchBegin.getStockCode(), watchBegin.getClose(), watchBegin.getExrights());
-        if (stockMinute != null) {
+        if (stockMinute != null && DateUtil.date2String(stockMinute.getDate()).equals(DateUtil.date2String(new Date()))) {
             StockMinute existMinute = stockMinuteDao.getStockMinute(stockMinute.getStockCode(), stockMinute.getDate(), stockMinute.getHour(), stockMinute.getMinute());
             if (existMinute == null) {
                 stockMinuteDao.saveStockMinute(stockMinute);

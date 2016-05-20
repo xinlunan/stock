@@ -74,7 +74,7 @@ public class HighestProbeBuyAnalystService extends BaseStockAnalyseService {
     @SuppressWarnings("hiding")
     public List<StockTrade> doAnalyse(List<StockDaily> dailys) {
         log.info("analyse stock code:" + dailys.get(0).getStockCode());
-        for (int i = 30; i < 50; i++) {
+        for (int i = -3; i < 200; i++) {
             BigDecimal buyRateHigh = BigDecimal.valueOf(0 - i);
             BigDecimal high = BD_100.subtract(buyRateHigh);
             if (i > 0) {
