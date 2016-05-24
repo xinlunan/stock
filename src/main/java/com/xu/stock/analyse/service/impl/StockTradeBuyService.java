@@ -87,7 +87,7 @@ public class StockTradeBuyService implements IStockTradeBuyService {
             StockDaily nextDaily = dailys.get(dailyIndex + 1);
             stockMinute = stockMinuteService.fetchHistoryNearCloseBuyMinute(nextDaily);
             if (stockMinute == null) {
-                stockMinute = buildStockMinute(nextDaily);
+                stockMinute = StockAnalyseUtil.buildStockMinute(nextDaily);
             }
             if (stockMinute.getHigh().compareTo(stockMinute.getPrice()) == 0) {
                 BigDecimal thisPriceExr = stockMinute.getPrice().multiply(stockMinute.getExrights());
@@ -121,18 +121,6 @@ public class StockTradeBuyService implements IStockTradeBuyService {
         stockTradeBuy.setExrights(stockMinute.getExrights());
         stockTradeBuy.setAnalyseType(stockMinute.getHour() == 15 ? StockTradeBuyAnalyseType.CLOSE : StockTradeBuyAnalyseType.REALTIME);
         return stockTradeBuy;
-    }
-
-    private StockMinute buildStockMinute(StockDaily daily) {
-        StockMinute stockMinute = new StockMinute();
-        stockMinute.setDate(daily.getDate());
-        stockMinute.setHour(15);
-        stockMinute.setMinute(0);
-        stockMinute.setPrice(daily.getClose());
-        stockMinute.setHigh(daily.getHigh());
-        stockMinute.setLow(daily.getLow());
-        stockMinute.setExrights(daily.getExrights());
-        return stockMinute;
     }
 
 }
