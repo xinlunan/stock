@@ -12,12 +12,10 @@ import javax.annotation.Resource;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.xu.stock.analyse.controller.HighestProbeBuyAnalyseController;
 import com.xu.stock.data.controller.StockDailyController;
 import com.xu.test.BaseTestCase;
 
 /**
- * 股票初始化，将A股所有股票初始化到系统中。
  * 
  * @version Revision History
  * 
@@ -29,18 +27,18 @@ import com.xu.test.BaseTestCase;
  * @since 1.
  */
 @SuppressWarnings("restriction")
-public class StockAnalyseHighestProbe extends BaseTestCase {
+public class StockAnalyseHighestProbeFast extends BaseTestCase {
 
-    public static final int                  NUM_THREADS = 1;
+    public static final int                  NUM_THREADS = 10;
     @Resource
     private StockDailyController             stockDailyController;
     @Resource
-    private HighestProbeBuyAnalyseController highestProbeBuyAnalyseController;
+    private HighestProbeBuyAnalyseFastController highestProbeBuyAnalyseFastController;
 
     @Test
     public void highestProbeBuyAnalyse() {
         log.info("最高点试探分析购买开始...");
-        highestProbeBuyAnalyseController.analyse(NUM_THREADS);
+        highestProbeBuyAnalyseFastController.analyse(NUM_THREADS);
         log.info("最高点试探分析购买完成.");
     }
 

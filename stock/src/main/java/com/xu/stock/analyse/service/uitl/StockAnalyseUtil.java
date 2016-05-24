@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.xu.stock.analyse.model.StockWatchBegin;
 import com.xu.stock.data.model.StockDaily;
+import com.xu.stock.data.model.StockMinute;
 import com.xu.util.DateUtil;
 
 /**
@@ -255,5 +256,18 @@ public class StockAnalyseUtil {
             return compare > 0;
         }
         return false;
+    }
+
+    public static StockMinute buildStockMinute(StockDaily daily) {
+        StockMinute stockMinute = new StockMinute();
+        stockMinute.setStockCode(daily.getStockCode());
+        stockMinute.setDate(daily.getDate());
+        stockMinute.setHour(15);
+        stockMinute.setMinute(0);
+        stockMinute.setPrice(daily.getClose());
+        stockMinute.setHigh(daily.getHigh());
+        stockMinute.setLow(daily.getLow());
+        stockMinute.setExrights(daily.getExrights());
+        return stockMinute;
     }
 }

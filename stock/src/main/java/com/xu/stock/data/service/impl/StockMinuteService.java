@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.xu.stock.analyse.model.StockWatchBegin;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StockTradeBuyTime;
+import com.xu.stock.analyse.service.uitl.StockAnalyseUtil;
 import com.xu.stock.data.dao.IStockMinuteDao;
 import com.xu.stock.data.download.SinaStockMinuteHistoryDownloador;
 import com.xu.stock.data.download.SinaStockMinuteRealtimeDownloador;
@@ -57,6 +58,10 @@ public class StockMinuteService implements IStockMinuteService {
                         isFirstNearClose = true;
                     }
                 }
+            }
+            if (existStockMinute == null) {
+                existStockMinute = StockAnalyseUtil.buildStockMinute(daily);
+                stockMinuteDao.saveStockMinute(existStockMinute);
             }
         }
         return existStockMinute;
