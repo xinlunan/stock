@@ -89,9 +89,11 @@ public class StockMinuteService implements IStockMinuteService {
 
     public List<StockMinute> fetchRealtimeMinute(StockDaily daily) {
         StockMinute stockMinute = SinaStockMinuteRealtimeDownloador.download(daily.getStockCode(), daily.getClose(), daily.getExrights());
-        StockMinute existMinute = stockMinuteDao.getStockMinute(stockMinute.getStockCode(), stockMinute.getDate(), stockMinute.getHour(), stockMinute.getMinute());
-        if (existMinute == null) {
-            stockMinuteDao.saveStockMinute(stockMinute);
+        if (stockMinute != null) {
+            StockMinute existMinute = stockMinuteDao.getStockMinute(stockMinute.getStockCode(), stockMinute.getDate(), stockMinute.getHour(), stockMinute.getMinute());
+            if (existMinute == null) {
+                stockMinuteDao.saveStockMinute(stockMinute);
+            }
         }
         return stockMinuteDao.getRealtimeMinutes(daily.getStockCode(), daily.getDate());
     }

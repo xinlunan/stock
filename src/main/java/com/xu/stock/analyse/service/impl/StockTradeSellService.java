@@ -73,13 +73,11 @@ public class StockTradeSellService implements IStockTradeSellService {
                                 stockTradeSellDao.saveTradeSell(sellTrade);
                                 buy.setStatus(StockTradeBuyStatus.SELLED);
                                 stockTradeBuyDao.updateStatus(buy);
+                                log.info("卖出\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()) + "\t" + DateUtil.date2String(sellTrade.getDate()));
                             } else {
                                 log.info("停牌，无法卖出\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()));
                             }
                         }
-                    }
-                    if (StockTradeBuyStatus.BOUGHT.equals(buy.getStatus())) {
-                        log.error("惨了没卖出去");
                     }
                 } else {
                     log.info("未到卖出日期\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()));
@@ -129,11 +127,10 @@ public class StockTradeSellService implements IStockTradeSellService {
                     result = stockMinute;
                 }
             }
-            log.error("到收盘都没生成卖出交易 ");
         }
         if (result == null) {
-            log.info("没有分时信息\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()));
             if (StockAnalyseUtil.dailyIndex(dailys, buy.getDate()) < dailys.size() - holdDay) {// 历史日期，只是没获取到分时信息。以收盘价成交
+                log.info("没有分时信息\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()));
                 StockDaily daily = dailys.get(StockAnalyseUtil.dailyIndex(dailys, buy.getDate()) + holdDay);
                 StockMinute stockMinute = new StockMinute();
                 stockMinute.setDate(daily.getDate());
