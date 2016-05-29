@@ -54,13 +54,9 @@ public class SinaStockMinuteRealtimeDownloador {
                 stockMinute.setAmount(null);
                 stockMinute.setExrights(exrights);
                 return stockMinute;
-            } else {
-                log.info("股票停牌\t" + stockCode + "\t" + result);
             }
-
-        } else {
-            log.error("fetchExrights下载数据不成功");
         }
+        log.info("股票停牌\t" + stockCode + "\t" + result);
 
         return null;
     }

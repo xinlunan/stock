@@ -65,6 +65,9 @@ public class StockTradeBuyService implements IStockTradeBuyService {
                     } else {
                         watchBegin.setAnalyseStatus(WatchBeginStatus.UNTRADED);
                     }
+                } else {
+                    // 如果停牌，则不关注，避免每次下载数据，浪费网络
+                    watchBegin.setAnalyseStatus(WatchBeginStatus.UNTRADED);
                 }
                 stockWatchBeginDao.updateStatus(watchBegin);
             }

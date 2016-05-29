@@ -49,10 +49,6 @@ public class StockWatchBeginService implements IStockWatchBeginService {
         List<StockHighest> highestPoints = stockHighestDao.getHighests(dailys.get(0).getStockCode(), parameters);
         for (StockHighest highest : highestPoints) {
             if (HighestAnalyseStatus.ANALYZING.equals(highest.getAnalyseStatus())) {
-                if ("300011".equals(highest.getStockCode()) && "2012-04-23".equals(DateUtil.date2String(highest.getDate()))) {
-
-                    log.info("");
-                }
                 Integer index = StockAnalyseUtil.dailyIndex(dailys, highest.getAnalyseDate());
                 StockDaily highestStockDaily = dailys.get(index);
                 BigDecimal highestCloseExr = highestStockDaily.getClose().multiply(highestStockDaily.getExrights());
