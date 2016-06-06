@@ -40,8 +40,6 @@ public class StockHighest implements Serializable {
     private BigDecimal            exrights;
     // 参数
     private String                parameters;
-    // 分析状态：BUYABLE,UNBUYABLE,ANALYZING
-    private String                analyseStatus;
     // 最后分析日期
     private Date                  analyseDate;
     // 创建日期
@@ -131,14 +129,6 @@ public class StockHighest implements Serializable {
         this.parameters = parameters;
     }
 
-    public String getAnalyseStatus() {
-        return analyseStatus;
-    }
-
-    public void setAnalyseStatus(String analyseStatus) {
-        this.analyseStatus = analyseStatus;
-    }
-
     public Date getAnalyseDate() {
         return analyseDate;
     }
@@ -178,7 +168,7 @@ public class StockHighest implements Serializable {
     @Override
     public String toString() {
         return "StockHighest [highestId=" + highestId + ", stockCode=" + stockCode + ", stockName=" + stockName + ", date=" + date + ", open=" + open + ", high=" + high + ", low=" + low + ", close=" + close + ", exrights=" + exrights
-               + ", parameters=" + parameters + ", analyseStatus=" + analyseStatus + ", analyseDate=" + analyseDate + ", created=" + created + ", updated=" + updated + ", watchBegins=" + watchBegins + "]";
+               + ", parameters=" + parameters + ", analyseDate=" + analyseDate + ", created=" + created + ", updated=" + updated + ", watchBegins=" + watchBegins + "]";
     }
 
 }

@@ -60,6 +60,7 @@ public class HttpClientHandle {
                         result = EntityUtils.toString(entity, charset);
                         log.debug("http get completed,result resolved. url: " + url);
                         log.debug(result);
+                        log.info(url + " return ");
                         return result;
                     }
                 } finally {

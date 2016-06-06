@@ -1,7 +1,9 @@
 package com.xu.stock.analyse.service.impl;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -58,18 +60,21 @@ public class StockTradeSellService implements IStockTradeSellService {
     @Resource
     private IStockTradeSellDao     stockTradeSellDao;
 
-    public void analyseStockTradeSell(List<StockDaily> dailys, String parameters) {
+    public void analyseStockTradeSell(List<StockDaily> dailys) {
+        Map<String, List<StockMinute>> minuteCache = new HashMap<String, List<StockMinute>>();
         initStrategyParameters();
-        List<StockTradeBuy> buys = stockTradeBuyDao.getBoughtStockTradeBuys(dailys.get(0).getStockCode(), StrategyType.HIGHEST_PROBE_BUY.toString(), parameters);
+        List<StockTradeBuy> buys = stockTradeBuyDao.getBoughtStockTradeBuys(dailys.get(0).getStockCode(), StrategyType.HIGHEST_PROBE_BUY.toString());
         for (StockTradeBuy buy : buys) {
             for (int holdDay = holdDayBegin; holdDay <= holdDayEnd; holdDay++) {
-                if (StockAnalyseUtil.dailyIndex(dailys, buy.getDate()) <= dailys.size() - holdDay) {
-                    List<StockMinute> minutes = fetchStockMinute(dailys, buy, holdDay);
+                if (StockAnalyseUtil.dailyIndex(dailys, buy.getDate()) < dailys.size() - holdDay
+                    || (StockAnalyseUtil.dailyIndex(dailys, buy.getDate()) == dailys.size() - holdDay && StockAnalyseUtil.hasNewSellData(dailys, dailys.get(dailys.size() - 1).getDate()))) {
+                    List<StockMinute> minutes = fetchStockMinute(dailys, buy, holdDay, minuteCache);
                     for (int stopLossRate = stopLossRateBegin.intValue(); stopLossRate <= stopLossRateEnd.intValue(); stopLossRate++) {
                         for (int expectRate = expectRateBegin.intValue(); expectRate <= expectRateEnd.intValue(); expectRate++) {
                             StockMinute stockMinute = analyseSellMinute(dailys, minutes, buy, holdDay, stopLossRate, expectRate);
                             if (stockMinute != null) {
-                                StockTradeSell sellTrade = buildStockTradeSell(stockMinute, buy, parameters + "," + holdDay + "," + expectRate + "," + stopLossRate);
+                                String parameters = StockAnalyseUtil.buildParameter(buy.getParameters(), holdDay, expectRate, stopLossRate);
+                                StockTradeSell sellTrade = buildStockTradeSell(stockMinute, buy, parameters);
                                 stockTradeSellDao.saveTradeSell(sellTrade);
                                 buy.setStatus(StockTradeBuyStatus.SELLED);
                                 stockTradeBuyDao.updateStatus(buy);
@@ -151,9 +156,10 @@ public class StockTradeSellService implements IStockTradeSellService {
      * 
      * @param dailys
      * @param buy
+     * @param minuteCache
      * @return
      */
-    private List<StockMinute> fetchStockMinute(List<StockDaily> dailys, StockTradeBuy buy, int holdDay) {
+    private List<StockMinute> fetchStockMinute(List<StockDaily> dailys, StockTradeBuy buy, int holdDay, Map<String, List<StockMinute>> minuteCache) {
         List<StockMinute> stockMinutes = null;
         int dailyIndex = StockAnalyseUtil.dailyIndex(dailys, buy.getDate());
         if (dailyIndex > dailys.size() - holdDay) {
@@ -161,7 +167,13 @@ public class StockTradeSellService implements IStockTradeSellService {
         } else if (dailyIndex == dailys.size() - holdDay) {
             stockMinutes = stockMinuteService.fetchRealtimeMinute(dailys.get(dailys.size() - holdDay));
         } else {
-            stockMinutes = stockMinuteService.fetchHistoryMinutes(dailys.get(dailyIndex + holdDay));
+            StockDaily daily = dailys.get(dailyIndex + holdDay);
+            if (minuteCache.containsKey(daily.getStockCode() + daily.getDate())) {
+                return minuteCache.get(daily.getStockCode() + daily.getDate());
+            } else {
+                stockMinutes = stockMinuteService.fetchHistoryMinutes(dailys.get(dailyIndex + holdDay));
+                minuteCache.put(daily.getStockCode() + daily.getDate(), stockMinutes);
+            }
         }
         return stockMinutes;
     }

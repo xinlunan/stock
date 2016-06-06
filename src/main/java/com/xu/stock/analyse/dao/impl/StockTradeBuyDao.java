@@ -38,19 +38,10 @@ public class StockTradeBuyDao extends BaseDao<StockTradeBuy> implements IStockTr
         return result;
     }
 
-    public List<StockTradeBuy> getStockTradeBuys(String stockCode, String strategy, String parameters) {
+    public List<StockTradeBuy> getBoughtStockTradeBuys(String stockCode, String strategy) {
         Map<String, Object> paras = new HashMap<String, Object>();
         paras.put("stockCode", stockCode);
         paras.put("strategy", strategy);
-        paras.put("parameters", parameters);
-        return getSqlSession().selectList(SQL_GET_STOCK_BUYS, paras);
-    }
-
-    public List<StockTradeBuy> getBoughtStockTradeBuys(String stockCode, String strategy, String parameters) {
-        Map<String, Object> paras = new HashMap<String, Object>();
-        paras.put("stockCode", stockCode);
-        paras.put("strategy", strategy);
-        paras.put("parameters", parameters);
         return getSqlSession().selectList(SQL_GET_BOUGHT_STOCK_BUYS, paras);
     }
 

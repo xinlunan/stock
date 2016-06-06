@@ -1,9 +1,7 @@
 package com.xu.stock.analyse.dao.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -36,14 +34,6 @@ public class StockTradeSellDao extends BaseDao<StockTradeSell> implements IStock
             result = result + getSqlSession().insert(SQL_INSERT_STOCK_SELL, sell);
         }
         return result;
-    }
-
-    public List<StockTradeSell> getStockTradeSells(String stockCode, String strategy, String parameters) {
-        Map<String, Object> paras = new HashMap<String, Object>();
-        paras.put("stockCode", stockCode);
-        paras.put("strategy", strategy);
-        paras.put("parameters", parameters);
-        return getSqlSession().selectList(SQL_GET_STOCK_SELLS, paras);
     }
 
     public Integer saveTradeSell(StockTradeSell sellTrade) {

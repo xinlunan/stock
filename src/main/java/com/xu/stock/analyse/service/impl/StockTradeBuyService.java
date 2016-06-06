@@ -2,7 +2,9 @@ package com.xu.stock.analyse.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -50,12 +52,13 @@ public class StockTradeBuyService implements IStockTradeBuyService {
     @Resource
     private IStockWatchBeginDao stockWatchBeginDao;
 
-    public void analyseStockTradeBuy(List<StockDaily> dailys, String parameters) {
-        List<StockWatchBegin> watchBegins = stockWatchBeginDao.getUnAnalyseWatchBegins(StrategyType.HIGHEST_PROBE_BUY, parameters, dailys.get(0).getStockCode());
+    public void analyseStockTradeBuy(List<StockDaily> dailys) {
+        Map<String, StockMinute> minuteCache = new HashMap<String, StockMinute>();
+        List<StockWatchBegin> watchBegins = stockWatchBeginDao.getUnAnalyseWatchBegins(StrategyType.HIGHEST_PROBE_BUY, dailys.get(0).getStockCode());
         List<StockTradeBuy> buys = new ArrayList<StockTradeBuy>();
         for (StockWatchBegin watchBegin : watchBegins) {
-            if (WatchBeginStatus.ANALYZING.equals(watchBegin.getAnalyseStatus())) {
-                StockMinute stockMinute = fetchStockMinute(dailys, watchBegin);
+            if (WatchBeginStatus.ANALYZING.equals(watchBegin.getAnalyseStatus()) && StockAnalyseUtil.hasNewBuyData(dailys, watchBegin.getDate())) {
+                StockMinute stockMinute = fetchStockMinute(dailys, watchBegin, minuteCache);
                 if (stockMinute != null) {
                     BigDecimal priceExr = stockMinute.getPrice().multiply(stockMinute.getExrights());
                     BigDecimal highPriceExr = stockMinute.getHigh().multiply(stockMinute.getExrights());
@@ -75,16 +78,20 @@ public class StockTradeBuyService implements IStockTradeBuyService {
         stockTradeBuyDao.saveStockTradeBuys(buys);
     }
 
+
     /**
      * 获取分时信息
      * 
      * @param dailys
      * @param watchBegin
+     * @param minuteCache
      * @return
      */
-    private StockMinute fetchStockMinute(List<StockDaily> dailys, StockWatchBegin watchBegin) {
-
+    private StockMinute fetchStockMinute(List<StockDaily> dailys, StockWatchBegin watchBegin, Map<String, StockMinute> minuteCache) {
         StockMinute stockMinute = null;
+        if(minuteCache.containsKey(watchBegin.getStockCode()+watchBegin.getDate())){
+            return minuteCache.get(watchBegin.getStockCode() + watchBegin.getDate());
+        }
         int dailyIndex = StockAnalyseUtil.dailyIndex(dailys, watchBegin.getDate());
         if (dailyIndex < dailys.size() - 1) {// 下一天也在历史中
             StockDaily nextDaily = dailys.get(dailyIndex + 1);
@@ -101,8 +108,12 @@ public class StockTradeBuyService implements IStockTradeBuyService {
                     stockMinute = null;
                 }
             }
+            minuteCache.put(watchBegin.getStockCode() + watchBegin.getDate(), stockMinute);
         } else {
             stockMinute = stockMinuteService.fetchRealtimeBuyMinute(watchBegin);
+            if (stockMinute != null) {
+                minuteCache.put(watchBegin.getStockCode() + watchBegin.getDate(), stockMinute);
+            }
         }
 
         return stockMinute;

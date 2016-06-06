@@ -63,6 +63,10 @@ public class StockDaily implements Serializable, Comparable<StockDaily> {
         return BigDecimal.valueOf(exrights);
     }
 
+    public Double getExrightsObj() {
+        return exrights;
+    }
+
     public void setExrights(BigDecimal exrights) {
         this.exrights = exrights.doubleValue();
     }
@@ -251,6 +255,7 @@ public class StockDaily implements Serializable, Comparable<StockDaily> {
                + ", volume=" + volume + ", asset=" + asset + ", created=" + created + ", updated=" + updated + "]";
     }
 
+    @Override
     public int compareTo(StockDaily stockDaily) {
         return this.getDate().compareTo(stockDaily.getDate());
     }

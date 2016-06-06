@@ -25,16 +25,10 @@
 		stock_code,stock_name,strategy,parameters,nature,status,last_date,date,hour,minute,price,exrights,analyse_type,created,updated
 	</sql>
 
-	<select id="getStockTradeBuys" resultMap="StockTradeBuy">
-		SELECT trade_id,<include refid="columns" />
-		fROM t_stock_trade_buy
-		WHERE stock_code=#{stockCode} and strategy=#{strategy} and parameters=#{parameters} ;
-	</select>
-	
 	<select id="getBoughtStockTradeBuys" resultMap="StockTradeBuy">
 		SELECT trade_id,<include refid="columns" />
 		fROM t_stock_trade_buy
-		WHERE stock_code=#{stockCode} and strategy=#{strategy} and parameters=#{parameters} and status='BOUGHT';
+		WHERE stock_code=#{stockCode} and strategy=#{strategy} and status='BOUGHT';
 	</select>
 
 	<insert id="insertStockTradeBuy" flushCache="true" useGeneratedKeys="true" keyProperty="tradeId">

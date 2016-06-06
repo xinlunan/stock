@@ -23,12 +23,10 @@ public interface IStockWatchBeginService {
      * 根据最高点找出可能试探突破点的日期
      * 
      * @param dailys
-     * @param parameters
+     * @param lastWaveCycle
+     * @param thisWaveCycle
      * @param thisFallRate
-     * @param warnRateLow
-     * @param buyRateLow
-     * @param buyRateHigh
      */
-    public void analyseBatchBeginByHighest(List<StockDaily> dailys, String parameters, BigDecimal thisFallRate, BigDecimal warnRateLow, BigDecimal buyRateLow, BigDecimal buyRateHigh);
+    public void analyseBatchBeginByHighest(List<StockDaily> dailys, Integer lastWaveCycle, Integer thisWaveCycle, BigDecimal thisFallRate);
 
 }

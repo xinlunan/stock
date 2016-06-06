@@ -37,10 +37,6 @@ public class HighestProbeBuyAnalystService extends BaseStockAnalyseService {
     private Integer                 lastWaveCycle;
     private Integer                 thisWaveCycle;
     private BigDecimal              thisFallRate;
-    private BigDecimal              buyRateHigh;
-    private BigDecimal              buyRateLow;
-    private BigDecimal              warnRateLow;
-    private String                  parameters;
 
     @Resource
     private IStockMinuteService     stockMinuteService;
@@ -64,39 +60,22 @@ public class HighestProbeBuyAnalystService extends BaseStockAnalyseService {
         this.lastWaveCycle = strategy.getIntValue(HighestProbeBuyArgs.D1_LAST_WAVE_CYCLE);
         this.thisWaveCycle = strategy.getIntValue(HighestProbeBuyArgs.D2_THIS_WAVE_CYCLE);
         this.thisFallRate = BigDecimal.valueOf(strategy.getDoubleValue(HighestProbeBuyArgs.F1_THIS_FALL_RATE));
-        this.warnRateLow = BigDecimal.valueOf(strategy.getDoubleValue(HighestProbeBuyArgs.F2_WARN_RATE_LOW));
-        this.buyRateLow = BigDecimal.valueOf(strategy.getDoubleValue(HighestProbeBuyArgs.F3_BUY_RATE_LOW));
-        this.buyRateHigh = BigDecimal.valueOf(strategy.getDoubleValue(HighestProbeBuyArgs.F4_BUY_RATE_HIGH));
-        this.parameters = this.lastWaveCycle + "," + this.thisWaveCycle + "," + this.thisFallRate + "," + this.warnRateLow + "," + this.buyRateLow + "," + this.buyRateHigh;
     }
 
     @Override
-    @SuppressWarnings("hiding")
     public List<StockTrade> doAnalyse(List<StockDaily> dailys) {
-        log.info("analyse stock code:" + dailys.get(0).getStockCode());
-        for (int i = -3; i < 200; i++) {
-            BigDecimal buyRateHigh = BigDecimal.valueOf(0 - i);
-            BigDecimal high = BD_100.subtract(buyRateHigh);
-            if (i > 0) {
-                high = BD_100.multiply(BigDecimal.valueOf(1.01).pow(i)).setScale(0, BigDecimal.ROUND_HALF_UP);
-                buyRateHigh = BD_100.subtract(high);
-            }
-            BigDecimal buyRateLow = BD_100.subtract(high.multiply(BD_100.subtract(BD_1)).divide(BD_100, 1, BigDecimal.ROUND_HALF_UP));
-            BigDecimal warnRateLow = BD_100.subtract(high.multiply(BD_100.subtract(BD_10)).divide(BD_100, 1, BigDecimal.ROUND_HALF_UP));
-            String parameters = lastWaveCycle + "," + thisWaveCycle + "," + thisFallRate + "," + warnRateLow + "," + buyRateLow + "," + buyRateHigh;
-
-            // 找出当前股票的历史最高点的日期
-            stockHighestService.analyseHighestPoints(dailys, parameters, lastWaveCycle, thisWaveCycle, thisFallRate);
-
-            // 根据最高点找出可能试探突破的观察点
-            stockWatchBeginService.analyseBatchBeginByHighest(dailys, parameters, thisFallRate, warnRateLow, buyRateLow, buyRateHigh);
-
-            // 分析买入信息
-            stockTradeBuyService.analyseStockTradeBuy(dailys, parameters);
-
-            // 分析卖出信息
-            stockTradeSellService.analyseStockTradeSell(dailys, parameters);
+        if ("000001".equals(dailys.get(0).getStockCode())) {
+            log.info("debug异常" + dailys.get(0).getStockCode());
         }
+        log.info("analyse stock code:" + dailys.get(0).getStockCode());
+        // 找出当前股票的历史最高点的日期
+        stockHighestService.analyseHighestPoints(dailys, lastWaveCycle, thisWaveCycle, thisFallRate);
+        // 根据最高点找出可能试探突破的观察点
+        stockWatchBeginService.analyseBatchBeginByHighest(dailys, lastWaveCycle, thisWaveCycle, thisFallRate);
+        // 分析买入信息
+        stockTradeBuyService.analyseStockTradeBuy(dailys);
+        // 分析卖出信息
+        stockTradeSellService.analyseStockTradeSell(dailys);
         return null;
     }
 

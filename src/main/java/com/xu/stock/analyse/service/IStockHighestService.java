@@ -28,5 +28,5 @@ public interface IStockHighestService {
      * @param thisWaveCycle
      * @param thisFallRate
      */
-    public void analyseHighestPoints(List<StockDaily> stockDailys, String parameters, Integer lastWaveCycle, Integer thisWaveCycle, BigDecimal thisFallRate);
+    public void analyseHighestPoints(List<StockDaily> stockDailys, Integer lastWaveCycle, Integer thisWaveCycle, BigDecimal thisFallRate);
 }

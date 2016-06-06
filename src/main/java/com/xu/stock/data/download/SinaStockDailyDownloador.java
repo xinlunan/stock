@@ -73,9 +73,8 @@ public class SinaStockDailyDownloador {
             try {
                 String[] indesUrl = url.split("##");
                 List<StockDaily> dailys = parseHtml(stock, HttpClientHandle.get(indesUrl[0], "gb2312"));// 解析返回的html
-                if (!dailys.isEmpty()) {
-                    resolveExrights(stock, dailys, HttpClientHandle.get(indesUrl[1], "gb2312"));// 解析返回的html
-                }
+                resolveExrights(stock, dailys, indesUrl[1]);// 解析返回的html
+                resolveLastDataExrights(dailys, indesUrl[2]);// 解析返回的html
                 stockDailyes.addAll(dailys);
             } catch (Exception e) {
                 log.error("", e);
@@ -84,6 +83,31 @@ public class SinaStockDailyDownloador {
             }
         }
         return stockDailyes;
+    }
+
+    private static void resolveLastDataExrights(List<StockDaily> dailys, String url) {
+        if (dailys.size() > 1) {
+            StockDaily lastDaily = dailys.get(dailys.size() - 1);
+            StockDaily lastLastDaily = dailys.get(dailys.size() - 2);
+            if (lastDaily.getExrightsObj() == null && lastLastDaily.getExrightsObj() != null) {
+                String result = HttpClientHandle.get(url, "gb2312");
+                if (result.length() > 30) {
+                    String[] infos = result.split(",");
+                    if (!infos[1].startsWith("0.00") && infos[30].equals(DateUtil.date2String(lastDaily.getDate()))) {
+                        BigDecimal newClose = BigDecimal.valueOf(Double.valueOf(infos[2]));
+                        BigDecimal exrights = lastLastDaily.getExrights().multiply(lastLastDaily.getLastClose()).divide(newClose, 4, BigDecimal.ROUND_HALF_UP);
+                        Double rate = exrights.divide(lastLastDaily.getExrights(), 4, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        if (rate > 0.98 && rate < 1.02) {
+                            lastDaily.setExrights(lastLastDaily.getExrights());
+                        } else {
+                            lastDaily.setExrights(exrights);
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 
     /**
@@ -122,9 +146,10 @@ public class SinaStockDailyDownloador {
         }
 
         for (String season : seasons) {
+            String fullStockCode = stock.getStockCode().startsWith("6") ? "sh" + stock.getStockCode() : "sz" + stock.getStockCode();
             StringBuilder url = new StringBuilder(StockApiConstants.Sina.API_URL_GET_STOCK_INDEX).append(stock.getStockCode()).append(".phtml?").append(season);
-
             url.append("##").append(StockApiConstants.Sina.API_URL_GET_FUQUAN_STOCK_INDEX).append(stock.getStockCode()).append(".phtml?").append(season);
+            url.append("##").append(StockApiConstants.Sina.API_URL_STOCK_REALTIME_DETAL).append(fullStockCode);
             urls.add(url.toString());
         }
 
@@ -198,64 +223,66 @@ public class SinaStockDailyDownloador {
         return stockDaily;
     }
 
-    private static void resolveExrights(Stock stock, List<StockDaily> dailys, String html) {
-        try {
-            String tempString = html.replaceAll("&nbsp;", "").replaceAll("&", "");
-            int begin = tempString.indexOf("<table id=\"FundHoldSharesTable");
-            if (begin > 0) {
-                tempString = tempString.substring(begin);
-                tempString = tempString.substring(0, tempString.indexOf("</table>") + 8);
-                Document doc = DocumentUtil.string2Doc(tempString);
+    private static void resolveExrights(Stock stock, List<StockDaily> dailys, String url) {
+        if (!dailys.isEmpty()) {
+            try {
+                String html = HttpClientHandle.get(url, "gb2312");
+                String tempString = html.replaceAll("&nbsp;", "").replaceAll("&", "");
+                int begin = tempString.indexOf("<table id=\"FundHoldSharesTable");
+                if (begin > 0) {
+                    tempString = tempString.substring(begin);
+                    tempString = tempString.substring(0, tempString.indexOf("</table>") + 8);
+                    Document doc = DocumentUtil.string2Doc(tempString);
 
-                NodeList daylyNodes = (NodeList) XPathUtil.parse(doc, "//table/tr[position()>1]", XPathConstants.NODESET);
-                int nodeLength = daylyNodes.getLength();
-                int dailyIndex = 0;
-                for (int i = nodeLength - 1; i >= 0; i--) {
-                    NodeList dailyNodes = daylyNodes.item(i).getChildNodes();
-                    NodeList dateNodes = dailyNodes.item(1).getChildNodes().item(0).getChildNodes();
-                    Node dateNode = nodeLength > 1 ? dateNodes.item(1) : dateNodes.item(0);
-                    dateNode = dateNode == null ? dateNodes.item(0) : dateNode;
-                    String date = StringUtil.replaceBlank(dateNode.getTextContent());
-                    date = "".equals(date) ? StringUtil.replaceBlank(daylyNodes.item(i).getChildNodes().item(1).getChildNodes().item(0).getChildNodes().item(1).getTextContent()) : date;
-                    BigDecimal exrights = BigDecimal.valueOf(Double.valueOf(dailyNodes.item(15).getTextContent()));
-                    BigDecimal thisExrights = BigDecimal.valueOf(1);
+                    NodeList daylyNodes = (NodeList) XPathUtil.parse(doc, "//table/tr[position()>1]", XPathConstants.NODESET);
+                    int nodeLength = daylyNodes.getLength();
+                    int dailyIndex = 0;
+                    for (int i = nodeLength - 1; i >= 0; i--) {
+                        NodeList dailyNodes = daylyNodes.item(i).getChildNodes();
+                        NodeList dateNodes = dailyNodes.item(1).getChildNodes().item(0).getChildNodes();
+                        Node dateNode = nodeLength > 1 ? dateNodes.item(1) : dateNodes.item(0);
+                        dateNode = dateNode == null ? dateNodes.item(0) : dateNode;
+                        String date = StringUtil.replaceBlank(dateNode.getTextContent());
+                        date = "".equals(date) ? StringUtil.replaceBlank(daylyNodes.item(i).getChildNodes().item(1).getChildNodes().item(0).getChildNodes().item(1).getTextContent()) : date;
+                        BigDecimal exrights = BigDecimal.valueOf(Double.valueOf(dailyNodes.item(15).getTextContent()));
+                        BigDecimal thisExrights = BigDecimal.valueOf(1);
 
-                    StockDaily stockDaily = dailys.get(dailyIndex);
-                    while (stock.getLastClose() != null && !DateUtil.date2String(stockDaily.getDate()).equals(date)) {
-                        stockDaily.setThisExrights(thisExrights);
-                        stockDaily.setExrights(stock.getExrights());
-                        dailyIndex = dailyIndex + 1;
-                        stockDaily = dailys.get(dailyIndex);
-                    }
-                    if (DateUtil.date2String(stockDaily.getDate()).equals(date)) {
-                        if (stock.getLastClose() != null && stock.getExrights().compareTo(exrights) != 0) {
-                            thisExrights = exrights.divide(stock.getExrights(), 6, BigDecimal.ROUND_HALF_UP);
-                            if (!"2005-01-01".equals(DateUtil.date2String(stock.getLastDate())) || stock.getDailySize() > 0) {
-                                stockDaily.setLastClose(stockDaily.getLastClose().multiply(stock.getExrights()).divide(exrights, 2, BigDecimal.ROUND_HALF_UP));
-                                setGapRate(stockDaily);
-                            }
+                        StockDaily stockDaily = dailys.get(dailyIndex);
+                        while (stock.getLastClose() != null && !DateUtil.date2String(stockDaily.getDate()).equals(date)) {
+                            stockDaily.setThisExrights(thisExrights);
+                            stockDaily.setExrights(stock.getExrights());
+                            dailyIndex = dailyIndex + 1;
+                            stockDaily = dailys.get(dailyIndex);
                         }
-                        stockDaily.setThisExrights(thisExrights);
-                        stockDaily.setExrights(exrights);
-                        stock.setExrights(exrights);
-                        stock.setAsset(stockDaily.getAsset());
-                        stock.setDailySize(stock.getDailySize() + 1);
-                        dailyIndex = dailyIndex + 1;
-                    } else {
+                        if (DateUtil.date2String(stockDaily.getDate()).equals(date)) {
+                            if (stock.getLastClose() != null && stock.getExrights().compareTo(exrights) != 0) {
+                                thisExrights = exrights.divide(stock.getExrights(), 6, BigDecimal.ROUND_HALF_UP);
+                                if (!"2005-01-01".equals(DateUtil.date2String(stock.getLastDate())) || stock.getDailySize() > 0) {
+                                    stockDaily.setLastClose(stockDaily.getLastClose().multiply(stock.getExrights()).divide(exrights, 2, BigDecimal.ROUND_HALF_UP));
+                                    setGapRate(stockDaily);
+                                }
+                            }
+                            stockDaily.setThisExrights(thisExrights);
+                            stockDaily.setExrights(exrights);
+                            stock.setExrights(exrights);
+                            stock.setAsset(stockDaily.getAsset());
+                            stock.setDailySize(stock.getDailySize() + 1);
+                            dailyIndex = dailyIndex + 1;
+                        } else {
+                            throw new RuntimeException();
+                        }
+                    }
+                    if (nodeLength == 0) {
                         throw new RuntimeException();
                     }
-                }
-                if (nodeLength == 0) {
+                } else {
                     throw new RuntimeException();
                 }
-            } else {
-                throw new RuntimeException();
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
-
     }
 
     private static void setGapRate(StockDaily stockDaily) {
