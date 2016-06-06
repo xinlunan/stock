@@ -1,6 +1,5 @@
 package com.xu.stock.analyse.dao;
 
-import java.util.Date;
 import java.util.List;
 
 import com.xu.stock.analyse.model.StockWatchBegin;
@@ -29,17 +28,6 @@ public interface IStockWatchBeginDao {
     public Integer saveWatchBegins(List<StockWatchBegin> watchBegins);
 
     /**
-     * 获取观察点
-     * 
-     * @param type
-     * @param parameters
-     * @param stockCode
-     * @param date
-     * @return
-     */
-    public List<StockWatchBegin> getWatchBegins(StrategyType type, String parameters, String stockCode, Date date);
-
-    /**
      * 获取未分析的观察点
      * 
      * @param type
@@ -47,7 +35,7 @@ public interface IStockWatchBeginDao {
      * @param stockCode
      * @return
      */
-    public List<StockWatchBegin> getUnAnalyseWatchBegins(StrategyType type, String parameters, String stockCode);
+    public List<StockWatchBegin> getUnAnalyseWatchBegins(StrategyType type, String stockCode);
 
     /**
      * 更新分析状态

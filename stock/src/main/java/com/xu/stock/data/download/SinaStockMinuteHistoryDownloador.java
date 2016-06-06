@@ -62,15 +62,17 @@ public class SinaStockMinuteHistoryDownloador {
             for (int i = tradeStr.length - 2; i > 0; i--) {
                 String[] infos = tradeStr[i].split("\t");
                 if (!updateStockMinute(infos, minutes)) {
-                    StockMinute minuteInfo = newStockMinute(infos, stockDaily, high, low);
-                    if (minuteInfo != null) {
-                        if (minuteInfo.getHigh().doubleValue() > high) {
-                            high = minuteInfo.getHigh().doubleValue();
+                    if (!infos[1].contains(":")) {
+                        StockMinute minuteInfo = newStockMinute(infos, stockDaily, high, low);
+                        if (minuteInfo != null) {
+                            if (minuteInfo.getHigh().doubleValue() > high) {
+                                high = minuteInfo.getHigh().doubleValue();
+                            }
+                            if (minuteInfo.getLow().doubleValue() < low) {
+                                low = minuteInfo.getLow().doubleValue();
+                            }
+                            minutes.add(minuteInfo);
                         }
-                        if (minuteInfo.getLow().doubleValue() < low) {
-                            low = minuteInfo.getLow().doubleValue();
-                        }
-                        minutes.add(minuteInfo);
                     }
                 }
             }

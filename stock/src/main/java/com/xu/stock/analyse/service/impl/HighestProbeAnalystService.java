@@ -75,16 +75,18 @@ public class HighestProbeAnalystService extends BaseStockAnalyseService {
         log.info("analyse stock code:" + dailys.get(0).getStockCode());
 
         // 找出当前股票的历史最高点的日期
-        stockHighestService.analyseHighestPoints(dailys, parameters, lastWaveCycle, thisWaveCycle, thisFallRate);
-
-        // 根据最高点找出可能试探突破的观察点
-        stockWatchBeginService.analyseBatchBeginByHighest(dailys, parameters, thisFallRate, warnRateLow, buyRateLow, buyRateHigh);
+        // stockHighestService.analyseHighestPoints(dailys, parameters,
+        // lastWaveCycle, thisWaveCycle, thisFallRate);
+        //
+        // // 根据最高点找出可能试探突破的观察点
+        // stockWatchBeginService.analyseBatchBeginByHighest(dailys, parameters,
+        // thisFallRate, warnRateLow, buyRateLow, buyRateHigh);
 
         // 分析买入信息
-        stockTradeBuyService.analyseStockTradeBuy(dailys, parameters);
-
-        // 分析卖出信息
-        stockTradeSellService.analyseStockTradeSell(dailys, parameters);
+        // stockTradeBuyService.analyseStockTradeBuy(dailys, parameters);
+        //
+        // // 分析卖出信息
+        // stockTradeSellService.analyseStockTradeSell(dailys, parameters);
         return null;
     }
 

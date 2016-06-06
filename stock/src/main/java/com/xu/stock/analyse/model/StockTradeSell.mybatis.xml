@@ -25,12 +25,6 @@
 		stock_code,stock_name,strategy,parameters,nature,buy_date,date,hour,minute,price,exrights,profit_rate,analyse_type,created,updated
 	</sql>
 
-	<select id="getStockTradeSells" resultMap="StockTradeSell">
-		SELECT trade_id,<include refid="columns" />
-		fROM t_stock_trade_sell
-		WHERE stock_code=#{stockCode} and strategy=#{strategy} and parameters=#{parameters} ;
-	</select>
-	
 	<insert id="insertStockTradeSell" flushCache="true" useGeneratedKeys="true" keyProperty="tradeId">
 		INSERT INTO t_stock_trade_sell (<include refid="columns" />)
 		VALUES (

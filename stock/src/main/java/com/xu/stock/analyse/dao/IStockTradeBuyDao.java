@@ -15,22 +15,13 @@ public interface IStockTradeBuyDao {
     public Integer saveStockTradeBuys(List<StockTradeBuy> buys);
 
     /**
-     * 获取购买信息
-     * 
-     * @param stockCode
-     * @param parameters
-     * @return
-     */
-    public List<StockTradeBuy> getStockTradeBuys(String stockCode, String strategy, String parameters);
-
-    /**
      * 获取未卖出的购买信息
      * 
      * @param stockCode
      * @param parameters
      * @return
      */
-    public List<StockTradeBuy> getBoughtStockTradeBuys(String stockCode, String strategy, String parameters);
+    public List<StockTradeBuy> getBoughtStockTradeBuys(String stockCode, String strategy);
 
     /**
      * 更新购买状态

@@ -24,6 +24,6 @@ public interface IStockTradeSellService {
      * @param dailys
      * @param parameters
      */
-    public void analyseStockTradeSell(List<StockDaily> dailys, String parameters);
+    public void analyseStockTradeSell(List<StockDaily> dailys);
 
 }

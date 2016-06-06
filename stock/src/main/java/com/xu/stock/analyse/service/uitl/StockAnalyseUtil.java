@@ -3,13 +3,16 @@ package com.xu.stock.analyse.service.uitl;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.xu.stock.analyse.model.StockWatchBegin;
+import com.xu.stock.analyse.service.StockAnalyseConstants;
 import com.xu.stock.data.model.StockDaily;
 import com.xu.stock.data.model.StockMinute;
+import com.xu.util.DateDiffUtil;
 import com.xu.util.DateUtil;
 
 /**
@@ -208,7 +211,7 @@ public class StockAnalyseUtil {
         return nextDaily;
     }
 
-    public static boolean isReachFallRate(List<StockDaily> stockDailys, int index, BigDecimal thisFallRate) {
+    public static Date getFirstLowDate(List<StockDaily> stockDailys, int index, BigDecimal thisFallRate) {
         StockDaily highestStockDaily = stockDailys.get(index);
         BigDecimal highestCloseExr = highestStockDaily.getClose().multiply(highestStockDaily.getExrights());
         BigDecimal lowestCloseExr = highestCloseExr.subtract(highestCloseExr.multiply(thisFallRate).divide(BD_100, 2, BigDecimal.ROUND_HALF_UP));
@@ -218,14 +221,14 @@ public class StockAnalyseUtil {
 
             // 如果当前已大于历史高点
             if (thisCloseExr.compareTo(highestCloseExr) == 1) {
-                return false;
+                return null;
             }
             // 本次跌幅超设定幅度，与最高点相差比例介于设定的报警范围内，当前最高价小于历史最高价
             if (thisCloseExr.compareTo(lowestCloseExr) == -1) {
-                return true;
+                return thisDaliy.getDate();
             }
         }
-        return false;
+        return null;
     }
 
     public static Integer dailyIndex(List<StockDaily> dailys, Date date) {
@@ -249,6 +252,17 @@ public class StockAnalyseUtil {
         return null;
     }
 
+    public static String buildParameter(Object... parameters) {
+        String result = "";
+        for (Object parameter : parameters) {
+            result = result + parameter.toString() + ",";
+        }
+        if(result.endsWith(",")){
+            result = result.substring(0, result.length() - 1);
+        }
+        return result;
+    }
+
     public static boolean hasNextDaily(List<StockDaily> dailys, StockWatchBegin watchBegin) {
         if (dailys != null && dailys.size() > 1) {
             StockDaily lastDaily = dailys.get(dailys.size() - 1);
@@ -270,4 +284,57 @@ public class StockAnalyseUtil {
         stockMinute.setExrights(daily.getExrights());
         return stockMinute;
     }
+
+    public static boolean hasNewBuyData(List<StockDaily> dailys, Date date) {
+        if (StockAnalyseUtil.dailyIndex(dailys, date) < dailys.size() - 1) {
+            return true;
+        } else {
+            Date nextDate = DateDiffUtil.getNextWorkDate(date);
+            String nextDateStr = DateUtil.date2String(nextDate) + " 14" + ":" + StockAnalyseConstants.StockTradeBuyTime.MINUTE + ":00";
+            Date newNextDate = DateUtil.stringToDate(nextDateStr);
+            if (newNextDate.before(new Date())) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public static boolean hasNewSellData(List<StockDaily> dailys, Date date) {
+        if (StockAnalyseUtil.dailyIndex(dailys, date) < dailys.size() - 1) {
+            return true;
+        } else {
+            Date nextDate = DateDiffUtil.getNextWorkDate(date);
+            String nextDateStr = DateUtil.date2String(nextDate) + " 09:30:00";
+            Date newNextDate = DateUtil.stringToDate(nextDateStr);
+            if (newNextDate.before(new Date())) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public static Date getLastHigherDate(List<StockDaily> dailys, StockDaily thisDaily, Map<String, Date> lastHigherCache) {
+        BigDecimal thisCloseExt = thisDaily.getClose().multiply(thisDaily.getExrights());
+        Date higherDate = null;
+        String key = thisDaily.getStockCode() + thisDaily.getDate();
+        if (lastHigherCache.containsKey(key)) {
+            higherDate = lastHigherCache.get(key);
+        } else {
+            Integer index = StockAnalyseUtil.dailyIndex(dailys, thisDaily.getDate());
+            for (int i = index - 1; i >= 0; i--) {
+                StockDaily lastDaily = dailys.get(i);
+                BigDecimal lastCloseExt = lastDaily.getClose().multiply(lastDaily.getExrights());
+                BigDecimal gapRateExr = lastCloseExt.subtract(thisCloseExt).multiply(BD_100).divide(thisCloseExt, 4, BigDecimal.ROUND_HALF_UP);
+                if (gapRateExr.doubleValue() > 10) {
+                    higherDate = lastDaily.getDate();
+                    break;
+                }
+            }
+            lastHigherCache.put(key, higherDate);
+        }
+        return higherDate;
+    }
+
 }

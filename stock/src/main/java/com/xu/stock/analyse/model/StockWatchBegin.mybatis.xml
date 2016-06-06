@@ -26,16 +26,10 @@
 		stock_code,stock_name,strategy,parameters,ref_date,ref_close,ref_exrights,date,close,exrights,buy_ref_low_exr,buy_ref_high_exr,buy_ref_close_exr,analyse_status,created,updated
 	</sql>
 
-	<select id="getWatchBegins" resultMap="StockWatchBegin">
-		SELECT watch_begin_id,<include refid="columns" /> 
-		FROM t_stock_watch_begin
-		WHERE stock_code=#{stockCode} and strategy=#{strategy} and parameters=#{parameters} and ref_date=#{refDate};
-	</select>
-	
 	<select id="getUnAnalyseWatchBegins" resultMap="StockWatchBegin">
 		SELECT watch_begin_id,<include refid="columns" /> 
 		FROM t_stock_watch_begin
-		WHERE stock_code=#{stockCode} and strategy=#{strategy} and parameters=#{parameters} and analyse_status='ANALYZING';
+		WHERE stock_code=#{stockCode} and strategy=#{strategy} and analyse_status='ANALYZING';
 	</select>
 
 	<insert id="insertWatchBegin" flushCache="true" useGeneratedKeys="true" keyProperty="watchBeginId">

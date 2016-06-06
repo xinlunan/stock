@@ -33,15 +33,4 @@ public interface IStockTradeSellDao {
      */
     public Integer saveStockTradeSells(List<StockTradeSell> sells);
 
-    /**
-     * 获取卖出交易
-     * 
-     * @param stockCode
-     * @param strategy
-     * @param parameters
-     * @return
-     */
-    public List<StockTradeSell> getStockTradeSells(String stockCode, String strategy, String parameters);
-
-
 }

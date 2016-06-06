@@ -13,14 +13,13 @@
 		<id property="close" column="close"></id>
 		<id property="exrights" column="exrights"></id>
 		<id property="parameters" column="parameters"></id>
-		<id property="analyseStatus" column="analyse_status"></id>
 		<id property="analyseDate" column="analyse_date"></id>
 		<id property="created" column="created"></id>
 		<id property="updated" column="updated"></id>
 	</resultMap>
 	
 	<sql id="columns">
-		stock_code,stock_name,date,open,high,low,close,exrights,parameters,analyse_status,analyse_date,created,updated
+		stock_code,stock_name,date,open,high,low,close,exrights,parameters,analyse_date,created,updated
 	</sql>
 
 	<select id="getHighests" resultMap="StockHighest">
@@ -32,12 +31,12 @@
 	<insert id="insertHighest" flushCache="true" useGeneratedKeys="true" keyProperty="highestId">
 		INSERT INTO t_stock_highest (<include refid="columns" />)
 		VALUES (
-			#{stockCode}, #{stockName}, #{date},#{open},#{high},#{low},#{close},#{exrights},#{parameters},#{analyseStatus},#{analyseDate},sysdate(),sysdate()
+			#{stockCode}, #{stockName}, #{date},#{open},#{high},#{low},#{close},#{exrights},#{parameters},#{analyseDate},sysdate(),sysdate()
 		);
 	</insert>
 	
 	<update id="updateHighestAnalyse" flushCache="true">
-		UPDATE t_stock_highest SET analyse_status=#{analyseStatus},analyse_date=#{analyseDate} WHERE stock_code=#{stockCode} and date=#{date} and parameters=#{parameters};
+		UPDATE t_stock_highest SET analyse_date=#{analyseDate} WHERE stock_code=#{stockCode} and date=#{date} and parameters=#{parameters};
 	</update>
 
 </mapper> 

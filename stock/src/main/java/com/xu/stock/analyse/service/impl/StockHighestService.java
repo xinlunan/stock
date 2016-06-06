@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.xu.stock.analyse.dao.IStockHighestDao;
 import com.xu.stock.analyse.model.StockHighest;
 import com.xu.stock.analyse.service.IStockHighestService;
-import com.xu.stock.analyse.service.StockAnalyseConstants.HighestAnalyseStatus;
 import com.xu.stock.analyse.service.uitl.StockAnalyseUtil;
 import com.xu.stock.data.model.StockDaily;
 import com.xu.util.DateUtil;
@@ -40,7 +39,8 @@ public class StockHighestService implements IStockHighestService {
     @Resource
     private IStockHighestDao stockHighestDao;
 
-    public void analyseHighestPoints(List<StockDaily> stockDailys, String parameters, Integer lastWaveCycle, Integer thisWaveCycle, BigDecimal thisFallRate) {
+    public void analyseHighestPoints(List<StockDaily> stockDailys, Integer lastWaveCycle, Integer thisWaveCycle, BigDecimal thisFallRate) {
+        String parameters = StockAnalyseUtil.buildParameter(lastWaveCycle, thisWaveCycle, thisFallRate);
         List<StockHighest> highests = stockHighestDao.getHighests(stockDailys.get(0).getStockCode(), parameters);
 
         List<StockHighest> newHighests = new ArrayList<StockHighest>();
@@ -50,7 +50,8 @@ public class StockHighestService implements IStockHighestService {
             // 指定是期是否最高点
             if (StockAnalyseUtil.isHighest(stockDailys, index, lastWaveCycle, thisWaveCycle)) {
                 // 本次是否达到跌幅
-                if (StockAnalyseUtil.isReachFallRate(stockDailys, index, thisFallRate)) {
+                Date lowDate = StockAnalyseUtil.getFirstLowDate(stockDailys, index, thisFallRate);
+                if (lowDate!=null) {
                     StockDaily daily = stockDailys.get(index);
                     StockHighest history = new StockHighest();
 
@@ -63,8 +64,7 @@ public class StockHighestService implements IStockHighestService {
                     history.setClose(daily.getClose());
                     history.setExrights(daily.getExrights());
                     history.setParameters(parameters);
-                    history.setAnalyseStatus(HighestAnalyseStatus.ANALYZING);
-                    history.setAnalyseDate(history.getDate());
+                    history.setAnalyseDate(lowDate);
 
                     newHighests.add(history);
                 }
