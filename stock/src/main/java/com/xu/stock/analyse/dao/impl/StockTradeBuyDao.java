@@ -25,11 +25,13 @@ import com.xu.stock.analyse.model.StockTradeBuy;
 @Repository("stockTradeBuyDao")
 public class StockTradeBuyDao extends BaseDao<StockTradeBuy> implements IStockTradeBuyDao {
 
-    private final String SQL_UPDATE_STOCK_BUY      = getNameSpace() + "updateStatus";
-    public final String  SQL_INSERT_STOCK_BUY      = getNameSpace() + "insertStockTradeBuy";
-    public final String  SQL_GET_STOCK_BUYS        = getNameSpace() + "getStockTradeBuys";
-    public final String  SQL_GET_BOUGHT_STOCK_BUYS = getNameSpace() + "getBoughtStockTradeBuys";
+    private final String SQL_UPDATE_STOCK_BUY          = getNameSpace() + "updateStatus";
+    public final String  SQL_INSERT_STOCK_BUY          = getNameSpace() + "insertStockTradeBuy";
+    public final String  SQL_GET_STOCK_BUYS            = getNameSpace() + "getStockTradeBuys";
+    public final String  SQL_GET_BOUGHT_STOCK_BUYS     = getNameSpace() + "getBoughtStockTradeBuys";
+    public final String  SQL_GET_ALL_BOUGHT_STOCK_BUYS = getNameSpace() + "getAllBoughtStockTradeBuys";
 
+    @Override
     public Integer saveStockTradeBuys(List<StockTradeBuy> buys) {
         Integer result = 0;
         for (StockTradeBuy buy : buys) {
@@ -38,6 +40,7 @@ public class StockTradeBuyDao extends BaseDao<StockTradeBuy> implements IStockTr
         return result;
     }
 
+    @Override
     public List<StockTradeBuy> getBoughtStockTradeBuys(String stockCode, String strategy) {
         Map<String, Object> paras = new HashMap<String, Object>();
         paras.put("stockCode", stockCode);
@@ -45,8 +48,14 @@ public class StockTradeBuyDao extends BaseDao<StockTradeBuy> implements IStockTr
         return getSqlSession().selectList(SQL_GET_BOUGHT_STOCK_BUYS, paras);
     }
 
+    @Override
     public Integer updateStatus(StockTradeBuy buy) {
         return getSqlSession().insert(SQL_UPDATE_STOCK_BUY, buy);
+    }
+
+    @Override
+    public List<StockTradeBuy> getAllBoughtStockTradeBuys() {
+        return getSqlSession().selectList(SQL_GET_ALL_BOUGHT_STOCK_BUYS);
     }
 
 }

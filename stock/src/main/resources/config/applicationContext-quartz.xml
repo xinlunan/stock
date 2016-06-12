@@ -41,6 +41,14 @@
 			<value>execute</value>
 		</property>
 	</bean>
+	<bean id="stockAnalyseResultMailJobMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="stockAnalyseResultMailController" />
+		</property>
+		<property name="targetMethod">
+			<value>execute</value>
+		</property>
+	</bean>
 	
 	<bean id="highestProbeAnalyseCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="highestProbeAnalyseJobMethod"></property>
@@ -54,6 +62,10 @@
 		<property name="jobDetail" ref="highestProbeSellAnalyseJobMethod"></property>
 		<property name="cronExpression" value="0 */2 9-14 * * ? *"></property>
 	</bean>
+	<bean id="stockAnalyseResultMailCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="stockAnalyseResultMailJobMethod"></property>
+		<property name="cronExpression" value="0 50 14 * * ? *"></property>
+	</bean>
 
 	<bean id="SpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
@@ -61,6 +73,7 @@
 				<ref bean="highestProbeAnalyseCronTriggerBean" />
 				<ref bean="highestProbeBuyAnalyseCronTriggerBean" />
 				<ref bean="highestProbeSellAnalyseCronTriggerBean" />
+				<ref bean="stockAnalyseResultMailCronTriggerBean" />
 			</list>
 		</property>
 	</bean>

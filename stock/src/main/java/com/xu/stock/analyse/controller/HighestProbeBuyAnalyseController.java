@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.analyse.service.IStockAnalyseService;
+import com.xu.stock.analyse.service.IStockTradeBuyService;
 import com.xu.stock.data.controller.StockDailyController;
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.service.IStockService;
@@ -33,6 +34,8 @@ public class HighestProbeBuyAnalyseController extends BaseStockAnalyseController
 	@Resource
 	private IStockAnalyseService highestProbeBuyAnalyseService;
     @Resource
+    IStockTradeBuyService        stockTradeBuyService;
+    @Resource
     private StockDailyController stockDailyController;
 
 	@Override
@@ -43,6 +46,7 @@ public class HighestProbeBuyAnalyseController extends BaseStockAnalyseController
     public void execute() {
         download();
         super.analyse(10);
+        stockTradeBuyService.sendStockAnalyseResultMail();
     }
 
     public void download() {

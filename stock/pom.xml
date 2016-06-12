@@ -177,7 +177,6 @@
 		  	<artifactId>quartz-commonj</artifactId>
 		  	<version>${quartz.version}</version>
 		</dependency>
-		
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
@@ -193,7 +192,11 @@
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>1.9.13</version>
 		</dependency>
-
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
 		<!-- XML begin -->
 		<dependency>
 			<groupId>dom4j</groupId>

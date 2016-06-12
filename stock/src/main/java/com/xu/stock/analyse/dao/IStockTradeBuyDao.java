@@ -24,9 +24,19 @@ public interface IStockTradeBuyDao {
     public List<StockTradeBuy> getBoughtStockTradeBuys(String stockCode, String strategy);
 
     /**
+     * 获取未卖出的购买信息
+     * 
+     * @param stockCode
+     * @param parameters
+     * @return
+     */
+    public List<StockTradeBuy> getAllBoughtStockTradeBuys();
+
+    /**
      * 更新购买状态
      * 
      * @param buy
+     * @return
      */
     public Integer updateStatus(StockTradeBuy buy);
 

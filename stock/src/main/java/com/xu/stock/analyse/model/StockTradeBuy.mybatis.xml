@@ -27,8 +27,13 @@
 
 	<select id="getBoughtStockTradeBuys" resultMap="StockTradeBuy">
 		SELECT trade_id,<include refid="columns" />
-		fROM t_stock_trade_buy
+		FROM t_stock_trade_buy
 		WHERE stock_code=#{stockCode} and strategy=#{strategy} and status='BOUGHT';
+	</select>
+	
+	<select id="getAllBoughtStockTradeBuys" resultMap="StockTradeBuy">
+		SELECT trade_id,<include refid="columns" />
+		FROM t_stock_trade_buy WHERE STATUS='BOUGHT' AND DATE=(SELECT MAX(DATE) FROM t_stock_trade_buy);
 	</select>
 
 	<insert id="insertStockTradeBuy" flushCache="true" useGeneratedKeys="true" keyProperty="tradeId">
