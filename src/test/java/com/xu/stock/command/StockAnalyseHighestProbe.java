@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.xu.stock.analyse.controller.HighestProbeBuyAnalyseController;
+import com.xu.stock.analyse.controller.HighestProbeAnalyseController;
 import com.xu.stock.data.controller.StockDailyController;
 import com.xu.test.BaseTestCase;
 
@@ -31,21 +31,21 @@ import com.xu.test.BaseTestCase;
 @SuppressWarnings("restriction")
 public class StockAnalyseHighestProbe extends BaseTestCase {
 
-    public static final int                  NUM_THREADS = 1;
+    public static final int               NUM_THREADS = 1;
     @Resource
     private StockDailyController             stockDailyController;
     @Resource
-    private HighestProbeBuyAnalyseController highestProbeBuyAnalyseController;
+    private HighestProbeAnalyseController highestProbeAnalyseController;
 
     @Test
     public void highestProbeBuyAnalyse() {
         log.info("最高点试探分析购买开始...");
-        highestProbeBuyAnalyseController.analyse(NUM_THREADS);
+        highestProbeAnalyseController.analyse(NUM_THREADS);
         log.info("最高点试探分析购买完成.");
     }
 
     @Before
     public void download() {
-        stockDailyController.downloadStockDaily(50);
+        stockDailyController.downloadStockDaily(10);
     }
 }
