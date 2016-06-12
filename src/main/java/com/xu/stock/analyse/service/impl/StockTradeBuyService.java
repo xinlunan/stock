@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.xu.mail.MailSender;
 import com.xu.stock.analyse.dao.IStockTradeBuyDao;
 import com.xu.stock.analyse.dao.IStockWatchBeginDao;
 import com.xu.stock.analyse.model.StockTradeBuy;
@@ -136,6 +137,21 @@ public class StockTradeBuyService implements IStockTradeBuyService {
         stockTradeBuy.setExrights(stockMinute.getExrights());
         stockTradeBuy.setAnalyseType(stockMinute.getHour() == 15 ? StockTradeBuyAnalyseType.CLOSE : StockTradeBuyAnalyseType.REALTIME);
         return stockTradeBuy;
+    }
+
+    @Override
+    public void sendStockAnalyseResultMail() {
+        log.info("发送分析结果邮件");
+        String content = "";
+        List<StockTradeBuy> buys = stockTradeBuyDao.getAllBoughtStockTradeBuys();
+        for (StockTradeBuy buy : buys) {
+            String parameter = buy.getParameters();
+            parameter = parameter.substring(parameter.lastIndexOf(",") + 1, parameter.length());
+            content = content + buy.getStockCode() + "_" + parameter + "\n";
+        }
+        log.info("发送分析结果邮件:" + content);
+        MailSender.sendMail(content);
+        log.info("发送分析结果邮件结束");
     }
 
 }

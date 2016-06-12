@@ -26,4 +26,9 @@ public interface IStockTradeBuyService {
      */
     public void analyseStockTradeBuy(List<StockDaily> dailys);
 
+    /**
+     * 发送分析购买的结果邮件
+     */
+    public void sendStockAnalyseResultMail();
+
 }
