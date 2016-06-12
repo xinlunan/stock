@@ -56,4 +56,8 @@ public interface IStockDao {
 	 */
 	public Integer updateStock(Stock stock);
 
+    public List<Stock> getAnalyseBuyStocks();
+
+    public List<Stock> getAnalyseSellStocks();
+
 }

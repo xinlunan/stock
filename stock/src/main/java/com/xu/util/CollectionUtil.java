@@ -42,8 +42,11 @@ public class CollectionUtil {
 		for (int i = 0; i < pages; i++) {
 			int fromIndex = i * pageSize;
 			int toIndex = i == (pages - 1) ? totalSize : (i + 1) * pageSize;
-			List subList = list.subList(fromIndex, toIndex);
-			subListPage.add(subList);
+            if (fromIndex < totalSize) {
+                toIndex = toIndex > totalSize ? totalSize : toIndex;
+                List subList = list.subList(fromIndex, toIndex);
+                subListPage.add(subList);
+            }
 		}
 
 		return subListPage;

@@ -181,19 +181,17 @@ public class StockAnalyseUtil {
      * @return
      */
     public static StockDaily getSellDaily(List<StockDaily> dailys, Date date, int holdDay) {
-        for (int i = 0; i < dailys.size(); i++) {
-            StockDaily daily = dailys.get(i);
-            if (DateUtil.dateToString(daily.getDate()).equals(DateUtil.dateToString(date))) {
-                if (i + holdDay < dailys.size() - 1) {
-                    return dailys.get(i + holdDay);
-                } else if (i + holdDay == dailys.size() - 1) {
-                    StockDaily lastDaily = dailys.get(i + holdDay);
-                    StockDaily nextDaily = buildNextStockDaily(lastDaily);
-                    return nextDaily;
-                } else {
-                    return null;
-                }
-
+        Integer index = StockAnalyseUtil.dailyIndex(dailys, date);
+        if (index != null) {
+            Integer sellIndex = index + holdDay;
+            if (sellIndex <= dailys.size() - 1) {
+                return dailys.get(sellIndex);
+            } else if (sellIndex == dailys.size()) {
+                StockDaily lastDaily = dailys.get(sellIndex - 1);
+                StockDaily nextDaily = buildNextStockDaily(lastDaily);
+                return nextDaily;
+            } else {
+                return null;
             }
         }
         return null;
@@ -331,6 +329,9 @@ public class StockAnalyseUtil {
                     higherDate = lastDaily.getDate();
                     break;
                 }
+            }
+            if (higherDate == null) {
+                higherDate = dailys.get(0).getDate();
             }
             lastHigherCache.put(key, higherDate);
         }

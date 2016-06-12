@@ -99,8 +99,11 @@ public class SinaStockDailyDownloador {
                         Double rate = exrights.divide(lastLastDaily.getExrights(), 4, BigDecimal.ROUND_HALF_UP).doubleValue();
                         if (rate > 0.98 && rate < 1.02) {
                             lastDaily.setExrights(lastLastDaily.getExrights());
+                            lastDaily.setThisExrights(BigDecimal.valueOf(1));
                         } else {
+                            BigDecimal thisExrights = exrights.divide(lastLastDaily.getExrights(), 6, BigDecimal.ROUND_HALF_UP);
                             lastDaily.setExrights(exrights);
+                            lastDaily.setThisExrights(thisExrights);
                         }
                     }
                 }

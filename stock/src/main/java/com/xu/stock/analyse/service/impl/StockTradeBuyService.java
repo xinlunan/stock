@@ -52,6 +52,7 @@ public class StockTradeBuyService implements IStockTradeBuyService {
     @Resource
     private IStockWatchBeginDao stockWatchBeginDao;
 
+    @Override
     public void analyseStockTradeBuy(List<StockDaily> dailys) {
         Map<String, StockMinute> minuteCache = new HashMap<String, StockMinute>();
         List<StockWatchBegin> watchBegins = stockWatchBeginDao.getUnAnalyseWatchBegins(StrategyType.HIGHEST_PROBE_BUY, dailys.get(0).getStockCode());

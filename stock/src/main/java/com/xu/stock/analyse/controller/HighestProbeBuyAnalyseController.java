@@ -1,10 +1,15 @@
 package com.xu.stock.analyse.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.analyse.service.IStockAnalyseService;
+import com.xu.stock.data.controller.StockDailyController;
+import com.xu.stock.data.model.Stock;
+import com.xu.stock.data.service.IStockService;
 
 /**
  * 股票分析控制层
@@ -23,12 +28,29 @@ import com.xu.stock.analyse.service.IStockAnalyseService;
 @Service("highestProbeBuyAnalyseController")
 public class HighestProbeBuyAnalyseController extends BaseStockAnalyseController {
 
+    @Resource
+    private IStockService        stockService;
 	@Resource
 	private IStockAnalyseService highestProbeBuyAnalyseService;
+    @Resource
+    private StockDailyController stockDailyController;
 
 	@Override
 	public IStockAnalyseService getStockAnalyseService() {
 		return highestProbeBuyAnalyseService;
 	}
 
+    public void execute() {
+        download();
+        super.analyse(10);
+    }
+
+    public void download() {
+        stockDailyController.downloadStockDaily(50);
+    }
+
+    @Override
+    public List<Stock> getAnalyseStocks() {
+        return stockService.getAnalyseBuyStocks();
+    }
 }

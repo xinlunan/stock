@@ -1,6 +1,7 @@
 package com.xu.stock.analyse.service.impl;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,32 +61,35 @@ public class StockTradeSellService implements IStockTradeSellService {
     @Resource
     private IStockTradeSellDao     stockTradeSellDao;
 
+    @Override
     public void analyseStockTradeSell(List<StockDaily> dailys) {
         Map<String, List<StockMinute>> minuteCache = new HashMap<String, List<StockMinute>>();
         initStrategyParameters();
         List<StockTradeBuy> buys = stockTradeBuyDao.getBoughtStockTradeBuys(dailys.get(0).getStockCode(), StrategyType.HIGHEST_PROBE_BUY.toString());
         for (StockTradeBuy buy : buys) {
             for (int holdDay = holdDayBegin; holdDay <= holdDayEnd; holdDay++) {
-                if (StockAnalyseUtil.dailyIndex(dailys, buy.getDate()) < dailys.size() - holdDay
-                    || (StockAnalyseUtil.dailyIndex(dailys, buy.getDate()) == dailys.size() - holdDay && StockAnalyseUtil.hasNewSellData(dailys, dailys.get(dailys.size() - 1).getDate()))) {
-                    List<StockMinute> minutes = fetchStockMinute(dailys, buy, holdDay, minuteCache);
-                    for (int stopLossRate = stopLossRateBegin.intValue(); stopLossRate <= stopLossRateEnd.intValue(); stopLossRate++) {
-                        for (int expectRate = expectRateBegin.intValue(); expectRate <= expectRateEnd.intValue(); expectRate++) {
-                            StockMinute stockMinute = analyseSellMinute(dailys, minutes, buy, holdDay, stopLossRate, expectRate);
-                            if (stockMinute != null) {
-                                String parameters = StockAnalyseUtil.buildParameter(buy.getParameters(), holdDay, expectRate, stopLossRate);
-                                StockTradeSell sellTrade = buildStockTradeSell(stockMinute, buy, parameters);
-                                stockTradeSellDao.saveTradeSell(sellTrade);
-                                buy.setStatus(StockTradeBuyStatus.SELLED);
-                                stockTradeBuyDao.updateStatus(buy);
-                                log.info("卖出\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()) + "\t" + DateUtil.date2String(sellTrade.getDate()));
-                            } else {
-                                log.info("停牌，无法卖出\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()));
+                if (StockAnalyseUtil.dailyIndex(dailys, buy.getDate()) != null) {
+                    if (StockAnalyseUtil.dailyIndex(dailys, buy.getDate()) < dailys.size() - holdDay
+                        || (StockAnalyseUtil.dailyIndex(dailys, buy.getDate()) == dailys.size() - holdDay && StockAnalyseUtil.hasNewSellData(dailys, dailys.get(dailys.size() - 1).getDate()))) {
+                        List<StockMinute> minutes = fetchStockMinute(dailys, buy, holdDay, minuteCache);
+                        for (int stopLossRate = stopLossRateBegin.intValue(); stopLossRate <= stopLossRateEnd.intValue(); stopLossRate++) {
+                            for (int expectRate = expectRateBegin.intValue(); expectRate <= expectRateEnd.intValue(); expectRate++) {
+                                StockMinute stockMinute = analyseSellMinute(dailys, minutes, buy, holdDay, stopLossRate, expectRate);
+                                if (stockMinute != null) {
+                                    String parameters = StockAnalyseUtil.buildParameter(buy.getParameters(), holdDay, expectRate, stopLossRate);
+                                    StockTradeSell sellTrade = buildStockTradeSell(stockMinute, buy, parameters);
+                                    stockTradeSellDao.saveTradeSell(sellTrade);
+                                    buy.setStatus(StockTradeBuyStatus.SELLED);
+                                    stockTradeBuyDao.updateStatus(buy);
+                                    log.info("卖出\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()) + "\t" + DateUtil.date2String(sellTrade.getDate()));
+                                } else {
+                                    log.info("停牌，无法卖出\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()));
+                                }
                             }
                         }
+                    } else {
+                        log.info("未到卖出日期\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()));
                     }
-                } else {
-                    log.info("未到卖出日期\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()));
                 }
             }
 
@@ -119,11 +123,11 @@ public class StockTradeSellService implements IStockTradeSellService {
         if (!minutes.isEmpty()) {
             BigDecimal expectRate = BigDecimal.valueOf(expectRateInt).divide(BD_100).setScale(4, BigDecimal.ROUND_HALF_UP);// 期望收益
             BigDecimal thisStopLoss_100 = BigDecimal.valueOf(stopLossRate).divide(BD_100).setScale(4, BigDecimal.ROUND_HALF_UP);
-            StockDaily buyDaily = StockAnalyseUtil.getSellDaily(dailys, buy.getDate(), 0);
+            StockDaily buyDay = StockAnalyseUtil.getSellDaily(dailys, buy.getDate(), 0);
             for (int i = 0; i < minutes.size(); i++) {
                 StockMinute stockMinute = minutes.get(i);
                 BigDecimal expectSellPrice = buy.getPrice().add(buy.getPrice().multiply(expectRate)).multiply(buy.getExrights()).divide(stockMinute.getExrights(), 4, BigDecimal.ROUND_HALF_UP);
-                BigDecimal stopLossPrice = buyDaily.getClose().subtract(buyDaily.getClose().multiply(thisStopLoss_100)).multiply(buyDaily.getExrights()).divide(stockMinute.getExrights(), 4, BigDecimal.ROUND_HALF_UP);
+                BigDecimal stopLossPrice = buyDay.getClose().subtract(buyDay.getClose().multiply(thisStopLoss_100)).multiply(buyDay.getExrights()).divide(stockMinute.getExrights(), 4, BigDecimal.ROUND_HALF_UP);
                 Boolean isStopLoss = stockMinute.getPrice().compareTo(stopLossPrice) == -1;
                 Boolean isExpectSell = expectSellPrice.compareTo(stockMinute.getPrice()) <= 0;
                 Boolean isNearClose = (stockMinute.getHour() >= StockSellTime.HOUR && stockMinute.getMinute() >= StockSellTime.MINUTE);
@@ -165,7 +169,13 @@ public class StockTradeSellService implements IStockTradeSellService {
         if (dailyIndex > dailys.size() - holdDay) {
             return null;
         } else if (dailyIndex == dailys.size() - holdDay) {
-            stockMinutes = stockMinuteService.fetchRealtimeMinute(dailys.get(dailys.size() - holdDay));
+            String cacheKey = buy.getStockCode() + DateUtil.getDate(new Date(), "yyyy-MM-dd HH:mm");
+            if (minuteCache.containsKey(cacheKey)) {
+                return minuteCache.get(cacheKey);
+            } else {
+                stockMinutes = stockMinuteService.fetchRealtimeMinute(dailys.get(dailys.size() - holdDay));
+                minuteCache.put(cacheKey, stockMinutes);
+            }
         } else {
             StockDaily daily = dailys.get(dailyIndex + holdDay);
             if (minuteCache.containsKey(daily.getStockCode() + daily.getDate())) {

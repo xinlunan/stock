@@ -29,6 +29,16 @@
 		FROM t_stock ORDER BY stock_code;
 	</select>
 	
+	<select id="getAnalyseBuyStock" resultMap="Stock">
+		SELECT stock_id, <include refid="columns" /> 
+		FROM t_stock WHERE stock_code IN (SELECT DISTINCT stock_code FROM t_stock_watch_begin WHERE analyse_status='ANALYZING');
+	</select>
+	
+	<select id="getAnalyseSellStock" resultMap="Stock">
+		SELECT stock_id, <include refid="columns" /> 
+		FROM t_stock WHERE stock_code IN (SELECT DISTINCT stock_code FROM t_stock_trade_buy WHERE status='BOUGHT');
+	</select>
+	
 	<select id="getOldStock" resultMap="Stock">
 		SELECT stock_id, <include refid="columns" />
 		FROM t_stock WHERE last_date = (SELECT MIN(last_date) FROM t_stock) ORDER BY stock_code;
