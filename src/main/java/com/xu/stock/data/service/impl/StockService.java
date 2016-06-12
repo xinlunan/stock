@@ -41,19 +41,33 @@ public class StockService implements IStockService {
 	@Resource
 	private IStockDailyDao stockDailyDao;
 
-	public Stock getStock(String stockCode) {
+	@Override
+    public Stock getStock(String stockCode) {
 		return stockDao.getStock(stockCode);
 	}
 
-	public List<Stock> getAllStocks() {
+	@Override
+    public List<Stock> getAllStocks() {
 		return stockDao.getAllStocks();
 	}
 
-	public List<Stock> getUnupatedStocks() {
+    @Override
+    public List<Stock> getAnalyseBuyStocks() {
+        return stockDao.getAnalyseBuyStocks();
+    }
+
+    @Override
+    public List<Stock> getAnalyseSellStocks() {
+        return stockDao.getAnalyseSellStocks();
+    }
+
+	@Override
+    public List<Stock> getUnupatedStocks() {
 		return stockDao.getUnupatedStocks();
 	}
 
-	public Integer insertStocks(List<Stock> stocks) {
+	@Override
+    public Integer insertStocks(List<Stock> stocks) {
 		Integer result = 0;
 		for (Stock stock : stocks) {
 			Stock exsitStock = stockDao.getStock(stock.getStockCode());
@@ -68,7 +82,8 @@ public class StockService implements IStockService {
 		return result;
 	}
 
-	public void saveStockData(Stock stock) {
+	@Override
+    public void saveStockData(Stock stock) {
         log.info("更新数据:" + stock.getStockCode());
 		filterInvalid(stock);
 
@@ -113,6 +128,7 @@ public class StockService implements IStockService {
         }
 	}
 
+    @Override
     public StockDaily getNextDaily(String stockCode, Date date) {
         return stockDailyDao.getNextStockDaily(stockCode, date);
     }

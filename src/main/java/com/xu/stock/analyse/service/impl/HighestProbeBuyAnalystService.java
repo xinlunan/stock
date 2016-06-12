@@ -64,7 +64,7 @@ public class HighestProbeBuyAnalystService extends BaseStockAnalyseService {
 
     @Override
     public List<StockTrade> doAnalyse(List<StockDaily> dailys) {
-        if ("000001".equals(dailys.get(0).getStockCode())) {
+        if ("".equals(dailys.get(0).getStockCode())) {
             log.info("debug异常" + dailys.get(0).getStockCode());
         }
         log.info("analyse stock code:" + dailys.get(0).getStockCode());

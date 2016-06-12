@@ -36,6 +36,20 @@ public interface IStockService {
 	 */
 	public List<Stock> getAllStocks();
 
+    /**
+     * 获取待分析买入的股票
+     * 
+     * @return
+     */
+    public List<Stock> getAnalyseBuyStocks();
+
+    /**
+     * 获取待分析卖出的股票
+     * 
+     * @return
+     */
+    public List<Stock> getAnalyseSellStocks();
+
 	/**
 	 * 获取最久没有更新的股票
 	 * 

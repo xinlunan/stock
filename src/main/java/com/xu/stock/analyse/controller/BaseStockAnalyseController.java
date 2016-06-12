@@ -40,7 +40,7 @@ public abstract class BaseStockAnalyseController {
 	private IStockDailyDao stockDailyDao;
 
 	public void analyse(int threads) {
-		List<Stock> stocks = stockService.getAllStocks();
+		List<Stock> stocks = getAnalyseStocks();
 
 		List<List<Stock>> stockGroups = CollectionUtil.subListByPages(stocks, threads);
 
@@ -52,12 +52,16 @@ public abstract class BaseStockAnalyseController {
 			worker.setStockAnalyseService(getStockAnalyseService());
 			worker.start();
 			workers.add(worker);
-
 		}
 
 		ThreadUtil.threadsJoin(workers);
 
 	}
+
+    public List<Stock> getAnalyseStocks() {
+        List<Stock> stocks = stockService.getAllStocks();
+        return stocks;
+    }
 
 	public abstract IStockAnalyseService getStockAnalyseService();
 

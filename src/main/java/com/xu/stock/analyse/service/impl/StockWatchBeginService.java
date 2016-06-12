@@ -2,7 +2,10 @@ package com.xu.stock.analyse.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -48,6 +51,7 @@ public class StockWatchBeginService implements IStockWatchBeginService {
 
     @Override
     public void analyseBatchBeginByHighest(List<StockDaily> dailys, Integer lastWaveCycle, Integer thisWaveCycle, BigDecimal thisFallRate) {
+        Map<String, Date> lastHigherCache = new HashMap<String, Date>();
         String parameters = StockAnalyseUtil.buildParameter(lastWaveCycle, thisWaveCycle, thisFallRate);
         List<StockHighest> highestPoints = stockHighestDao.getHighests(dailys.get(0).getStockCode(), parameters);
         for (StockHighest highest : highestPoints) {// 遍历所有最高点
@@ -56,6 +60,11 @@ public class StockWatchBeginService implements IStockWatchBeginService {
             for (int i = -3; i < 200; i++) {// 尝试不同的收益参数
                 for (int j = index + 1; j < dailys.size(); j++) {// 从指定日期开始遍历
                     StockDaily thisDaily = dailys.get(j);
+                    Date higherDate = StockAnalyseUtil.getLastHigherDate(dailys, thisDaily, lastHigherCache);
+                    if (higherDate.after(highest.getDate())) {
+                        continue;
+                    }
+
                     BigDecimal thisCloseExr = thisDaily.getClose().multiply(thisDaily.getExrights());
                     BigDecimal currentHighestExr = thisDaily.getHigh().multiply(thisDaily.getExrights());
                     BigDecimal buyRateHigh = BigDecimal.valueOf(0 - i);

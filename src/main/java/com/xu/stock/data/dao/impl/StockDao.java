@@ -24,31 +24,49 @@ import com.xu.stock.data.model.Stock;
  */
 @Repository("stockDao")
 public class StockDao extends BaseDao<Stock> implements IStockDao {
-	public final String SQL_GET_STOCK = getNameSpace() + "getStock";
-	public final String SQL_GET_ALL_STOCK = getNameSpace() + "getAllStock";
-	public final String SQL_GET_OLD_STOCK = getNameSpace() + "getOldStock";
-	public final String SQL_INSERT_STOCK = getNameSpace() + "insertStock";
-	public final String SQL_UPDATE_STOCK = getNameSpace() + "updateStock";
 
-	public Stock getStock(String stockCode) {
+    public final String SQL_GET_STOCK              = getNameSpace() + "getStock";
+    public final String SQL_GET_ALL_STOCK          = getNameSpace() + "getAllStock";
+    public final String SQL_GET_ANALYSE_BUY_STOCK  = getNameSpace() + "getAnalyseBuyStock";
+    public final String SQL_GET_ANALYSE_SELL_STOCK = getNameSpace() + "getAnalyseSellStock";
+    public final String SQL_GET_OLD_STOCK          = getNameSpace() + "getOldStock";
+    public final String SQL_INSERT_STOCK           = getNameSpace() + "insertStock";
+    public final String SQL_UPDATE_STOCK           = getNameSpace() + "updateStock";
+
+	@Override
+    public Stock getStock(String stockCode) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("stockCode", stockCode);
 		return getSqlSession().selectOne(SQL_GET_STOCK, params);
 	}
 
-	public List<Stock> getAllStocks() {
+	@Override
+    public List<Stock> getAllStocks() {
 		return getSqlSession().selectList(SQL_GET_ALL_STOCK);
 	}
 
-	public List<Stock> getUnupatedStocks() {
+    @Override
+    public List<Stock> getAnalyseBuyStocks() {
+        return getSqlSession().selectList(SQL_GET_ANALYSE_BUY_STOCK);
+    }
+
+    @Override
+    public List<Stock> getAnalyseSellStocks() {
+        return getSqlSession().selectList(SQL_GET_ANALYSE_SELL_STOCK);
+    }
+
+	@Override
+    public List<Stock> getUnupatedStocks() {
 		return getSqlSession().selectList(SQL_GET_OLD_STOCK);
 	}
 
-	public Integer insertStock(Stock stock) {
+	@Override
+    public Integer insertStock(Stock stock) {
 		return getSqlSession().insert(SQL_INSERT_STOCK, stock);
 	}
 
-	public Integer updateStock(Stock stock) {
+	@Override
+    public Integer updateStock(Stock stock) {
 		return getSqlSession().update(SQL_UPDATE_STOCK, stock);
 	}
 
