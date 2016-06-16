@@ -20,7 +20,7 @@ public class MailSender {
             Session session = getDefaultInstance(buildProperties(), username, password);
 
             Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress(username + "@qq.com"));
+            msg.setFrom(new InternetAddress(username + "@qq.com", "巴菲特"));
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("371698049@qq.com", false));
             msg.setSubject("stock analyse result");
             msg.setText(content);
