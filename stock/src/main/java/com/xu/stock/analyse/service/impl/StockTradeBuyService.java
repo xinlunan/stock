@@ -110,15 +110,27 @@ public class StockTradeBuyService implements IStockTradeBuyService {
                     stockMinute = null;
                 }
             }
+            if (stockMinute != null) {
+                if (stockMinute.getPrice().multiply(stockMinute.getExrights()).compareTo(watchBegin.getClose().multiply(watchBegin.getExrights())) < 1) {
+                    stockMinute = null;
+                }
+            }
             minuteCache.put(watchBegin.getStockCode() + watchBegin.getDate(), stockMinute);
         } else {
             stockMinute = stockMinuteService.fetchRealtimeBuyMinute(watchBegin);
-            BigDecimal thisPriceExr = stockMinute.getPrice().multiply(stockMinute.getExrights());
-            BigDecimal thisHighPriceExr = stockMinute.getHigh().multiply(stockMinute.getExrights());
-            BigDecimal lastPriceExr = watchBegin.getClose().multiply(watchBegin.getExrights());
-            BigDecimal rate = thisPriceExr.subtract(lastPriceExr).multiply(BigDecimal.valueOf(100)).divide(lastPriceExr, 4, BigDecimal.ROUND_HALF_UP);
-            if (StockAnalyseUtil.isLimitUp(thisPriceExr, rate, thisHighPriceExr)) {
-                stockMinute = null;
+            if (stockMinute.getHigh().compareTo(stockMinute.getPrice()) == 0) {
+                BigDecimal thisPriceExr = stockMinute.getPrice().multiply(stockMinute.getExrights());
+                BigDecimal thisHighPriceExr = stockMinute.getHigh().multiply(stockMinute.getExrights());
+                BigDecimal lastPriceExr = watchBegin.getClose().multiply(watchBegin.getExrights());
+                BigDecimal rate = thisPriceExr.subtract(lastPriceExr).multiply(BigDecimal.valueOf(100)).divide(lastPriceExr, 4, BigDecimal.ROUND_HALF_UP);
+                if (StockAnalyseUtil.isLimitUp(thisPriceExr, rate, thisHighPriceExr)) {
+                    stockMinute = null;
+                }
+            }
+            if (stockMinute != null) {
+                if (stockMinute.getPrice().multiply(stockMinute.getExrights()).compareTo(watchBegin.getClose().multiply(watchBegin.getExrights())) < 1) {
+                    stockMinute = null;
+                }
             }
             if (stockMinute != null) {
                 minuteCache.put(watchBegin.getStockCode() + watchBegin.getDate(), stockMinute);
