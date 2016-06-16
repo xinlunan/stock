@@ -33,7 +33,8 @@
 	
 	<select id="getAllBoughtStockTradeBuys" resultMap="StockTradeBuy">
 		SELECT trade_id,<include refid="columns" />
-		FROM t_stock_trade_buy WHERE STATUS='BOUGHT' AND DATE=(SELECT MAX(DATE) FROM t_stock_trade_buy);
+		FROM t_stock_trade_buy WHERE STATUS='BOUGHT' AND DATE=(SELECT MAX(DATE) FROM t_stock_trade_buy) 
+		ORDER BY stock_code ,CAST(SUBSTRING_INDEX(parameters, ',', -1) AS DECIMAL) DESC;
 	</select>
 
 	<insert id="insertStockTradeBuy" flushCache="true" useGeneratedKeys="true" keyProperty="tradeId">

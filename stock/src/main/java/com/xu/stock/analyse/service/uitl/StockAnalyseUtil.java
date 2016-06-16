@@ -8,6 +8,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.xu.stock.analyse.model.StockHighest;
 import com.xu.stock.analyse.model.StockWatchBegin;
 import com.xu.stock.analyse.service.StockAnalyseConstants;
 import com.xu.stock.data.model.StockDaily;
@@ -255,7 +256,7 @@ public class StockAnalyseUtil {
         for (Object parameter : parameters) {
             result = result + parameter.toString() + ",";
         }
-        if(result.endsWith(",")){
+        if (result.endsWith(",")) {
             result = result.substring(0, result.length() - 1);
         }
         return result;
@@ -336,6 +337,20 @@ public class StockAnalyseUtil {
             lastHigherCache.put(key, higherDate);
         }
         return higherDate;
+    }
+
+    public static boolean hasHigher(List<StockDaily> dailys, StockHighest highest, StockDaily thisDaily, BigDecimal buyLowExr) {
+        Integer highIndex = StockAnalyseUtil.dailyIndex(dailys, highest.getDate());
+        Integer thisIndex = StockAnalyseUtil.dailyIndex(dailys, thisDaily.getDate());
+        Integer endIndex = thisIndex - 40 > highIndex ? thisIndex - 40 : highIndex;
+        for (int i = thisIndex - 1; i > endIndex; i--) {
+            StockDaily lastDaily = dailys.get(i);
+            BigDecimal lastCloseExt = lastDaily.getClose().multiply(lastDaily.getExrights());
+            if (buyLowExr.compareTo(lastCloseExt) == -1) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

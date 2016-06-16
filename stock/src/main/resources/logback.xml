@@ -12,7 +12,7 @@
             <fileNamePattern>D:/server/tomcat/tomcat7/apache-tomcat-7.0.54.stock/logs/stock/stock.%d{yyyy-MM-dd}.log</fileNamePattern>
         </rollingPolicy>
         <encoder>
-            <pattern>%X{logback.sessionId} %X{logback.ip} %date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%X{logback.sessionId} %X{logback.ip} %d{yyyy-MM-dd} %date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 

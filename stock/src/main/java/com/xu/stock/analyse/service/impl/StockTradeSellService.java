@@ -83,13 +83,15 @@ public class StockTradeSellService implements IStockTradeSellService {
                                     stockTradeBuyDao.updateStatus(buy);
                                     log.info("卖出\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()) + "\t" + DateUtil.date2String(sellTrade.getDate()));
                                 } else {
-                                    log.info("停牌，无法卖出\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()));
+                                    log.info("等待卖出\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()));
                                 }
                             }
                         }
                     } else {
                         log.info("未到卖出日期\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()));
                     }
+                } else {
+                    log.info("未抓取买入日期\t" + buy.getStockCode() + "\t" + DateUtil.date2String(buy.getDate()));
                 }
             }
 

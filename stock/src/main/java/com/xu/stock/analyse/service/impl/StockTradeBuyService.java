@@ -113,6 +113,13 @@ public class StockTradeBuyService implements IStockTradeBuyService {
             minuteCache.put(watchBegin.getStockCode() + watchBegin.getDate(), stockMinute);
         } else {
             stockMinute = stockMinuteService.fetchRealtimeBuyMinute(watchBegin);
+            BigDecimal thisPriceExr = stockMinute.getPrice().multiply(stockMinute.getExrights());
+            BigDecimal thisHighPriceExr = stockMinute.getHigh().multiply(stockMinute.getExrights());
+            BigDecimal lastPriceExr = watchBegin.getClose().multiply(watchBegin.getExrights());
+            BigDecimal rate = thisPriceExr.subtract(lastPriceExr).multiply(BigDecimal.valueOf(100)).divide(lastPriceExr, 4, BigDecimal.ROUND_HALF_UP);
+            if (StockAnalyseUtil.isLimitUp(thisPriceExr, rate, thisHighPriceExr)) {
+                stockMinute = null;
+            }
             if (stockMinute != null) {
                 minuteCache.put(watchBegin.getStockCode() + watchBegin.getDate(), stockMinute);
             }
@@ -147,7 +154,15 @@ public class StockTradeBuyService implements IStockTradeBuyService {
         for (StockTradeBuy buy : buys) {
             String parameter = buy.getParameters();
             parameter = parameter.substring(parameter.lastIndexOf(",") + 1, parameter.length());
-            content = content + buy.getStockCode() + "_" + parameter + "\n";
+            if (content.contains(buy.getStockCode())) {
+                content = content + "," + parameter;
+            } else {
+                if (content.length() == 0) {
+                    content = content + buy.getStockCode() + "_" + parameter;
+                } else {
+                    content = content + "\n" + buy.getStockCode() + "_" + parameter;
+                }
+            }
         }
         log.info("发送分析结果邮件:" + content);
         MailSender.sendMail(content);
