@@ -52,7 +52,7 @@
 	
 	<bean id="highestProbeAnalyseCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="highestProbeAnalyseJobMethod"></property>
-		<property name="cronExpression" value="0 0 20 * * ? *"></property>
+		<property name="cronExpression" value="0 0 20,21,22 * * ? *"></property>
 	</bean>
 	<bean id="highestProbeBuyAnalyseCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="highestProbeBuyAnalyseJobMethod"></property>
