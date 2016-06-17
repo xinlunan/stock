@@ -49,8 +49,8 @@ public class StockTradeSellService implements IStockTradeSellService {
 
     private Integer                holdDayBegin      = 1;
     private Integer                holdDayEnd        = 1;
-    private Double                 expectRateBegin   = 10d;
-    private Double                 expectRateEnd     = 10d;
+    private Double                 expectRateBegin   = 8d;
+    private Double                 expectRateEnd     = 8d;
     private Double                 stopLossRateBegin = 10d;
     private Double                 stopLossRateEnd   = 10d;
 
