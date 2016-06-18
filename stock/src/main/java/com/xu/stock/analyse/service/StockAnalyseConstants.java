@@ -34,7 +34,7 @@ public interface StockAnalyseConstants {
     public interface StockSellTime {
 
         public static final Integer HOUR   = 14;
-        public static final Integer MINUTE = 30;
+        public static final Integer MINUTE = 03;
     }
 
     public interface WatchBeginStatus {
