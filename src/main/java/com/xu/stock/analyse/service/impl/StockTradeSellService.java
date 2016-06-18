@@ -49,8 +49,8 @@ public class StockTradeSellService implements IStockTradeSellService {
 
     private Integer                holdDayBegin      = 1;
     private Integer                holdDayEnd        = 1;
-    private Double                 expectRateBegin   = 8d;
-    private Double                 expectRateEnd     = 8d;
+    private Double                 expectRateBegin   = 0d;
+    private Double                 expectRateEnd     = 10d;
     private Double                 stopLossRateBegin = 10d;
     private Double                 stopLossRateEnd   = 10d;
 
@@ -134,8 +134,17 @@ public class StockTradeSellService implements IStockTradeSellService {
                 Boolean isExpectSell = expectSellPrice.compareTo(stockMinute.getPrice()) <= 0;
                 Boolean isNearClose = (stockMinute.getHour() >= StockSellTime.HOUR && stockMinute.getMinute() >= StockSellTime.MINUTE);
 
-                if (isStopLoss || isExpectSell || isNearClose) {// 止跌、达到预期、到了接近收盘时间
+                if (isStopLoss) {// 止跌、达到预期、到了接近收盘时间
                     result = stockMinute;
+                    break;
+                }
+                if (isExpectSell) {// 止跌、达到预期、到了接近收盘时间
+                    result = stockMinute;
+                    break;
+                }
+                if (isNearClose) {// 止跌、达到预期、到了接近收盘时间
+                    result = stockMinute;
+                    break;
                 }
             }
         }

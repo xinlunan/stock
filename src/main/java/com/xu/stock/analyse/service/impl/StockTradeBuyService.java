@@ -27,6 +27,7 @@ import com.xu.stock.analyse.service.uitl.StockAnalyseUtil;
 import com.xu.stock.data.model.StockDaily;
 import com.xu.stock.data.model.StockMinute;
 import com.xu.stock.data.service.IStockMinuteService;
+import com.xu.util.DateUtil;
 
 /**
  * 历史最高点
@@ -60,6 +61,9 @@ public class StockTradeBuyService implements IStockTradeBuyService {
         List<StockTradeBuy> buys = new ArrayList<StockTradeBuy>();
         for (StockWatchBegin watchBegin : watchBegins) {
             if (WatchBeginStatus.ANALYZING.equals(watchBegin.getAnalyseStatus()) && StockAnalyseUtil.hasNewBuyData(dailys, watchBegin.getDate())) {
+                if (DateUtil.date2String(watchBegin.getDate()).equals("aaaaa") && "20,20,30.0,-79.1,-97.0,-99".equals(watchBegin.getParameters())) {
+                    log.info("");
+                }
                 StockMinute stockMinute = fetchStockMinute(dailys, watchBegin, minuteCache);
                 if (stockMinute != null) {
                     BigDecimal priceExr = stockMinute.getPrice().multiply(stockMinute.getExrights());
@@ -101,13 +105,15 @@ public class StockTradeBuyService implements IStockTradeBuyService {
             if (stockMinute == null) {
                 stockMinute = StockAnalyseUtil.buildStockMinute(nextDaily);
             }
-            if (stockMinute.getHigh().compareTo(stockMinute.getPrice()) == 0) {
-                BigDecimal thisPriceExr = stockMinute.getPrice().multiply(stockMinute.getExrights());
-                BigDecimal thisHighPriceExr = stockMinute.getHigh().multiply(stockMinute.getExrights());
-                BigDecimal lastPriceExr = nextDaily.getLastClose().multiply(nextDaily.getExrights());
-                BigDecimal rate = thisPriceExr.subtract(lastPriceExr).multiply(BigDecimal.valueOf(100)).divide(lastPriceExr, 4, BigDecimal.ROUND_HALF_UP);
-                if (StockAnalyseUtil.isLimitUp(thisPriceExr, rate, thisHighPriceExr)) {
-                    stockMinute = null;
+            if (stockMinute != null) {
+                if (stockMinute.getHigh().compareTo(stockMinute.getPrice()) == 0) {
+                    BigDecimal thisPriceExr = stockMinute.getPrice().multiply(stockMinute.getExrights());
+                    BigDecimal thisHighPriceExr = stockMinute.getHigh().multiply(stockMinute.getExrights());
+                    BigDecimal lastPriceExr = nextDaily.getLastClose().multiply(nextDaily.getExrights());
+                    BigDecimal rate = thisPriceExr.subtract(lastPriceExr).multiply(BigDecimal.valueOf(100)).divide(lastPriceExr, 4, BigDecimal.ROUND_HALF_UP);
+                    if (StockAnalyseUtil.isLimitUp(thisPriceExr, rate, thisHighPriceExr)) {
+                        stockMinute = null;
+                    }
                 }
             }
             if (stockMinute != null) {
@@ -118,13 +124,15 @@ public class StockTradeBuyService implements IStockTradeBuyService {
             minuteCache.put(watchBegin.getStockCode() + watchBegin.getDate(), stockMinute);
         } else {
             stockMinute = stockMinuteService.fetchRealtimeBuyMinute(watchBegin);
-            if (stockMinute.getHigh().compareTo(stockMinute.getPrice()) == 0) {
-                BigDecimal thisPriceExr = stockMinute.getPrice().multiply(stockMinute.getExrights());
-                BigDecimal thisHighPriceExr = stockMinute.getHigh().multiply(stockMinute.getExrights());
-                BigDecimal lastPriceExr = watchBegin.getClose().multiply(watchBegin.getExrights());
-                BigDecimal rate = thisPriceExr.subtract(lastPriceExr).multiply(BigDecimal.valueOf(100)).divide(lastPriceExr, 4, BigDecimal.ROUND_HALF_UP);
-                if (StockAnalyseUtil.isLimitUp(thisPriceExr, rate, thisHighPriceExr)) {
-                    stockMinute = null;
+            if (stockMinute != null) {
+                if (stockMinute.getHigh().compareTo(stockMinute.getPrice()) == 0) {
+                    BigDecimal thisPriceExr = stockMinute.getPrice().multiply(stockMinute.getExrights());
+                    BigDecimal thisHighPriceExr = stockMinute.getHigh().multiply(stockMinute.getExrights());
+                    BigDecimal lastPriceExr = watchBegin.getClose().multiply(watchBegin.getExrights());
+                    BigDecimal rate = thisPriceExr.subtract(lastPriceExr).multiply(BigDecimal.valueOf(100)).divide(lastPriceExr, 4, BigDecimal.ROUND_HALF_UP);
+                    if (StockAnalyseUtil.isLimitUp(thisPriceExr, rate, thisHighPriceExr)) {
+                        stockMinute = null;
+                    }
                 }
             }
             if (stockMinute != null) {
