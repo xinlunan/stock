@@ -178,9 +178,9 @@ public class StockTradeBuyService implements IStockTradeBuyService {
                 content = content + "," + parameter;
             } else {
                 if (content.length() == 0) {
-                    content = content + buy.getStockCode() + "_" + parameter;
+                    content = content + buy.getStockCode() + "_" + buy.getStockName() + "_" + parameter;
                 } else {
-                    content = content + "\n" + buy.getStockCode() + "_" + parameter;
+                    content = content + "\n" + buy.getStockCode() + "_" + buy.getStockName() + "_" + parameter;
                 }
             }
         }
