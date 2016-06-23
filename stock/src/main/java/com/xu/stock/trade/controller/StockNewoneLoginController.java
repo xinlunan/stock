@@ -157,7 +157,6 @@ public class StockNewoneLoginController {
         paras.add(new BasicNameValuePair("version", "2"));
         String result = HttpsClientHandle.post(httpClient, "https://etrade.newone.com.cn/xtrade", paras);
         if (result.contains("document.location.href")) {
-            log.info(result);
             model.put("result", result);
             return new ModelAndView("trade/list", model);
         } else {
