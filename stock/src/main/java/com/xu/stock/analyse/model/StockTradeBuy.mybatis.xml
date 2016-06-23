@@ -45,7 +45,7 @@
 	</insert>
 	
 	<update id="updateStatus" flushCache="true">
-		UPDATE t_stock_trade_buy SET status=#{status} WHERE trade_id=#{tradeId};
+		UPDATE t_stock_trade_buy SET status=#{status},updated=sysdate() WHERE trade_id=#{tradeId};
 	</update>
 	
 </mapper> 
