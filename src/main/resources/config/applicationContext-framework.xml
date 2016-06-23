@@ -16,8 +16,7 @@
 		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.2.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
 		http://www.winit.com/schema/mqx http://www.winit.com/schema/mqx/mqx.xsd
-		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd"
-		default-lazy-init="true">
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 	<!-- Service父类 -->
 	<bean id="baseService" abstract="true" class=" com.winit.framework.service.impl.BaseService"></bean>
 

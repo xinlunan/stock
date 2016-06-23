@@ -101,8 +101,6 @@
 			
 			<tx:method name="addTransportLog" propagation="REQUIRES_NEW" rollback-for="Exception" />
 			<tx:method name="downloadStockMinutes" propagation="REQUIRES_NEW" rollback-for="Exception" />
-			<tx:method name="tryLock" propagation="REQUIRES_NEW" rollback-for="Exception" />
-			<tx:method name="unLock" propagation="REQUIRES_NEW" rollback-for="Exception" />
 
 			<tx:method name="*" propagation="REQUIRED" rollback-for="Exception" />
 		</tx:attributes>
