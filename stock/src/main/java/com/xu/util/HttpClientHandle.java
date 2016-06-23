@@ -76,6 +76,7 @@ public class HttpClientHandle {
                     try {
                         Thread.sleep(200);
                     } catch (InterruptedException e1) {
+                        throw new RuntimeException(e1);
                     }
                     continue;
                 }
@@ -138,6 +139,7 @@ public class HttpClientHandle {
                     try {
                         Thread.sleep(200);
                     } catch (InterruptedException e1) {
+                        throw new RuntimeException(e1);
                     }
                     continue;
                 }
@@ -220,6 +222,7 @@ public class HttpClientHandle {
                     try {
                         Thread.sleep(200);
                     } catch (InterruptedException e1) {
+                        throw new RuntimeException(e1);
                     }
                     continue;
                 }

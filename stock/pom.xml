@@ -10,7 +10,7 @@
 		<amqp-client.version>3.5.6</amqp-client.version>
 		<aspectj.version>1.7.4</aspectj.version>
 		<assertj.version>1.5.0</assertj.version>
-		<commons-httpclient.version>3.1</commons-httpclient.version>
+		<commons-httpclient.version>4.5.2</commons-httpclient.version>
 		<commons-lang3.version>3.2.1</commons-lang3.version>
 		<commons-logging.version>1.2</commons-logging.version>
 		<commons-io.version>2.4</commons-io.version>
@@ -73,6 +73,17 @@
 		<maven.build.timestamp.format>yyMMdd_HHmmss</maven.build.timestamp.format>
 	</properties>
 	<dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>3.0-alpha-1</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.0</version>
+        </dependency>
+        
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -354,6 +365,11 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
 			<version>3.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.sling</groupId>
+			<artifactId>org.apache.sling.scripting.api</artifactId>
+			<version>2.1.6</version>
 		</dependency>
 		<!-- junit -->
 		<dependency>
