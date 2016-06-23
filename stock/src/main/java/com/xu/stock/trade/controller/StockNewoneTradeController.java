@@ -47,14 +47,6 @@ public class StockNewoneTradeController {
     @Resource
     private StockNewoneLoginController stockNewoneLoginController;
 
-    /**
-     * 根据帐号、密码向交易平台登录
-     * 
-     * @param model
-     * @param mobile
-     * @param code
-     * @return
-     */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView login(ModelMap model) {
         log.info("initLoginForm");
