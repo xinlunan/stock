@@ -40,7 +40,7 @@
 	</insert>
 	
 	<insert id="updateStatus" flushCache="true">
-		UPDATE t_stock_watch_begin SET analyse_status=#{analyseStatus} WHERE watch_begin_id = #{watchBeginId};
+		UPDATE t_stock_watch_begin SET analyse_status=#{analyseStatus},updated=sysdate() WHERE watch_begin_id = #{watchBeginId};
 	</insert>
 
 </mapper> 
