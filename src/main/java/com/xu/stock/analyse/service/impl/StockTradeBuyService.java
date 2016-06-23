@@ -2,6 +2,7 @@ package com.xu.stock.analyse.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +96,7 @@ public class StockTradeBuyService implements IStockTradeBuyService {
      */
     private StockMinute fetchStockMinute(List<StockDaily> dailys, StockWatchBegin watchBegin, Map<String, StockMinute> minuteCache) {
         StockMinute stockMinute = null;
-        if(minuteCache.containsKey(watchBegin.getStockCode()+watchBegin.getDate())){
+        if (minuteCache.containsKey(watchBegin.getStockCode() + watchBegin.getDate())) {
             return minuteCache.get(watchBegin.getStockCode() + watchBegin.getDate());
         }
         int dailyIndex = StockAnalyseUtil.dailyIndex(dailys, watchBegin.getDate());
@@ -123,7 +124,13 @@ public class StockTradeBuyService implements IStockTradeBuyService {
             }
             minuteCache.put(watchBegin.getStockCode() + watchBegin.getDate(), stockMinute);
         } else {
-            stockMinute = stockMinuteService.fetchRealtimeBuyMinute(watchBegin);
+            String cacheKey = watchBegin.getStockCode() + DateUtil.getDate(new Date(), "yyyy-MM-dd HH:mm");
+            if (minuteCache.containsKey(cacheKey)) {
+                stockMinute = minuteCache.get(cacheKey);
+            } else {
+                stockMinute = stockMinuteService.fetchRealtimeBuyMinute(watchBegin);
+                minuteCache.put(cacheKey, stockMinute);
+            }
             if (stockMinute != null) {
                 if (stockMinute.getHigh().compareTo(stockMinute.getPrice()) == 0) {
                     BigDecimal thisPriceExr = stockMinute.getPrice().multiply(stockMinute.getExrights());
@@ -139,9 +146,6 @@ public class StockTradeBuyService implements IStockTradeBuyService {
                 if (stockMinute.getPrice().multiply(stockMinute.getExrights()).compareTo(watchBegin.getClose().multiply(watchBegin.getExrights())) < 1) {
                     stockMinute = null;
                 }
-            }
-            if (stockMinute != null) {
-                minuteCache.put(watchBegin.getStockCode() + watchBegin.getDate(), stockMinute);
             }
         }
 
