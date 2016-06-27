@@ -159,6 +159,7 @@ public class HttpsClientHandle {
         int retry = 3;
         for (int i = 0; i == 0 || i < retry; i++) {
             try {
+                log.info(url);
                 HttpGet httpGet = new HttpGet(url);
                 httpGet.setConfig(RequestConfig.custom().setSocketTimeout(60000).setConnectTimeout(2000).build());
                 HttpResponse response = httpClient.execute(httpGet);
@@ -171,7 +172,7 @@ public class HttpsClientHandle {
                 return content;
             } catch (Throwable e) {
                 if (i >= retry - 1) {
-                    log.error("http download exception", e);
+                    log.error("http get exception", e);
                     throw new RuntimeException(e);
                 } else {
                     try {
@@ -191,6 +192,7 @@ public class HttpsClientHandle {
         int retry = 3;
         for (int i = 0; i == 0 || i < retry; i++) {
             try {
+                log.info(url);
                 HttpPost httpPost = new HttpPost(url);
                 httpPost.setEntity(new UrlEncodedFormEntity(formparams, "UTF-8"));
                 httpPost.setConfig(RequestConfig.custom().setSocketTimeout(30000).setConnectTimeout(2000).build());
@@ -203,6 +205,7 @@ public class HttpsClientHandle {
                 return content;
             } catch (Throwable e) {
                 if (i >= retry - 1) {
+                    log.error("https post exception", e);
                     throw new RuntimeException(e);
                 } else {
                     try {
@@ -228,8 +231,8 @@ public class HttpsClientHandle {
     public static boolean download(HttpClient httpClient, String url, String path) {
         int retry = 3;
         for (int i = 0; i == 0 || i < retry; i++) {
-            log.info(url);
             try {
+                log.info(url);
                 UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(new ArrayList<NameValuePair>());
                 HttpPost httppost = new HttpPost(url);
                 httppost.setConfig(RequestConfig.custom().setSocketTimeout(60000).setConnectTimeout(2000).build());
@@ -262,7 +265,7 @@ public class HttpsClientHandle {
                 }
             } catch (Throwable e) {
                 if (i >= retry - 1) {
-                    log.error("http download exception", e);
+                    log.error("https download exception", e);
                     // 扫异常
                     throw new RuntimeException(e);
                 } else {
