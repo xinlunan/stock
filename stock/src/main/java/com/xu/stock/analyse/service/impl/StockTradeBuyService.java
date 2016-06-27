@@ -181,10 +181,12 @@ public class StockTradeBuyService implements IStockTradeBuyService {
             if (content.contains(buy.getStockCode())) {
                 content = content + "," + parameter;
             } else {
+                String fullStockCode = buy.getStockCode().startsWith("6") ? "sh" + buy.getStockCode() : "sz" + buy.getStockCode();
+                String stockKLine = "<img src=\"http://image.sinajs.cn/newchart/daily/n/" + fullStockCode + ".gif?random=1467021750540\"><br>";
                 if (content.length() == 0) {
-                    content = content + buy.getStockCode() + "_" + buy.getStockName() + "_" + parameter;
+                    content = content + stockKLine + buy.getStockCode() + "_" + buy.getStockName() + "_" + parameter;
                 } else {
-                    content = content + "\n" + buy.getStockCode() + "_" + buy.getStockName() + "_" + parameter;
+                    content = content + "<br>" + stockKLine + buy.getStockCode() + "_" + buy.getStockName() + "_" + parameter;
                 }
             }
         }

@@ -24,6 +24,7 @@ public class MailSender {
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("371698049@qq.com", false));
             msg.setSubject("stock analyse result");
             msg.setText(content);
+            msg.setContent(content, "text/html;charset = gbk");
 
             Transport.send(msg);
         } catch (Exception e) {

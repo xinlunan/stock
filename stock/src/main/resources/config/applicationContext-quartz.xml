@@ -48,6 +48,14 @@
 			<value>execute</value>
 		</property>
 	</bean>
+	<bean id="stockNewoneSessionJobMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="stockNewoneSessionService" />
+		</property>
+		<property name="targetMethod">
+			<value>keepAlive</value>
+		</property>
+	</bean>
 	
 	<bean id="highestProbeAnalyseCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="highestProbeAnalyseJobMethod"></property>
@@ -59,11 +67,19 @@
 	</bean>
 	<bean id="highestProbeSellAnalyseCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="highestProbeSellAnalyseJobMethod"></property>
-		<property name="cronExpression" value="0 */1 9-14 * * ? *"></property>
+		<property name="cronExpression" value="0 */1 9-13 * * ? *"></property>
+	</bean>
+	<bean id="highestProbeSell14AnalyseCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="highestProbeSellAnalyseJobMethod"></property>
+		<property name="cronExpression" value="0 0,1,2,3,4,5 14 * * ? *"></property>
 	</bean>
 	<bean id="stockAnalyseResultMailCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="stockAnalyseResultMailJobMethod"></property>
 		<property name="cronExpression" value="0 50 14 * * ? *"></property>
+	</bean>
+	<bean id="stockNewoneSessionCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="stockNewoneSessionJobMethod"></property>
+		<property name="cronExpression" value="0 */15 * * * ? *"></property>
 	</bean>
 
 	<bean id="SpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
@@ -72,7 +88,9 @@
 				<ref bean="highestProbeAnalyseCronTriggerBean" />
 				<ref bean="highestProbeBuyAnalyseCronTriggerBean" />
 				<ref bean="highestProbeSellAnalyseCronTriggerBean" />
+				<ref bean="highestProbeSell14AnalyseCronTriggerBean" />
 				<ref bean="stockAnalyseResultMailCronTriggerBean" />
+				<ref bean="stockNewoneSessionCronTriggerBean" />
 			</list>
 		</property>
 	</bean>
