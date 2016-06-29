@@ -59,27 +59,27 @@
 	
 	<bean id="highestProbeAnalyseCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="highestProbeAnalyseJobMethod"></property>
-		<property name="cronExpression" value="0 0 20,21,22 * * ? *"></property>
+		<property name="cronExpression" value="0 0 9,20,21,22 * * ? *"></property>
 	</bean>
 	<bean id="highestProbeBuyAnalyseCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="highestProbeBuyAnalyseJobMethod"></property>
-		<property name="cronExpression" value="0 46 14 * * ? *"></property>
-	</bean>
-	<bean id="highestProbeSellAnalyseCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="highestProbeSellAnalyseJobMethod"></property>
-		<property name="cronExpression" value="0 */1 9-13 * * ? *"></property>
-	</bean>
-	<bean id="highestProbeSell14AnalyseCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="highestProbeSellAnalyseJobMethod"></property>
-		<property name="cronExpression" value="0 0,1,2,3,4,5 14 * * ? *"></property>
+		<property name="cronExpression" value="0 46 14 ? * MON-FRI *"></property>
 	</bean>
 	<bean id="stockAnalyseResultMailCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="stockAnalyseResultMailJobMethod"></property>
-		<property name="cronExpression" value="0 50 14 * * ? *"></property>
+		<property name="cronExpression" value="0 50 14 ? * MON-FRI *"></property>
+	</bean>
+	<bean id="highestProbeSellAnalyseCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="highestProbeSellAnalyseJobMethod"></property>
+		<property name="cronExpression" value="0 */1 9-13 ? * MON-FRI *"></property>
+	</bean>
+	<bean id="highestProbeSell14AnalyseCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="highestProbeSellAnalyseJobMethod"></property>
+		<property name="cronExpression" value="0 0,1,2,3,4,5 14 ? * MON-FRI *"></property>
 	</bean>
 	<bean id="stockNewoneSessionCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="stockNewoneSessionJobMethod"></property>
-		<property name="cronExpression" value="0 */15 * * * ? *"></property>
+		<property name="cronExpression" value="0 */10 * * * ? *"></property>
 	</bean>
 
 	<bean id="SpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">

@@ -314,12 +314,12 @@ public class StockAnalyseUtil {
         }
     }
 
-    public static Date getLastHigherDate(List<StockDaily> dailys, StockDaily thisDaily, Map<String, Date> lastHigherCache) {
+    public static StockDaily getLastHigher(List<StockDaily> dailys, StockDaily thisDaily, Map<String, StockDaily> lastHigherCache) {
         BigDecimal thisCloseExt = thisDaily.getClose().multiply(thisDaily.getExrights());
-        Date higherDate = null;
+        StockDaily higher = null;
         String key = thisDaily.getStockCode() + thisDaily.getDate();
         if (lastHigherCache.containsKey(key)) {
-            higherDate = lastHigherCache.get(key);
+            higher = lastHigherCache.get(key);
         } else {
             Integer index = StockAnalyseUtil.dailyIndex(dailys, thisDaily.getDate());
             for (int i = index - 1; i >= 0; i--) {
@@ -327,16 +327,16 @@ public class StockAnalyseUtil {
                 BigDecimal lastCloseExt = lastDaily.getClose().multiply(lastDaily.getExrights());
                 BigDecimal gapRateExr = lastCloseExt.subtract(thisCloseExt).multiply(BD_100).divide(thisCloseExt, 4, BigDecimal.ROUND_HALF_UP);
                 if (gapRateExr.doubleValue() > 10) {
-                    higherDate = lastDaily.getDate();
+                    higher = lastDaily;
                     break;
                 }
             }
-            if (higherDate == null) {
-                higherDate = dailys.get(0).getDate();
+            if (higher == null) {
+                higher = dailys.get(0);
             }
-            lastHigherCache.put(key, higherDate);
+            lastHigherCache.put(key, higher);
         }
-        return higherDate;
+        return higher;
     }
 
     public static boolean hasHigher(List<StockDaily> dailys, StockHighest highest, StockDaily thisDaily, BigDecimal buyLowExr) {

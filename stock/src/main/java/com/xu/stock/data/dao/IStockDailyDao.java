@@ -35,7 +35,7 @@ public interface IStockDailyDao {
 	 * @param stockCode
 	 * @return
 	 */
-	public List<StockDaily> getRrightStockDailys(String stockCode);
+	public List<StockDaily> getRightStockDailys(String stockCode);
 
 	/**
 	 * 根据股票编码获取后复权后股票指数

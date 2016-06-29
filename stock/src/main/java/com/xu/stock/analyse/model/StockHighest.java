@@ -29,17 +29,19 @@ public class StockHighest implements Serializable {
     // 日期
     private Date                  date;
     // 最高价
-    private BigDecimal            open;
+    private Double                open;
     // 最高价
-    private BigDecimal            high;
+    private Double                high;
     // 最低价
-    private BigDecimal            low;
+    private Double                low;
     // 收盘价
-    private BigDecimal            close;
+    private Double                close;
     // 最低价
-    private BigDecimal            exrights;
+    private Double                exrights;
     // 参数
     private String                parameters;
+    // 分析状态
+    private String                analyseStatus;
     // 最后分析日期
     private Date                  analyseDate;
     // 创建日期
@@ -82,43 +84,43 @@ public class StockHighest implements Serializable {
     }
 
     public BigDecimal getOpen() {
-        return open;
+        return BigDecimal.valueOf(open);
     }
 
     public void setOpen(BigDecimal open) {
-        this.open = open;
+        this.open = open.doubleValue();
     }
 
     public BigDecimal getHigh() {
-        return high;
+        return BigDecimal.valueOf(high);
     }
 
     public void setHigh(BigDecimal high) {
-        this.high = high;
+        this.high = high.doubleValue();
     }
 
     public BigDecimal getLow() {
-        return low;
+        return BigDecimal.valueOf(low);
     }
 
     public void setLow(BigDecimal low) {
-        this.low = low;
+        this.low = low.doubleValue();
     }
 
     public BigDecimal getClose() {
-        return close;
+        return BigDecimal.valueOf(close);
     }
 
     public void setClose(BigDecimal close) {
-        this.close = close;
+        this.close = close.doubleValue();
     }
 
     public BigDecimal getExrights() {
-        return exrights;
+        return BigDecimal.valueOf(exrights);
     }
 
     public void setExrights(BigDecimal exrights) {
-        this.exrights = exrights;
+        this.exrights = exrights.doubleValue();
     }
 
     public String getParameters() {
@@ -127,6 +129,14 @@ public class StockHighest implements Serializable {
 
     public void setParameters(String parameters) {
         this.parameters = parameters;
+    }
+
+    public String getAnalyseStatus() {
+        return analyseStatus;
+    }
+
+    public void setAnalyseStatus(String analyseStatus) {
+        this.analyseStatus = analyseStatus;
     }
 
     public Date getAnalyseDate() {
@@ -168,7 +178,7 @@ public class StockHighest implements Serializable {
     @Override
     public String toString() {
         return "StockHighest [highestId=" + highestId + ", stockCode=" + stockCode + ", stockName=" + stockName + ", date=" + date + ", open=" + open + ", high=" + high + ", low=" + low + ", close=" + close + ", exrights=" + exrights
-               + ", parameters=" + parameters + ", analyseDate=" + analyseDate + ", created=" + created + ", updated=" + updated + ", watchBegins=" + watchBegins + "]";
+               + ", parameters=" + parameters + ", analyseStatus=" + analyseStatus + ", analyseDate=" + analyseDate + ", created=" + created + ", updated=" + updated + ", watchBegins=" + watchBegins + "]";
     }
 
 }

@@ -6,15 +6,19 @@
         </encoder>
     </appender>
 
-    <appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>D:/server/tomcat/tomcat7/apache-tomcat-7.0.54.stock/logs/stock/stock.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>D:/server/tomcat/tomcat7/apache-tomcat-7.0.54.stock/logs/stock/stock.%d{yyyy-MM-dd}.log</fileNamePattern>
-        </rollingPolicy>
-        <encoder>
-            <pattern>%X{logback.sessionId} %X{logback.ip} %d{yyyy-MM-dd} %date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
+	<appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>D:/server/tomcat/tomcat7/apache-tomcat-7.0.54.stock/logs/stock/stock.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>D:/server/tomcat/tomcat7/apache-tomcat-7.0.54.stock/logs/stock/stock_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+			<TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<MaxFileSize>100MB</MaxFileSize>
+			</TimeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%X{logback.sessionId} %X{logback.ip} %d{yyyy-MM-dd} %date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
 
     <!-- project default level -->
     <logger name="com.xu" level="info"/>

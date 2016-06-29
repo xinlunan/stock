@@ -34,7 +34,7 @@ public abstract class StockDailyService implements IStockDailyService {
 	private IStockDailyDao stockDailyDao;
 
 	public List<StockDaily> getStockDaily(String stockCode) {
-		return stockDailyDao.getRrightStockDailys(stockCode);
+		return stockDailyDao.getRightStockDailys(stockCode);
 	}
 
 	public void repairStockDaily(StockDaily daily, List<StockDaily> repairIndexs) {

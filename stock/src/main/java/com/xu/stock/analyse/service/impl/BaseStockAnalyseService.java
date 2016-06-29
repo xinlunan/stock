@@ -15,6 +15,7 @@ import com.xu.stock.analyse.model.StockAnalyseStrategy;
 import com.xu.stock.analyse.model.StockTrade;
 import com.xu.stock.analyse.service.IStockAnalyseService;
 import com.xu.stock.data.model.StockDaily;
+import com.xu.stock.data.service.IStockService;
 
 /**
  * 股票分析基类
@@ -38,6 +39,8 @@ public abstract class BaseStockAnalyseService implements IStockAnalyseService {
     public static final BigDecimal     BD_1   = BigDecimal.valueOf(1);
 	protected StockAnalyseStrategy strategy;
 
+    @Resource
+    private IStockService              stockService;
 	@Resource
 	protected IStockAnalyseStrategyDao stockAnalyseStrategyDao;
 	@Resource
@@ -46,8 +49,10 @@ public abstract class BaseStockAnalyseService implements IStockAnalyseService {
 	protected IStockAnalyseRecordDao stockAnalyseRecordDao;
 
 
-	public void analyse(List<StockDaily> dailys) {
+	@Override
+    public void analyse(List<StockDaily> dailys) {
 
+        stockService.getStockForUpdate(dailys.get(0).getStockCode());
 		List<StockAnalyseStrategy> strategys = getAnalyseStrategys();
 
 		for (StockAnalyseStrategy analyseStrategy : strategys) {
