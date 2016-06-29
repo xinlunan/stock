@@ -27,7 +27,15 @@ public interface IStockService {
 	 * @param stockCode
 	 * @return
 	 */
-	public Stock getStock(String stockCode);
+    public Stock getStock(String stockCode);
+
+    /**
+     * 获取股票
+     * 
+     * @param stockCode
+     * @return
+     */
+    public Stock getStockForUpdate(String stockCode);
 
 	/**
 	 * 获取所有股票

@@ -3,6 +3,7 @@ package com.xu.stock.analyse.dao;
 import java.util.List;
 
 import com.xu.stock.analyse.model.StockHighest;
+import com.xu.stock.data.model.StockDaily;
 
 /**
  * 历史最高点
@@ -21,11 +22,11 @@ public interface IStockHighestDao {
     /**
      * 获取历史最高价
      * 
-     * @param stockCode
+     * @param stockDaily
      * @param parameters
      * @return
      */
-    public List<StockHighest> getHighests(String stockCode, String parameters);
+    public List<StockHighest> getHighests(StockDaily stockDaily, String parameters);
 
 
     /**
@@ -42,5 +43,7 @@ public interface IStockHighestDao {
      * @param history
      */
     public Integer updateHighestAnalyse(StockHighest history);
+
+    public StockHighest getLastHighest(String stockCode, String parameters);
 
 }

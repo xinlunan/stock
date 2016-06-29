@@ -26,6 +26,7 @@ import com.xu.stock.data.model.Stock;
 public class StockDao extends BaseDao<Stock> implements IStockDao {
 
     public final String SQL_GET_STOCK              = getNameSpace() + "getStock";
+    public final String SQL_GET_STOCK_FOR_UPDATE   = getNameSpace() + "getStockForUpdate";
     public final String SQL_GET_ALL_STOCK          = getNameSpace() + "getAllStock";
     public final String SQL_GET_ANALYSE_BUY_STOCK  = getNameSpace() + "getAnalyseBuyStock";
     public final String SQL_GET_ANALYSE_SELL_STOCK = getNameSpace() + "getAnalyseSellStock";
@@ -38,7 +39,14 @@ public class StockDao extends BaseDao<Stock> implements IStockDao {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("stockCode", stockCode);
 		return getSqlSession().selectOne(SQL_GET_STOCK, params);
-	}
+    }
+
+    @Override
+    public Stock getStockForUpdate(String stockCode) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("stockCode", stockCode);
+        return getSqlSession().selectOne(SQL_GET_STOCK_FOR_UPDATE, params);
+    }
 
 	@Override
     public List<Stock> getAllStocks() {

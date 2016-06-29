@@ -2,7 +2,6 @@ package com.xu.stock.analyse.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +17,7 @@ import com.xu.stock.analyse.dao.IStockWatchBeginDao;
 import com.xu.stock.analyse.model.StockHighest;
 import com.xu.stock.analyse.model.StockWatchBegin;
 import com.xu.stock.analyse.service.IStockWatchBeginService;
+import com.xu.stock.analyse.service.StockAnalyseConstants.HighestAnalyseStatus;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.WatchBeginStatus;
 import com.xu.stock.analyse.service.uitl.StockAnalyseUtil;
@@ -51,56 +51,59 @@ public class StockWatchBeginService implements IStockWatchBeginService {
 
     @Override
     public void analyseBatchBeginByHighest(List<StockDaily> dailys, Integer lastWaveCycle, Integer thisWaveCycle, BigDecimal thisFallRate) {
-        Map<String, Date> lastHigherCache = new HashMap<String, Date>();
+        Map<String, StockDaily> lastHigherCache = new HashMap<String, StockDaily>();
         String parameters = StockAnalyseUtil.buildParameter(lastWaveCycle, thisWaveCycle, thisFallRate);
-        List<StockHighest> highestPoints = stockHighestDao.getHighests(dailys.get(0).getStockCode(), parameters);
+        List<StockHighest> highestPoints = stockHighestDao.getHighests(dailys.get(dailys.size() - 1), parameters);
         for (StockHighest highest : highestPoints) {// 遍历所有最高点
+            int i = Integer.valueOf(highest.getParameters().substring(highest.getParameters().lastIndexOf(",") + 1));
+
             BigDecimal highestCloseExr = highest.getClose().multiply(highest.getExrights());
             Integer index = StockAnalyseUtil.dailyIndex(dailys, highest.getAnalyseDate());
-            for (int i = -3; i < 200; i++) {// 尝试不同的收益参数
-                for (int j = index + 1; j < dailys.size(); j++) {// 从指定日期开始遍历
-                    StockDaily thisDaily = dailys.get(j);
-                    Date higherDate = StockAnalyseUtil.getLastHigherDate(dailys, thisDaily, lastHigherCache);
-                    if (higherDate.after(highest.getDate())) {
-                        continue;
-                    }
-
-                    BigDecimal thisCloseExr = thisDaily.getClose().multiply(thisDaily.getExrights());
-                    BigDecimal currentHighestExr = thisDaily.getHigh().multiply(thisDaily.getExrights());
-                    BigDecimal buyRateHigh = BigDecimal.valueOf(0 - i);
-                    BigDecimal high = BD_100.subtract(buyRateHigh);
-                    if (i > 0) {
-                        high = BD_100.multiply(BigDecimal.valueOf(1.01).pow(i)).setScale(0, BigDecimal.ROUND_HALF_UP);
-                        buyRateHigh = BD_100.subtract(high);
-                    }
-                    BigDecimal buyRateLow = BD_100.subtract(high.multiply(BD_100.subtract(BD_1)).divide(BD_100, 1, BigDecimal.ROUND_HALF_UP));
-                    BigDecimal warnRateLow = BD_100.subtract(high.multiply(BD_100.subtract(BD_10)).divide(BD_100, 1, BigDecimal.ROUND_HALF_UP));
-                    BigDecimal warnLowExr = highestCloseExr.subtract(highestCloseExr.multiply(warnRateLow).divide(BD_100, 2, BigDecimal.ROUND_HALF_UP));
-                    BigDecimal buyLowExr = highestCloseExr.subtract(highestCloseExr.multiply(buyRateLow).divide(BD_100, 2, BigDecimal.ROUND_HALF_UP));
-                    BigDecimal buyHighExr = highestCloseExr.subtract(highestCloseExr.multiply(buyRateHigh).divide(BD_100, 2, BigDecimal.ROUND_HALF_UP));
-                    BigDecimal highestExr = highestCloseExr.compareTo(buyHighExr) == 1 ? highestCloseExr : buyHighExr;
-                    List<StockWatchBegin> watchBegins = new ArrayList<StockWatchBegin>();
-                    if (highest.getWatchBegins() == null) {
-                        highest.setWatchBegins(new ArrayList<StockWatchBegin>());
-                    }
-
-                    // 当前价高于设定范围
-                    if (thisCloseExr.compareTo(buyHighExr) == 1) {
-                        break;
-                    }
-
-                    // 本次跌幅超设定幅度，大于最低预警值
-                    if (thisCloseExr.compareTo(warnLowExr) >= 0) {
-                        if (thisCloseExr.compareTo(buyLowExr) >= 0 && thisCloseExr.compareTo(buyHighExr) <= 0 && currentHighestExr.compareTo(highestExr) <= 0) {
-                            break;// 当天是最佳时机，后面跳过
-                        } else if (thisCloseExr.compareTo(buyHighExr) <= 0) {
-                            String thisParameters = StockAnalyseUtil.buildParameter(parameters, warnRateLow, buyRateLow, buyRateHigh);
-                            StockWatchBegin watchBegin = buildWatchBegin(highest, thisDaily, thisParameters, buyLowExr, buyHighExr, highestExr);
-                            watchBegins.add(watchBegin);
-                        }
-                    }
-                    stockWatchBeginDao.saveWatchBegins(watchBegins);
+            for (int j = index + 1; j < dailys.size(); j++) {// 从指定日期开始遍历
+                StockDaily thisDaily = dailys.get(j);
+                StockDaily higherDate = StockAnalyseUtil.getLastHigher(dailys, thisDaily, lastHigherCache);
+                if (higherDate.getDate().after(highest.getDate())) {
+                    continue;
                 }
+
+                BigDecimal thisCloseExr = thisDaily.getClose().multiply(thisDaily.getExrights());
+                BigDecimal currentHighestExr = thisDaily.getHigh().multiply(thisDaily.getExrights());
+                BigDecimal buyRateHigh = BigDecimal.valueOf(0 - i);
+                BigDecimal high = BD_100.subtract(buyRateHigh);
+                if (i > 0) {
+                    high = BD_100.multiply(BigDecimal.valueOf(1.01).pow(i)).setScale(0, BigDecimal.ROUND_HALF_UP);
+                    buyRateHigh = BD_100.subtract(high);
+                }
+                BigDecimal buyRateLow = BD_100.subtract(high.multiply(BD_100.subtract(BD_1)).divide(BD_100, 1, BigDecimal.ROUND_HALF_UP));
+                BigDecimal warnRateLow = BD_100.subtract(high.multiply(BD_100.subtract(BD_10)).divide(BD_100, 1, BigDecimal.ROUND_HALF_UP));
+                BigDecimal warnLowExr = highestCloseExr.subtract(highestCloseExr.multiply(warnRateLow).divide(BD_100, 2, BigDecimal.ROUND_HALF_UP));
+                BigDecimal buyLowExr = highestCloseExr.subtract(highestCloseExr.multiply(buyRateLow).divide(BD_100, 2, BigDecimal.ROUND_HALF_UP));
+                BigDecimal buyHighExr = highestCloseExr.subtract(highestCloseExr.multiply(buyRateHigh).divide(BD_100, 2, BigDecimal.ROUND_HALF_UP));
+                BigDecimal highestExr = highestCloseExr.compareTo(buyHighExr) == 1 ? highestCloseExr : buyHighExr;
+                List<StockWatchBegin> watchBegins = new ArrayList<StockWatchBegin>();
+                if (highest.getWatchBegins() == null) {
+                    highest.setWatchBegins(new ArrayList<StockWatchBegin>());
+                }
+
+                // 当前价高于设定范围
+                if (thisCloseExr.compareTo(buyHighExr) == 1) {
+                    highest.setAnalyseStatus(HighestAnalyseStatus.UNBUYABLE);
+                    break;
+                }
+
+                // 本次跌幅超设定幅度，大于最低预警值
+                if (thisCloseExr.compareTo(warnLowExr) >= 0) {
+                    if (thisCloseExr.compareTo(buyLowExr) >= 0 && thisCloseExr.compareTo(buyHighExr) <= 0 && currentHighestExr.compareTo(highestExr) <= 0) {
+                        highest.setAnalyseStatus(HighestAnalyseStatus.UNBUYABLE);
+                        break;// 当天是最佳时机，后面跳过
+                    } else if (thisCloseExr.compareTo(buyHighExr) <= 0) {
+                        String thisParameters = StockAnalyseUtil.buildParameter(parameters, warnRateLow, buyRateLow, buyRateHigh);
+                        StockWatchBegin watchBegin = buildWatchBegin(highest, thisDaily, thisParameters, buyLowExr, buyHighExr, highestExr);
+                        watchBegins.add(watchBegin);
+                        highest.setAnalyseStatus(HighestAnalyseStatus.BUYABLE);
+                    }
+                }
+                stockWatchBeginDao.saveWatchBegins(watchBegins);
             }
             highest.setAnalyseDate(dailys.get(dailys.size() - 1).getDate());
             stockHighestDao.updateHighestAnalyse(highest);

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.xu.stock.analyse.dao.IStockHighestDao;
 import com.xu.stock.analyse.model.StockHighest;
 import com.xu.stock.analyse.service.IStockHighestService;
+import com.xu.stock.analyse.service.StockAnalyseConstants.HighestAnalyseStatus;
 import com.xu.stock.analyse.service.uitl.StockAnalyseUtil;
 import com.xu.stock.data.model.StockDaily;
 import com.xu.util.DateUtil;
@@ -39,12 +40,14 @@ public class StockHighestService implements IStockHighestService {
     @Resource
     private IStockHighestDao stockHighestDao;
 
+    @Override
     public void analyseHighestPoints(List<StockDaily> stockDailys, Integer lastWaveCycle, Integer thisWaveCycle, BigDecimal thisFallRate) {
         String parameters = StockAnalyseUtil.buildParameter(lastWaveCycle, thisWaveCycle, thisFallRate);
-        List<StockHighest> highests = stockHighestDao.getHighests(stockDailys.get(0).getStockCode(), parameters);
+        StockHighest highest = stockHighestDao.getLastHighest(stockDailys.get(0).getStockCode(), parameters);
+
 
         List<StockHighest> newHighests = new ArrayList<StockHighest>();
-        int beginIndex = highestPointBeginIndex(stockDailys, highests, thisWaveCycle);
+        int beginIndex = highestPointBeginIndex(stockDailys, highest, thisWaveCycle);
         int endIndex = stockDailys.size() - thisWaveCycle;
         for (int index = beginIndex; index < endIndex; index++) {
             // 指定是期是否最高点
@@ -52,21 +55,24 @@ public class StockHighestService implements IStockHighestService {
                 // 本次是否达到跌幅
                 Date lowDate = StockAnalyseUtil.getFirstLowDate(stockDailys, index, thisFallRate);
                 if (lowDate!=null) {
-                    StockDaily daily = stockDailys.get(index);
-                    StockHighest history = new StockHighest();
+                    for (int i = -3; i < 200; i++) {
+                        StockDaily daily = stockDailys.get(index);
+                        StockHighest history = new StockHighest();
 
-                    history.setStockCode(daily.getStockCode());
-                    history.setStockName(daily.getStockName());
-                    history.setDate(daily.getDate());
-                    history.setOpen(daily.getOpen());
-                    history.setHigh(daily.getHigh());
-                    history.setLow(daily.getLow());
-                    history.setClose(daily.getClose());
-                    history.setExrights(daily.getExrights());
-                    history.setParameters(parameters);
-                    history.setAnalyseDate(lowDate);
+                        history.setStockCode(daily.getStockCode());
+                        history.setStockName(daily.getStockName());
+                        history.setDate(daily.getDate());
+                        history.setOpen(daily.getOpen());
+                        history.setHigh(daily.getHigh());
+                        history.setLow(daily.getLow());
+                        history.setClose(daily.getClose());
+                        history.setExrights(daily.getExrights());
+                        history.setParameters(StockAnalyseUtil.buildParameter(parameters, i));
+                        history.setAnalyseStatus(HighestAnalyseStatus.ANALYZING);
+                        history.setAnalyseDate(lowDate);
 
-                    newHighests.add(history);
+                        newHighests.add(history);
+                    }
                 }
 
             }
@@ -78,15 +84,15 @@ public class StockHighestService implements IStockHighestService {
      * 需要设计最高点的起始点
      * 
      * @param stockDailys
-     * @param highests
+     * @param highest
      * @param thisWaveCycle
      * @return
      */
-    private Integer highestPointBeginIndex(List<StockDaily> stockDailys, List<StockHighest> highests, Integer thisWaveCycle) {
-        if (highests.isEmpty()) {
+    private Integer highestPointBeginIndex(List<StockDaily> stockDailys, StockHighest highest, Integer thisWaveCycle) {
+        if (highest == null) {
             return thisWaveCycle;
         }
-        Date highestDate = highests.get(highests.size() - 1).getDate();
+        Date highestDate = highest.getDate();
         int thisIndex = stockDailys.size() - 1;
         for (int i = thisIndex; i >= 0; i--) {
             if (DateUtil.dateToString(stockDailys.get(i).getDate()).equals(DateUtil.dateToString(highestDate))) {

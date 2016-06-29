@@ -42,12 +42,12 @@ public class StockDailyDao extends BaseDao<StockDaily> implements IStockDailyDao
         return stockDailys.size();
     }
 
-	public List<StockDaily> getRrightStockDailys(String stockCode) {
+	public List<StockDaily> getRightStockDailys(String stockCode) {
 		return getSqlSession().selectList(SQL_GET_STOCK_INDEXS, stockCode);
 	}
 
 	public List<StockDaily> getStockDailys(String stockCode) {
-		return getRrightStockDailys(stockCode);
+		return getRightStockDailys(stockCode);
 	}
 
 	public StockDaily getLastStockDaily(String stockCode, Date date) {

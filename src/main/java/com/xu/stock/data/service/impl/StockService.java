@@ -46,6 +46,11 @@ public class StockService implements IStockService {
 		return stockDao.getStock(stockCode);
 	}
 
+    @Override
+    public Stock getStockForUpdate(String stockCode) {
+        return stockDao.getStockForUpdate(stockCode);
+    }
+
 	@Override
     public List<Stock> getAllStocks() {
 		return stockDao.getAllStocks();

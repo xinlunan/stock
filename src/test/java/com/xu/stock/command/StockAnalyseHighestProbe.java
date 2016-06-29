@@ -7,6 +7,8 @@
  */
 package com.xu.stock.command;
 
+import java.util.Date;
+
 import javax.annotation.Resource;
 
 import org.junit.Before;
@@ -31,7 +33,7 @@ import com.xu.test.BaseTestCase;
 @SuppressWarnings("restriction")
 public class StockAnalyseHighestProbe extends BaseTestCase {
 
-    public static final int               NUM_THREADS = 10;
+    public static final int               NUM_THREADS = 8;
     @Resource
     private StockDailyController             stockDailyController;
     @Resource
@@ -44,8 +46,13 @@ public class StockAnalyseHighestProbe extends BaseTestCase {
         log.info("最高点试探分析购买完成.");
     }
 
+    @SuppressWarnings("deprecation")
     @Before
     public void download() {
-        stockDailyController.downloadStockDaily(10);
+        if (new Date().getHours() >= 20) {
+            stockDailyController.downloadStockDaily(10);
+        }
     }
+
+
 }

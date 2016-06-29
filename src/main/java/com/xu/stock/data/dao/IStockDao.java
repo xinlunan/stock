@@ -60,4 +60,6 @@ public interface IStockDao {
 
     public List<Stock> getAnalyseSellStocks();
 
+    public Stock getStockForUpdate(String stockCode);
+
 }

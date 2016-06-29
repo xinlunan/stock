@@ -19,14 +19,14 @@ public class StockAnalyseWorker extends Thread {
 
     @Override
     public void run() {
-        log.info("StockDailyWorker run size" + stocks.size());
+        log.info("StockAnalyseWorker run size" + stocks.size());
 
         for (Stock stock : stocks) {
             int retry = 3;
             for (int i = 0; i == 0 || i < retry; i++) {
                 try {
                     // 所有交易记录
-                    List<StockDaily> dailys = stockDailyDao.getRrightStockDailys(stock.getStockCode());
+                    List<StockDaily> dailys = stockDailyDao.getRightStockDailys(stock.getStockCode());
                     if (!dailys.isEmpty()) {
                         stockAnalyseService.analyse(dailys);
                         break;
