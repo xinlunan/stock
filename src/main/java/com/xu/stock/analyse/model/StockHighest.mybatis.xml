@@ -32,8 +32,8 @@
 	<select id="getLastHighest" resultMap="StockHighest">
 		SELECT highest_id,<include refid="columns" /> 
 		FROM t_stock_highest
-		WHERE stock_code=#{stockCode} and parameters like CONCAT(#{parameters},'%') and analyse_status='ANALYZING'
-		order by highest_id desc limit 0,1;
+		WHERE stock_code=#{stockCode} and parameters like CONCAT(#{parameters},'%')
+		order by DATE desc limit 0,1;
 	</select>
 
 	<insert id="insertHighest" flushCache="true" useGeneratedKeys="true" keyProperty="highestId">
