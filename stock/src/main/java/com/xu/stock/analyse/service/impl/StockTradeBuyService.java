@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -175,20 +177,22 @@ public class StockTradeBuyService implements IStockTradeBuyService {
         log.info("发送分析结果邮件");
         String content = "";
         List<StockTradeBuy> buys = stockTradeBuyDao.getAllBoughtStockTradeBuys();
+        Map<String,String> stocks = new LinkedHashMap<String,String>();
         for (StockTradeBuy buy : buys) {
             String parameter = buy.getParameters();
             parameter = parameter.substring(parameter.lastIndexOf(",") + 1, parameter.length());
-            if (content.contains(buy.getStockCode())) {
-                content = content + "," + parameter;
+            if (stocks.containsKey(buy.getStockCode())) {
+                stocks.put(buy.getStockCode(), stocks.get(buy.getStockCode()) + "," + parameter);
             } else {
-                String fullStockCode = buy.getStockCode().startsWith("6") ? "sh" + buy.getStockCode() : "sz" + buy.getStockCode();
-                String stockKLine = "<img src=\"http://image.sinajs.cn/newchart/daily/n/" + fullStockCode + ".gif?random=" + System.currentTimeMillis() + "\"><br>";
-                if (content.length() == 0) {
-                    content = content + stockKLine + buy.getStockCode() + "_" + buy.getStockName() + "_" + parameter;
-                } else {
-                    content = content + "<br>" + stockKLine + buy.getStockCode() + "_" + buy.getStockName() + "_" + parameter;
-                }
+                stocks.put(buy.getStockCode(), "_"+buy.getStockName()+"_"+parameter);
             }
+        }
+        Iterator<String> it =  stocks.keySet().iterator();
+        while(it.hasNext()){
+            String stockCode = it.next();
+            String fullStockCode =stockCode.startsWith("6") ? "sh" +stockCode : "sz" +stockCode;
+            String stockKLine = "<img src=\"http://image.sinajs.cn/newchart/daily/n/" + fullStockCode + ".gif?random=" + System.currentTimeMillis() + "\"><br>";
+            content = content + stockCode + stocks.get(stockCode) + "<br>" + stockKLine + "<br>";
         }
         log.info("发送分析结果邮件:" + content);
         MailSender.sendMail(content);
