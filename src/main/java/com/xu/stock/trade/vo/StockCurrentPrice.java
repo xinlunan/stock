@@ -2,6 +2,8 @@ package com.xu.stock.trade.vo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StockCurrentPrice implements Serializable {
 
@@ -23,9 +25,47 @@ public class StockCurrentPrice implements Serializable {
     private BigDecimal        buy4Price;
     private BigDecimal        buy5Price;
 
-    public static StockCurrentPrice parseCurrentPrice(String html) {
-        // TODO Auto-generated method stub
-        return null;
+    public static StockCurrentPrice parse(String html) {
+        try {
+            Map<String, String> priceInfos = parseRuselt(html);
+            StockCurrentPrice price = new StockCurrentPrice();
+            price.setStockCode(priceInfos.get("ZQDM"));
+            price.setStockName(priceInfos.get("ZQJC"));
+            price.setCurrentPrice(BigDecimal.valueOf(Double.valueOf(priceInfos.get("XJ"))));
+            price.setRiseStopPrice(BigDecimal.valueOf(Double.valueOf(priceInfos.get("ZT"))));
+            price.setLossStopPrice(BigDecimal.valueOf(Double.valueOf(priceInfos.get("DT"))));
+            price.setLastClose(BigDecimal.valueOf(Double.valueOf(priceInfos.get("ZRSP"))));
+            price.setSell1Price(BigDecimal.valueOf(Double.valueOf(priceInfos.get("SJW1"))));
+            price.setSell2Price(BigDecimal.valueOf(Double.valueOf(priceInfos.get("SJW2"))));
+            price.setSell3Price(BigDecimal.valueOf(Double.valueOf(priceInfos.get("SJW3"))));
+            price.setSell4Price(BigDecimal.valueOf(Double.valueOf(priceInfos.get("SJW4"))));
+            price.setSell5Price(BigDecimal.valueOf(Double.valueOf(priceInfos.get("SJW5"))));
+            price.setBuy1Price(BigDecimal.valueOf(Double.valueOf(priceInfos.get("BJW1"))));
+            price.setBuy2Price(BigDecimal.valueOf(Double.valueOf(priceInfos.get("BJW2"))));
+            price.setBuy3Price(BigDecimal.valueOf(Double.valueOf(priceInfos.get("BJW3"))));
+            price.setBuy4Price(BigDecimal.valueOf(Double.valueOf(priceInfos.get("BJW4"))));
+            price.setBuy5Price(BigDecimal.valueOf(Double.valueOf(priceInfos.get("BJW5"))));
+            return price;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Map<String, String> parseRuselt(String html) {
+        String tempString = html.replaceAll("&nbsp;", "").replaceAll(" ", "").replaceAll("\\{", "").replaceAll("\\}", "").replaceAll("'", "");
+        Map<String, String> result = new HashMap<String, String>();
+        String[] infos = tempString.split(",");
+        for (String info : infos) {
+            String[] infoMap = info.split(":");
+            result.put(infoMap[0], infoMap[1]);
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        String html = "{'SCDM':'2','ZQJC':'平安银行','ZQDM':'000001','XJ':'8.70','ZT':'9.56','DT':'7.82','ZRSP':'8.69','BJW1':'8.70','BJW2':'8.69','BJW3':'8.68','BJW4':'8.67','BJW5':'8.66','BSL1':'1341','BSL2':'4365','BSL3':'5120','BSL4':'2544','BSL5':'2545','SJW1':'8.71','SJW2':'8.72','SJW3':'8.73','SJW4':'8.74','SJW5':'8.75','SSL1':'2610','SSL2':'3612','SSL3':'10186','SSL4':'10360','SSL5':'13774'}";
+        StockCurrentPrice price = parse(html);
+        System.out.println(price);
     }
 
     public String getStockCode() {
@@ -156,18 +196,11 @@ public class StockCurrentPrice implements Serializable {
         this.buy5Price = buy5Price;
     }
 
-    public static long getSerialversionuid() {
-        return serialVersionUID;
-    }
-
     @Override
     public String toString() {
-        return "StockRealtimeIndex [stockCode=" + stockCode + ", stockName=" + stockName + ", currentPrice=" + currentPrice + ", riseStopPrice=" + riseStopPrice + ", lossStopPrice=" + lossStopPrice + ", lastClose=" + lastClose
+        return "StockCurrentPrice [stockCode=" + stockCode + ", stockName=" + stockName + ", currentPrice=" + currentPrice + ", riseStopPrice=" + riseStopPrice + ", lossStopPrice=" + lossStopPrice + ", lastClose=" + lastClose
                + ", sell1Price=" + sell1Price + ", sell2Price=" + sell2Price + ", sell3Price=" + sell3Price + ", sell4Price=" + sell4Price + ", sell5Price=" + sell5Price + ", buy1Price=" + buy1Price + ", buy2Price=" + buy2Price
-               + ", buy3Price=" + buy3Price + ", buy4Price=" + buy4Price + ", buy5Price=" + buy5Price + ", getStockCode()=" + getStockCode() + ", getStockName()=" + getStockName() + ", getCurrentPrice()=" + getCurrentPrice()
-               + ", getRiseStopPrice()=" + getRiseStopPrice() + ", getLossStopPrice()=" + getLossStopPrice() + ", getLastClose()=" + getLastClose() + ", getSell1Price()=" + getSell1Price() + ", getSell2Price()=" + getSell2Price()
-               + ", getSell3Price()=" + getSell3Price() + ", getSell4Price()=" + getSell4Price() + ", getSell5Price()=" + getSell5Price() + ", getBuy1Price()=" + getBuy1Price() + ", getBuy2Price()=" + getBuy2Price() + ", getBuy3Price()="
-               + getBuy3Price() + ", getBuy4Price()=" + getBuy4Price() + ", getBuy5Price()=" + getBuy5Price() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+               + ", buy3Price=" + buy3Price + ", buy4Price=" + buy4Price + ", buy5Price=" + buy5Price + "]";
     }
 
 }

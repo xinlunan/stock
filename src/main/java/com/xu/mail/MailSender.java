@@ -14,17 +14,20 @@ public class MailSender {
 
     public static void sendMail(String content) {
         try {
-            final String username = "371698049";
-            final String password = "hxthefoevrpzbgdc";
+            // final String username = "371698049";
+            // final String password = "hxthefoevrpzbgdc";
+
+            final String username = "2036994784";
+            final String password = "fqslfgjipfjlchaa";
 
             Session session = getDefaultInstance(buildProperties(), username, password);
 
             Message msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(username + "@qq.com", "巴菲特"));
-            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("371698049@qq.com", false));
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("371698049@qq.com,519494051@qq.com", false));
             msg.setSubject("stock analyse result");
             msg.setText(content);
-            msg.setContent(content, "text/html;charset = gbk");
+            msg.setContent(content, "text/html;charset=gbk");
 
             Transport.send(msg);
         } catch (Exception e) {

@@ -89,7 +89,7 @@
 				<ref bean="highestProbeBuyAnalyseCronTriggerBean" />
 				<ref bean="highestProbeSellAnalyseCronTriggerBean" />
 				<ref bean="highestProbeSell14AnalyseCronTriggerBean" />
-				<ref bean="stockAnalyseResultMailCronTriggerBean" />
+<!-- 				<ref bean="stockAnalyseResultMailCronTriggerBean" /> -->
 				<ref bean="stockNewoneSessionCronTriggerBean" />
 			</list>
 		</property>
