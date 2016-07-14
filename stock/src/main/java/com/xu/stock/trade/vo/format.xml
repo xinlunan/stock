@@ -1,0 +1,59 @@
+<table width="100%" border="1" cellspacing="0" cellpadding="0" id="wtcent" bordercolor="#C8C8C8">
+	<tr class="tops">
+		<td align="center"></td>
+		<td align="center">证券名称</td>
+		<td>买卖标志</td>
+		
+		<td>委托价格</td>
+		
+		<td>委托数量</td>
+		
+		<td>成交价格</td>
+		
+		<td>成交数量</td>
+		
+		<td>状态说明</td>
+		
+		<td>委托时间</td>
+		
+		<td>委托编号</td>
+		
+		<td>证券代码</td>
+		
+		<td>股东代码</td>
+		
+		<td>报价方式</td>
+	</tr>
+	<tr>
+		<td hth='hth=204gddm=A718770420' hth2='204' xh='0' wtsj='11:01:39'><input type="checkbox" name="hth"
+			value="hth=204gddm=A718770420" rowno='1' /></td>
+		<td>华海药业</td>
+		<td>卖出</td>
+		<td>25.000</td>
+		<td>1500</td>
+		<td>0.000</td>
+		<td>0</td>
+		<td>未成交</td>
+		<td>20160623</td>
+		<td>204</td>
+		<td>600521</td>
+		<td>A718770420</td>
+		<td>限价委托</td>
+	</tr>
+	<tr>
+		<td hth='hth=202gddm=A718770420' hth2='202' xh='1' wtsj='10:54:36'><input type="checkbox" name="hth"
+			value="hth=202gddm=A718770420" rowno='2' /></td>
+		<td>中国化学</td>
+		<td>卖出</td>
+		<td>6.000</td>
+		<td>700</td>
+		<td>0.000</td>
+		<td>0</td>
+		<td>未成交</td>
+		<td>20160623</td>
+		<td>202</td>
+		<td>601117</td>
+		<td>A718770420</td>
+		<td>限价委托</td>
+	</tr>
+</table>

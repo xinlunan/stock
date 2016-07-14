@@ -35,7 +35,7 @@
 	
 	<select id="getAnalyseBuyStock" resultMap="Stock">
 		SELECT stock_id, <include refid="columns" /> 
-		FROM t_stock WHERE stock_code IN (SELECT DISTINCT stock_code FROM t_stock_watch_begin WHERE DATE&gt;CURDATE()-10);
+		FROM t_stock WHERE stock_code IN (SELECT DISTINCT stock_code FROM t_stock_watch_begin WHERE DATE&gt;#{date});
 	</select>
 	
 	<select id="getAnalyseSellStock" resultMap="Stock">

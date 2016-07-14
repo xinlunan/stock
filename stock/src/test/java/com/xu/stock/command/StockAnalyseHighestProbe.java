@@ -33,7 +33,7 @@ import com.xu.test.BaseTestCase;
 @SuppressWarnings("restriction")
 public class StockAnalyseHighestProbe extends BaseTestCase {
 
-    public static final int               NUM_THREADS = 8;
+    public static final int               NUM_THREADS = 1;
     @Resource
     private StockDailyController             stockDailyController;
     @Resource

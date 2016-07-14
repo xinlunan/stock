@@ -1,5 +1,6 @@
 package com.xu.stock.data.dao.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.winit.framework.dao.impl.BaseDao;
 import com.xu.stock.data.dao.IStockDao;
 import com.xu.stock.data.model.Stock;
+import com.xu.util.DateUtil;
 
 /**
  * 股票Dao实现
@@ -55,7 +57,9 @@ public class StockDao extends BaseDao<Stock> implements IStockDao {
 
     @Override
     public List<Stock> getAnalyseBuyStocks() {
-        return getSqlSession().selectList(SQL_GET_ANALYSE_BUY_STOCK);
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("date", DateUtil.addDay(new Date(), -10));
+        return getSqlSession().selectList(SQL_GET_ANALYSE_BUY_STOCK, params);
     }
 
     @Override

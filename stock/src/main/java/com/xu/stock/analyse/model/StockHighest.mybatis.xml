@@ -26,7 +26,7 @@
 	<select id="getHighests" resultMap="StockHighest">
 		SELECT highest_id,<include refid="columns" /> 
 		FROM t_stock_highest
-		WHERE stock_code=#{stockCode} and parameters like CONCAT(#{parameters},'%') and analyse_status='ANALYZING' and analyse_date &lt;&gt; #{analyseDate};
+		WHERE stock_code=#{stockCode} and parameters like CONCAT(#{parameters},'%') and analyse_status in ('ANALYZING','BUYABLE') and analyse_date &lt;&gt; #{analyseDate};
 	</select>
 	
 	<select id="getLastHighest" resultMap="StockHighest">

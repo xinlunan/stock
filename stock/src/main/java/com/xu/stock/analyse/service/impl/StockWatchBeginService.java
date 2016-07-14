@@ -56,11 +56,14 @@ public class StockWatchBeginService implements IStockWatchBeginService {
         List<StockHighest> highestPoints = stockHighestDao.getHighests(dailys.get(dailys.size() - 1), parameters);
         for (StockHighest highest : highestPoints) {// 遍历所有最高点
             int i = Integer.valueOf(highest.getParameters().substring(highest.getParameters().lastIndexOf(",") + 1));
-
             BigDecimal highestCloseExr = highest.getClose().multiply(highest.getExrights());
             Integer index = StockAnalyseUtil.dailyIndex(dailys, highest.getAnalyseDate());
             for (int j = index + 1; j < dailys.size(); j++) {// 从指定日期开始遍历
                 StockDaily thisDaily = dailys.get(j);
+//                if (highest.getParameters().equals("20,20,30.0,-2") && "2015-12-31".equals(DateUtil.date2String(highest.getDate())) && "2016-07-04".equals(DateUtil.date2String(thisDaily.getDate()))) {
+//                    log.info("");
+//                }
+                highest.setAnalyseDate(thisDaily.getDate());
                 StockDaily higherDate = StockAnalyseUtil.getLastHigher(dailys, thisDaily, lastHigherCache);
                 if (higherDate.getDate().after(highest.getDate())) {
                     continue;
@@ -105,7 +108,9 @@ public class StockWatchBeginService implements IStockWatchBeginService {
                 }
                 stockWatchBeginDao.saveWatchBegins(watchBegins);
             }
-            highest.setAnalyseDate(dailys.get(dailys.size() - 1).getDate());
+            if (HighestAnalyseStatus.ANALYZING.equals(highest.getAnalyseStatus())) {
+                highest.setAnalyseDate(dailys.get(dailys.size() - 1).getDate());
+            }
             stockHighestDao.updateHighestAnalyse(highest);
         }
     }
