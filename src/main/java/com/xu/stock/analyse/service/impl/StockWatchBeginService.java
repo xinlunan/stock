@@ -60,9 +60,9 @@ public class StockWatchBeginService implements IStockWatchBeginService {
             Integer index = StockAnalyseUtil.dailyIndex(dailys, highest.getAnalyseDate());
             for (int j = index + 1; j < dailys.size(); j++) {// 从指定日期开始遍历
                 StockDaily thisDaily = dailys.get(j);
-//                if (highest.getParameters().equals("20,20,30.0,-2") && "2015-12-31".equals(DateUtil.date2String(highest.getDate())) && "2016-07-04".equals(DateUtil.date2String(thisDaily.getDate()))) {
-//                    log.info("");
-//                }
+                if (highest.getParameters().equals("20,20,30.0,0") && "2015-11-25".equals(DateUtil.date2String(highest.getDate())) && "2016-07-04".equals(DateUtil.date2String(thisDaily.getDate()))) {
+                    log.info("");
+                }
                 highest.setAnalyseDate(thisDaily.getDate());
                 StockDaily higherDate = StockAnalyseUtil.getLastHigher(dailys, thisDaily, lastHigherCache);
                 if (higherDate.getDate().after(highest.getDate())) {

@@ -70,7 +70,7 @@ public class StockMinuteService implements IStockMinuteService {
     public StockMinute fetchRealtimeBuyMinute(StockWatchBegin watchBegin) {
         StockMinute stockMinute = SinaStockMinuteRealtimeDownloador.download(watchBegin.getStockCode(), watchBegin.getClose(), watchBegin.getExrights());
         if (stockMinute != null && DateUtil.date2String(stockMinute.getDate()).equals(DateUtil.date2String(new Date()))) {
-            StockMinute existMinute = stockMinuteDao.getStockMinute(stockMinute.getStockCode(), stockMinute.getDate(), stockMinute.getHour(), stockMinute.getMinute());
+            StockMinute existMinute = stockMinuteDao.getNearStockMinute(stockMinute.getStockCode(), stockMinute.getDate(), stockMinute.getHour(), stockMinute.getMinute());
             if (existMinute == null) {
                 stockMinuteDao.saveStockMinute(stockMinute);
             }
@@ -90,7 +90,7 @@ public class StockMinuteService implements IStockMinuteService {
     public List<StockMinute> fetchRealtimeMinute(StockDaily daily) {
         StockMinute stockMinute = SinaStockMinuteRealtimeDownloador.download(daily.getStockCode(), daily.getClose(), daily.getExrights());
         if (stockMinute != null) {
-            StockMinute existMinute = stockMinuteDao.getStockMinute(stockMinute.getStockCode(), stockMinute.getDate(), stockMinute.getHour(), stockMinute.getMinute());
+            StockMinute existMinute = stockMinuteDao.getNearStockMinute(stockMinute.getStockCode(), stockMinute.getDate(), stockMinute.getHour(), stockMinute.getMinute());
             if (existMinute == null) {
                 stockMinuteDao.saveStockMinute(stockMinute);
             }
