@@ -31,6 +31,7 @@ public class StockMinuteDao extends BaseDao<StockMinute> implements IStockMinute
     private final String SQL_GET_REALTIME_STOCK_MINUTE           = getNameSpace() + "getRealtimeMinutes";
     public final String  SQL_GET_STOCK_MINUTES                   = getNameSpace() + "getStockMinutes";
     public final String  SQL_GET_STOCK_MINUTE                    = getNameSpace() + "getStockMinute";
+    public final String  SQL_GET_NEAR_STOCK_MINUTE               = getNameSpace() + "getNearStockMinute";
     public final String  SQL_GET_HISTORY_STOCK_CLOSE_BUY_MINUTE  = getNameSpace() + "getHistoryNearCloseBuyMinute";
     public final String  SQL_GET_REALTIME_STOCK_CLOSE_BUY_MINUTE = getNameSpace() + "getRealtimeNearCloseBuyMinute";
     public final String  SQL_GET_STOCK_CLOSE_BUY_MINUTE          = getNameSpace() + "getNearCloseBuyMinute";
@@ -91,6 +92,16 @@ public class StockMinuteDao extends BaseDao<StockMinute> implements IStockMinute
         paras.put("hour", hour);
         paras.put("minute", minute);
         return getSqlSession().selectOne(SQL_GET_STOCK_MINUTE, paras);
+    }
+
+    @Override
+    public StockMinute getNearStockMinute(String stockCode, Date date, Integer hour, Integer minute) {
+        Map<String, Object> paras = new HashMap<String, Object>();
+        paras.put("stockCode", stockCode);
+        paras.put("date", date);
+        paras.put("hour", hour);
+        paras.put("minute", minute);
+        return getSqlSession().selectOne(SQL_GET_NEAR_STOCK_MINUTE, paras);
     }
 
     @Override

@@ -75,10 +75,12 @@ public interface IStockMinuteDao {
      * @param minute
      * @return
      */
-    public StockMinute getStockMinute(String stockCode, Date date, Integer hour, Integer minute);
+    public StockMinute getNearStockMinute(String stockCode, Date date, Integer hour, Integer minute);
 
     public List<StockMinute> getHistoryMinutes(String stockCode, Date date);
 
     public List<StockMinute> getRealtimeMinutes(String stockCode, Date date);
+
+    public StockMinute getStockMinute(String stockCode, Date date, Integer hour, Integer minute);
 
 }
