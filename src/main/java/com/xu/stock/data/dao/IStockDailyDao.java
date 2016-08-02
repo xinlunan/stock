@@ -3,6 +3,7 @@ package com.xu.stock.data.dao;
 import java.util.Date;
 import java.util.List;
 
+import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.model.StockDaily;
 
 /**
@@ -86,5 +87,11 @@ public interface IStockDailyDao {
 	 * @return
 	 */
 	public StockDaily getNextStockDaily(String stockCode, Date date);
+
+    public List<StockDaily> getNoMaStockDailys(Stock stock);
+
+    public void countDailyVolumeRatio(StockDaily daily);
+
+    public void countDailyMa(StockDaily daily, int i);
 
 }

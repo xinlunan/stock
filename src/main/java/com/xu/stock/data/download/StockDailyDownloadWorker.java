@@ -46,7 +46,7 @@ public class StockDailyDownloadWorker extends Thread {
 		}
 	}
 
-	private static boolean hasValidDay(Date lastDate) {
+	public static boolean hasValidDay(Date lastDate) {
 		if (lastDate == null)
 			return true;
 

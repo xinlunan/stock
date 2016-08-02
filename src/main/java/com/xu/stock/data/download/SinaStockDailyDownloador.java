@@ -143,7 +143,9 @@ public class SinaStockDailyDownloador {
                 }
             } else {
                 for (; beginJidu <= DateUtil.getSeason(today); beginJidu++) {
-                    seasons.add("year=" + beginYear + "&jidu=" + beginJidu);
+                    if (StockDailyDownloadWorker.hasValidDay(stock.getLastDate())) {
+                        seasons.add("year=" + beginYear + "&jidu=" + beginJidu);
+                    }
                 }
             }
         }

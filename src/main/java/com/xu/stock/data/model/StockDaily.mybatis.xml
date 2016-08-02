@@ -23,6 +23,14 @@
 		<id property="amount" column="amount"></id>
 		<id property="volume" column="volume"></id>
 		<id property="asset" column="asset"></id>
+		<id property="volumeRatio" column="volume_ratio"></id>
+		<id property="ma5" column="ma5"></id>
+		<id property="ma10" column="ma10"></id>
+		<id property="ma20" column="ma20"></id>
+		<id property="ma30" column="ma30"></id>
+		<id property="ma40" column="ma40"></id>
+		<id property="ma50" column="ma50"></id>
+		<id property="ma60" column="ma60"></id>
 		<id property="created" column="created"></id>
 		<id property="updated" column="updated"></id>
 		
@@ -31,13 +39,28 @@
 	<sql id="columns">
 		stock_code, stock_name, date,last_close, open, close, high, low, 
 		close_gap, close_gap_rate, high_gap, high_gap_rate, low_gap, low_gap_rate,
-		exrights,this_exrights,amount, volume, asset, created, updated
+		exrights,this_exrights,amount, volume, asset, volume_ratio, 
+		ma5, ma10, ma20, ma30, ma40, ma50, ma60, created, updated
 	</sql>
 	
 	<select id="getStockDaily" resultMap="StockDaily">
 		SELECT 	daily_id, <include refid="columns" />
 		FROM t_stock_daily 
 	 	WHERE stock_code=#{stockCode} and date=#{date};
+	</select>
+		
+	<select id="getNoMaStockDailys" resultMap="StockDaily">
+		SELECT 	daily_id, <include refid="columns" />
+		FROM t_stock_daily 
+	 	WHERE stock_code=#{stockCode} AND volume_ratio &lt; 0 ORDER BY date DESC;
+	</select>
+	
+	<select id="getHistoryStockDailys" resultMap="StockDaily">
+		SELECT 	daily_id, <include refid="columns" />
+		FROM t_stock_daily 
+	 	WHERE stock_code=#{stockCode} AND date &lt; #{date}
+	 	ORDER BY date DESC
+	 	LIMIT 60 ;
 	</select>
 		
 	<select id="getLastStockDaily" resultMap="StockDaily">
@@ -69,7 +92,8 @@
 		(
 			#{obj.stockCode}, #{obj.stockName}, #{obj.date},#{obj.lastClose}, #{obj.open}, #{obj.close}, #{obj.high}, #{obj.low},
 			#{obj.closeGap}, #{obj.closeGapRate}, #{obj.highGap}, #{obj.highGapRate}, #{obj.lowGap}, #{obj.lowGapRate}, 
-			#{obj.exrights},#{obj.thisExrights},#{obj.amount}, #{obj.volume}, #{obj.asset}, sysdate(),sysdate()
+			#{obj.exrights},#{obj.thisExrights},#{obj.amount}, #{obj.volume}, #{obj.asset},	#{obj.volumeRatio}, 
+			#{obj.ma5}, #{obj.ma10}, #{obj.ma20}, #{obj.ma30}, #{obj.ma40}, #{obj.ma50}, #{obj.ma60}, sysdate(),sysdate()
 		)
 		</foreach>
 	</insert>
@@ -78,6 +102,20 @@
 		UPDATE t_stock_daily 
 		SET updated = sysdate(), last_close=#{lastClose}, close_gap=#{closeGap}, close_gap_rate=#{closeGapRate}, 
 			high_gap=#{highGap}, high_gap_rate=#{highGapRate}, low_gap=#{lowGap}, low_gap_rate=#{lowGapRate}
+		WHERE stock_code=#{stockCode} and date=#{date};
+	</update>
+	
+	<update id="updateDailyVolumeRatio" flushCache="true">
+		UPDATE t_stock_daily 
+		SET updated = sysdate(), 
+		volume_ratio=amount/(SELECT AVG(amount) FROM (SELECT * FROM t_stock_daily WHERE stock_code=#{stockCode} AND DATE &lt;#{date} ORDER BY DATE DESC LIMIT 0,5) a) 
+		WHERE stock_code=#{stockCode} and date=#{date};
+	</update>
+	
+	<update id="updateDailyMa" flushCache="true">
+		UPDATE t_stock_daily 
+		SET updated = sysdate(), 
+		ma#{size}=(SELECT AVG(CLOSE) FROM (SELECT close FROM t_stock_daily WHERE stock_code=#{stockCode} AND DATE&lt;=#{date} ORDER BY DATE DESC LIMIT 0,#{size}) a)
 		WHERE stock_code=#{stockCode} and date=#{date};
 	</update>
 	
