@@ -1,5 +1,6 @@
 package com.xu.stock.data.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -95,14 +96,40 @@ public class StockService implements IStockService {
         List<StockDaily> dailys = stock.getStockDailys();
         stockDailyDao.saveStockDailys(dailys);
 
+        dailys = stockDailyDao.getNoMaStockDailys(stock);
+        for (StockDaily daily : dailys) {
+            stockDailyDao.countDailyVolumeRatio(daily);
+            stockDailyDao.countDailyMa(daily, 5);
+            stockDailyDao.countDailyMa(daily, 10);
+            stockDailyDao.countDailyMa(daily, 20);
+            stockDailyDao.countDailyMa(daily, 30);
+            stockDailyDao.countDailyMa(daily, 40);
+            stockDailyDao.countDailyMa(daily, 50);
+            stockDailyDao.countDailyMa(daily, 60);
+        }
 		stockDao.updateStock(stock);
 	}
 
-	/**
-	 * 过滤无效数据
-	 * 
-	 * @param stock
-	 */
+    protected void countDailyVolumeRatio(List<StockDaily> dailys, Integer noMaSize) {
+        for (int i = noMaSize - 1; i >= 0; i--) {
+            StockDaily thisDaily = dailys.get(i);
+            Integer endIndex = dailys.size() - i > 5 ? i + 5 : dailys.size() - 1;
+            BigDecimal totalAmount = BigDecimal.ZERO;
+            for (int j = i + 1; j < endIndex; j++) {
+                totalAmount = totalAmount.add(thisDaily.getAmount());
+            }
+            BigDecimal thisAmount = dailys.get(i).getAmount().multiply(BigDecimal.valueOf(Integer.valueOf(i - endIndex)));
+            BigDecimal volumeRatio = thisAmount.divide(totalAmount, 4, BigDecimal.ROUND_HALF_UP);
+
+            thisDaily.setVolumeRatio(volumeRatio);
+        }
+    }
+
+    /**
+     * 过滤无效数据
+     * 
+     * @param stock
+     */
 	private void filterInvalid(Stock stock) {
 		if (stock.getLastDate() == null) {
 			return;

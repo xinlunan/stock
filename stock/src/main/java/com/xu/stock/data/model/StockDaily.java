@@ -21,37 +21,53 @@ public class StockDaily implements Serializable, Comparable<StockDaily> {
     // 日期
     private Date              date;
     // 昨天收盘价
-    private Double        lastClose;
+    private Double            lastClose;
     // 开盘价
-    private Double        open;
+    private Double            open;
     // 收盘价
-    private Double        close;
+    private Double            close;
     // 涨跌额
-    private Double        closeGap;
+    private Double            closeGap;
     // 涨跌幅
-    private Double        closeGapRate;
+    private Double            closeGapRate;
     // 最高价
-    private Double        high;
+    private Double            high;
     // 最低价
-    private Double        low;
+    private Double            low;
     // 最高价与开盘价差价 high-open
-    private Double        highGap;
+    private Double            highGap;
     // 最高价与开盘价相差比例 (high-open)/open
-    private Double        highGapRate;
+    private Double            highGapRate;
     // 最低价与开盘价差价 低 low-open
-    private Double        lowGap;
+    private Double            lowGap;
     // 最低价与开盘价相差比例 (low-open)/open
-    private Double        lowGapRate;
+    private Double            lowGapRate;
     // 除权系数
-    private Double        exrights;
+    private Double            exrights;
     // 本次除权系数
-    private Double        thisExrights;
+    private Double            thisExrights;
     // 成交额
-    private Double        amount;
+    private Double            amount;
     // 成交量
-    private Double        volume;
+    private Double            volume;
     // 总资产
     private Long              asset;
+    // 量比
+    private Double            volumeRatio      = -1d;
+    // 5日均线
+    private Double            ma5              = -1d;
+    // 10日均线
+    private Double            ma10             = -1d;
+    // 20日均线
+    private Double            ma20             = -1d;
+    // 30日均线
+    private Double            ma30             = -1d;
+    // 40日均线
+    private Double            ma40             = -1d;
+    // 50日均线
+    private Double            ma50             = -1d;
+    // 60日均线
+    private Double            ma60             = -1d;
     // 创建日期
     private Date              created;
     // 更新日期
@@ -239,6 +255,134 @@ public class StockDaily implements Serializable, Comparable<StockDaily> {
         this.thisExrights = thisExrights.doubleValue();
     }
 
+    public BigDecimal getVolumeRatio() {
+        return BigDecimal.valueOf(volumeRatio);
+    }
+
+    public void setVolumeRatio(BigDecimal volumeRatio) {
+        this.volumeRatio = volumeRatio.doubleValue();
+    }
+
+    public BigDecimal getMa5() {
+        return BigDecimal.valueOf(ma5);
+    }
+
+    public void setMa5(BigDecimal ma5) {
+        this.ma5 = ma5.doubleValue();
+    }
+
+    public BigDecimal getMa10() {
+        return BigDecimal.valueOf(ma10);
+    }
+
+    public void setMa10(BigDecimal ma10) {
+        this.ma10 = ma10.doubleValue();
+    }
+
+    public BigDecimal getMa20() {
+        return BigDecimal.valueOf(ma20);
+    }
+
+    public void setMa20(BigDecimal ma20) {
+        this.ma20 = ma20.doubleValue();
+    }
+
+    public BigDecimal getMa30() {
+        return BigDecimal.valueOf(ma30);
+    }
+
+    public void setMa30(BigDecimal ma30) {
+        this.ma30 = ma30.doubleValue();
+    }
+
+    public BigDecimal getMa40() {
+        return BigDecimal.valueOf(ma40);
+    }
+
+    public void setMa40(BigDecimal ma40) {
+        this.ma40 = ma40.doubleValue();
+    }
+
+    public BigDecimal getMa50() {
+        return BigDecimal.valueOf(ma50);
+    }
+
+    public void setMa50(BigDecimal ma50) {
+        this.ma50 = ma50.doubleValue();
+    }
+
+    public BigDecimal getMa60() {
+        return BigDecimal.valueOf(ma60);
+    }
+
+    public void setMa60(BigDecimal ma60) {
+        this.ma60 = ma60.doubleValue();
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public void setLastClose(Double lastClose) {
+        this.lastClose = lastClose;
+    }
+
+    public void setOpen(Double open) {
+        this.open = open;
+    }
+
+    public void setClose(Double close) {
+        this.close = close;
+    }
+
+    public void setCloseGap(Double closeGap) {
+        this.closeGap = closeGap;
+    }
+
+    public void setCloseGapRate(Double closeGapRate) {
+        this.closeGapRate = closeGapRate;
+    }
+
+    public void setHigh(Double high) {
+        this.high = high;
+    }
+
+    public void setLow(Double low) {
+        this.low = low;
+    }
+
+    public void setHighGap(Double highGap) {
+        this.highGap = highGap;
+    }
+
+    public void setHighGapRate(Double highGapRate) {
+        this.highGapRate = highGapRate;
+    }
+
+    public void setLowGap(Double lowGap) {
+        this.lowGap = lowGap;
+    }
+
+    public void setLowGapRate(Double lowGapRate) {
+        this.lowGapRate = lowGapRate;
+    }
+
+    public void setExrights(Double exrights) {
+        this.exrights = exrights;
+    }
+
+    public void setThisExrights(Double thisExrights) {
+        this.thisExrights = thisExrights;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public void setVolume(Double volume) {
+        this.volume = volume;
+    }
+
     public List<StockMinute> getMinutes() {
         return minutes;
     }
@@ -249,10 +393,10 @@ public class StockDaily implements Serializable, Comparable<StockDaily> {
 
     @Override
     public String toString() {
-        return "StockDaily [dailyId=" + dailyId + ", stockCode=" + stockCode + ", stockName=" + stockName + ", date=" + date + ", lastClose=" + lastClose + ", open=" + open
-               + ", close=" + close + ", closeGap=" + closeGap + ", closeGapRate=" + closeGapRate + ", high=" + high + ", low=" + low + ", highGap=" + highGap + ", highGapRate="
-               + highGapRate + ", lowGap=" + lowGap + ", lowGapRate=" + lowGapRate + ", exrights=" + exrights + ", thisExrights=" + thisExrights + ", amount=" + amount
-               + ", volume=" + volume + ", asset=" + asset + ", created=" + created + ", updated=" + updated + "]";
+        return "StockDaily [dailyId=" + dailyId + ", stockCode=" + stockCode + ", stockName=" + stockName + ", date=" + date + ", lastClose=" + lastClose + ", open=" + open + ", close=" + close + ", closeGap=" + closeGap + ", closeGapRate="
+               + closeGapRate + ", high=" + high + ", low=" + low + ", highGap=" + highGap + ", highGapRate=" + highGapRate + ", lowGap=" + lowGap + ", lowGapRate=" + lowGapRate + ", exrights=" + exrights + ", thisExrights=" + thisExrights
+               + ", amount=" + amount + ", volume=" + volume + ", asset=" + asset + ", volumeRatio=" + volumeRatio + ", ma5=" + ma5 + ", ma10=" + ma10 + ", ma20=" + ma20 + ", ma60=" + ma60 + ", created=" + created + ", updated=" + updated
+               + ", minutes=" + minutes + "]";
     }
 
     @Override
