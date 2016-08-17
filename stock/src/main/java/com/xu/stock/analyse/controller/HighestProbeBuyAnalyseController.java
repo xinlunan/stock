@@ -7,7 +7,6 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.analyse.service.IStockAnalyseService;
-import com.xu.stock.analyse.service.IStockTradeBuyService;
 import com.xu.stock.data.controller.StockDailyController;
 import com.xu.stock.data.model.Stock;
 import com.xu.stock.data.service.IStockService;
@@ -17,11 +16,10 @@ import com.xu.stock.data.service.IStockService;
  * 
  * @version Revision History
  * 
- *          <pre>
+ * <pre>
  * Author     Version       Date        Changes
  * lunan.xu    1.0           2015-5-29     Created
- * 
- *          </pre>
+ * </pre>
  * 
  * @since 1.
  */
@@ -30,23 +28,23 @@ import com.xu.stock.data.service.IStockService;
 public class HighestProbeBuyAnalyseController extends BaseStockAnalyseController {
 
     @Resource
-    private IStockService        stockService;
-	@Resource
-	private IStockAnalyseService highestProbeBuyAnalyseService;
+    private IStockService            stockService;
     @Resource
-    IStockTradeBuyService        stockTradeBuyService;
+    private IStockAnalyseService     highestProbeAnalyseService;
     @Resource
-    private StockDailyController stockDailyController;
+    StockAnalyseResultMailController stockAnalyseResultMailController;
+    @Resource
+    private StockDailyController     stockDailyController;
 
-	@Override
-	public IStockAnalyseService getStockAnalyseService() {
-		return highestProbeBuyAnalyseService;
-	}
+    @Override
+    public IStockAnalyseService getStockAnalyseService() {
+        return highestProbeAnalyseService;
+    }
 
     public void execute() {
         download();
         super.analyse(10);
-        stockTradeBuyService.sendStockAnalyseResultMail();
+        stockAnalyseResultMailController.execute();
     }
 
     public void download() {

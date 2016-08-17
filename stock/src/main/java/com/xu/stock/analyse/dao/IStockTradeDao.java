@@ -18,7 +18,7 @@ import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
  * 
  * @since 1.
  */
-public interface IStockSimulateTradeDao {
+public interface IStockTradeDao {
 
 	/**
 	 * 获取所有购买交易信息
@@ -35,7 +35,7 @@ public interface IStockSimulateTradeDao {
 	 * @param stockCode
 	 * @return
 	 */
-	public List<StockTrade> getStockSimulateTrades(String stockCode);
+	public List<StockTrade> getStockTrades(String stockCode);
 
 	/**
 	 * 是否存在当前交易
@@ -51,6 +51,6 @@ public interface IStockSimulateTradeDao {
 	 * @param trades
 	 * @return
 	 */
-	public Integer saveStockSimulateTrades(List<StockTrade> trades);
+	public Integer saveStockTrades(List<StockTrade> trades);
 
 }

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author lunan.xu 股票每日指数
  */
-public class StockDaily implements Serializable, Comparable<StockDaily> {
+public class StockDaily implements Serializable {
 
     private static final long serialVersionUID = 2643489463991553829L;
 
@@ -43,17 +43,21 @@ public class StockDaily implements Serializable, Comparable<StockDaily> {
     // 最低价与开盘价相差比例 (low-open)/open
     private Double            lowGapRate;
     // 除权系数
-    private Double            exrights;
+    private Double            exrights         = -1d;
     // 本次除权系数
-    private Double            thisExrights;
-    // 成交额
-    private Double            amount;
+    private Double            thisExrights     = -1d;
     // 成交量
     private Double            volume;
-    // 总资产
-    private Long              asset;
     // 量比
     private Double            volumeRatio      = -1d;
+    // 换手率
+    private Double            turnoverRate;
+    // 成交额
+    private Double            amount;
+    // 总市值
+    private Long              marketValue;
+    // 流通市值
+    private Long              circulationMarketValue;
     // 5日均线
     private Double            ma5              = -1d;
     // 10日均线
@@ -223,12 +227,20 @@ public class StockDaily implements Serializable, Comparable<StockDaily> {
         this.volume = volume.doubleValue();
     }
 
-    public Long getAsset() {
-        return asset;
+    public Long getMarketValue() {
+        return marketValue;
     }
 
-    public void setAsset(Long asset) {
-        this.asset = asset;
+    public void setMarketValue(Long marketValue) {
+        this.marketValue = marketValue;
+    }
+
+    public Long getCirculationMarketValue() {
+        return circulationMarketValue;
+    }
+
+    public void setCirculationMarketValue(Long circulationMarketValue) {
+        this.circulationMarketValue = circulationMarketValue;
     }
 
     public Date getCreated() {
@@ -261,6 +273,14 @@ public class StockDaily implements Serializable, Comparable<StockDaily> {
 
     public void setVolumeRatio(BigDecimal volumeRatio) {
         this.volumeRatio = volumeRatio.doubleValue();
+    }
+
+    public BigDecimal getTurnoverRate() {
+        return BigDecimal.valueOf(turnoverRate);
+    }
+
+    public void setTurnoverRate(BigDecimal turnoverRate) {
+        this.turnoverRate = turnoverRate.doubleValue();
     }
 
     public BigDecimal getMa5() {
@@ -391,17 +411,14 @@ public class StockDaily implements Serializable, Comparable<StockDaily> {
         this.minutes = minutes;
     }
 
+
     @Override
     public String toString() {
         return "StockDaily [dailyId=" + dailyId + ", stockCode=" + stockCode + ", stockName=" + stockName + ", date=" + date + ", lastClose=" + lastClose + ", open=" + open + ", close=" + close + ", closeGap=" + closeGap + ", closeGapRate="
                + closeGapRate + ", high=" + high + ", low=" + low + ", highGap=" + highGap + ", highGapRate=" + highGapRate + ", lowGap=" + lowGap + ", lowGapRate=" + lowGapRate + ", exrights=" + exrights + ", thisExrights=" + thisExrights
-               + ", amount=" + amount + ", volume=" + volume + ", asset=" + asset + ", volumeRatio=" + volumeRatio + ", ma5=" + ma5 + ", ma10=" + ma10 + ", ma20=" + ma20 + ", ma60=" + ma60 + ", created=" + created + ", updated=" + updated
-               + ", minutes=" + minutes + "]";
+               + ", volume=" + volume + ", volumeRatio=" + volumeRatio + ", turnoverRate=" + turnoverRate + ", amount=" + amount + ", marketValue=" + marketValue + ", circulationMarketValue=" + circulationMarketValue + ", ma5=" + ma5
+               + ", ma10=" + ma10 + ", ma20=" + ma20 + ", ma30=" + ma30 + ", ma40=" + ma40 + ", ma50=" + ma50 + ", ma60=" + ma60 + ", created=" + created + ", updated=" + updated + ", minutes=" + minutes + "]";
     }
 
-    @Override
-    public int compareTo(StockDaily stockDaily) {
-        return this.getDate().compareTo(stockDaily.getDate());
-    }
 
 }

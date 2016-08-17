@@ -8,11 +8,10 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.xu.stock.analyse.model.StockAnalyseStrategy;
-import com.xu.stock.analyse.model.StockTrade;
-import com.xu.stock.analyse.service.IStockHighestService;
-import com.xu.stock.analyse.service.IStockTradeBuyService;
-import com.xu.stock.analyse.service.IStockTradeSellService;
-import com.xu.stock.analyse.service.IStockWatchBeginService;
+import com.xu.stock.analyse.service.IHighestProbeBuyService;
+import com.xu.stock.analyse.service.IHighestProbeHighestPointService;
+import com.xu.stock.analyse.service.IHighestProbeSellService;
+import com.xu.stock.analyse.service.IHighestProbeWatchBeginService;
 import com.xu.stock.analyse.service.StockAnalyseConstants.HighestProbeBuyArgs;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 import com.xu.stock.data.model.StockDaily;
@@ -34,24 +33,20 @@ import com.xu.stock.data.service.IStockMinuteService;
 @Service("highestProbeAnalyseService")
 public class HighestProbeAnalystService extends BaseStockAnalyseService {
 
-    private Integer                 lastWaveCycle;
-    private Integer                 thisWaveCycle;
-    private BigDecimal              thisFallRate;
-    private BigDecimal              buyRateHigh;
-    private BigDecimal              buyRateLow;
-    private BigDecimal              warnRateLow;
-    private String                  parameters;
+    private Integer                          lastWaveCycle;
+    private Integer                          thisWaveCycle;
+    private BigDecimal                       thisFallRate;
 
     @Resource
-    private IStockMinuteService     stockMinuteService;
+    private IStockMinuteService              stockMinuteService;
     @Resource
-    private IStockHighestService    stockHighestService;
+    private IHighestProbeHighestPointService highestProbeHighestPointService;
     @Resource
-    private IStockWatchBeginService stockWatchBeginService;
+    private IHighestProbeWatchBeginService   highestProbeWatchBeginService;
     @Resource
-    private IStockTradeBuyService   stockTradeBuyService;
+    private IHighestProbeBuyService          highestProbeBuyService;
     @Resource
-    private IStockTradeSellService  stockTradeSellService;
+    private IHighestProbeSellService         highestProbeSellService;
 
     @Override
     public List<StockAnalyseStrategy> getAnalyseStrategys() {
@@ -64,30 +59,22 @@ public class HighestProbeAnalystService extends BaseStockAnalyseService {
         this.lastWaveCycle = strategy.getIntValue(HighestProbeBuyArgs.D1_LAST_WAVE_CYCLE);
         this.thisWaveCycle = strategy.getIntValue(HighestProbeBuyArgs.D2_THIS_WAVE_CYCLE);
         this.thisFallRate = BigDecimal.valueOf(strategy.getDoubleValue(HighestProbeBuyArgs.F1_THIS_FALL_RATE));
-        this.warnRateLow = BigDecimal.valueOf(strategy.getDoubleValue(HighestProbeBuyArgs.F2_WARN_RATE_LOW));
-        this.buyRateLow = BigDecimal.valueOf(strategy.getDoubleValue(HighestProbeBuyArgs.F3_BUY_RATE_LOW));
-        this.buyRateHigh = BigDecimal.valueOf(strategy.getDoubleValue(HighestProbeBuyArgs.F4_BUY_RATE_HIGH));
-        this.parameters = this.lastWaveCycle + "," + this.thisWaveCycle + "," + this.thisFallRate + "," + this.warnRateLow + "," + this.buyRateLow + "," + this.buyRateHigh;
     }
 
     @Override
-    public List<StockTrade> doAnalyse(List<StockDaily> dailys) {
+    public void doAnalyse(List<StockDaily> dailys) {
+        if ("".equals(dailys.get(0).getStockCode())) {
+            log.info("debug异常" + dailys.get(0).getStockCode());
+        }
         log.info("analyse stock code:" + dailys.get(0).getStockCode());
-
         // 找出当前股票的历史最高点的日期
-        // stockHighestService.analyseHighestPoints(dailys, parameters,
-        // lastWaveCycle, thisWaveCycle, thisFallRate);
-        //
-        // // 根据最高点找出可能试探突破的观察点
-        // stockWatchBeginService.analyseBatchBeginByHighest(dailys, parameters,
-        // thisFallRate, warnRateLow, buyRateLow, buyRateHigh);
-
+        highestProbeHighestPointService.analyseHighestPoints(dailys, lastWaveCycle, thisWaveCycle, thisFallRate);
+        // 根据最高点找出可能试探突破的观察点
+        highestProbeWatchBeginService.analyseBatchBeginByHighest(dailys, lastWaveCycle, thisWaveCycle, thisFallRate);
         // 分析买入信息
-        // stockTradeBuyService.analyseStockTradeBuy(dailys, parameters);
-        //
-        // // 分析卖出信息
-        // stockTradeSellService.analyseStockTradeSell(dailys, parameters);
-        return null;
+        highestProbeBuyService.analyseStockTradeBuy(dailys);
+        // 分析卖出信息
+        highestProbeSellService.analyseStockTradeSell(dailys);
     }
 
 }

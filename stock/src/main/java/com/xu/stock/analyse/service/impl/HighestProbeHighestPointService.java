@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.xu.stock.analyse.dao.IStockHighestDao;
 import com.xu.stock.analyse.model.StockHighest;
-import com.xu.stock.analyse.service.IStockHighestService;
+import com.xu.stock.analyse.service.IHighestProbeHighestPointService;
 import com.xu.stock.analyse.service.StockAnalyseConstants.HighestAnalyseStatus;
 import com.xu.stock.analyse.service.uitl.StockAnalyseUtil;
 import com.xu.stock.data.model.StockDaily;
@@ -32,8 +32,8 @@ import com.xu.util.DateUtil;
  * @since 1.
  */
 @SuppressWarnings("restriction")
-@Service("stockHighestService")
-public class StockHighestService implements IStockHighestService {
+@Service("highestProbeHighestPointService")
+public class HighestProbeHighestPointService implements IHighestProbeHighestPointService {
 
     protected Logger         log = LoggerFactory.getLogger(this.getClass());
 

@@ -216,12 +216,12 @@ public class EqbQuantStockDailyDownloqdorHepler {
             stockDaily.setAmount(BigDecimal.valueOf(amounts.get(i)));
             stockDaily.setVolume(BigDecimal.valueOf(volumes.get(i)));
 			Long asset = null;
-			stockDaily.setAsset(asset);
+            stockDaily.setMarketValue(asset);
 
 			stockDailys.add(stockDaily);
 
 			stock.setLastClose(stockDaily.getClose());
-			stock.setAsset(stockDaily.getAsset());
+            stock.setMarketValue(stockDaily.getMarketValue());
 		}
 		stock.setStockDailys(stockDailys);
 

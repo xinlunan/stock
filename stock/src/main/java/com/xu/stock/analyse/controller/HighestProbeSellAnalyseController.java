@@ -30,11 +30,11 @@ public class HighestProbeSellAnalyseController extends BaseStockAnalyseControlle
     @Resource
     private IStockService        stockService;
 	@Resource
-    private IStockAnalyseService highestProbeBuyAnalyseService;
+    private IStockAnalyseService highestProbeAnalyseService;
 
 	@Override
 	public IStockAnalyseService getStockAnalyseService() {
-        return highestProbeBuyAnalyseService;
+        return highestProbeAnalyseService;
 	}
 
     public void execute() {

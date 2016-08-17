@@ -16,7 +16,7 @@ import com.xu.stock.analyse.dao.IStockTradeBuyDao;
 import com.xu.stock.analyse.dao.IStockTradeSellDao;
 import com.xu.stock.analyse.model.StockTradeBuy;
 import com.xu.stock.analyse.model.StockTradeSell;
-import com.xu.stock.analyse.service.IStockTradeSellService;
+import com.xu.stock.analyse.service.IHighestProbeSellService;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StockSellTime;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StockTradeBuyStatus;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StockTradeSellAnalyseType;
@@ -41,8 +41,8 @@ import com.xu.util.DateUtil;
  * @since 1.
  */
 @SuppressWarnings("restriction")
-@Service("stockTradeSellService")
-public class StockTradeSellService implements IStockTradeSellService {
+@Service("highestProbeSellService")
+public class HighestProbeSellService implements IHighestProbeSellService {
 
     protected Logger               log               = LoggerFactory.getLogger(this.getClass());
     public static final BigDecimal BD_100            = BigDecimal.valueOf(100);

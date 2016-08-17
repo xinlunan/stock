@@ -28,8 +28,10 @@ public class Stock implements Serializable, Comparable<Stock> {
     private String            stockCode;
     // 股票名称
     private String            stockName;
-    // 总资产
-    private Long              asset;
+    // 总市值
+    private Long              marketValue;
+    // 流通市值
+    private Long              circulationMarketValue;
     // 最后同步日期
     private Date              lastDate;
     // 最后收盘价
@@ -38,9 +40,9 @@ public class Stock implements Serializable, Comparable<Stock> {
     private Date              created;
     // 更新日期
     private Date              updated;
-
     // 除权系数
     private BigDecimal        exrights;
+
     private List<StockDaily>  stockDailys;
     private Boolean           hasException     = false;
     private Integer           dailySize        = 0;
@@ -77,12 +79,20 @@ public class Stock implements Serializable, Comparable<Stock> {
         this.stockName = stockName;
     }
 
-    public Long getAsset() {
-        return asset;
+    public Long getMarketValue() {
+        return marketValue;
     }
 
-    public void setAsset(Long asset) {
-        this.asset = asset;
+    public void setMarketValue(Long marketValue) {
+        this.marketValue = marketValue;
+    }
+
+    public Long getCirculationMarketValue() {
+        return circulationMarketValue;
+    }
+
+    public void setCirculationMarketValue(Long circulationMarketValue) {
+        this.circulationMarketValue = circulationMarketValue;
     }
 
     public Date getLastDate() {
@@ -125,6 +135,7 @@ public class Stock implements Serializable, Comparable<Stock> {
         return stockDailys;
     }
 
+    @Override
     public int compareTo(Stock stock) {
         return this.getStockCode().compareTo(stock.getStockCode());
     }
@@ -161,6 +172,10 @@ public class Stock implements Serializable, Comparable<Stock> {
         return serialVersionUID;
     }
 
-
+    @Override
+    public String toString() {
+        return "Stock [stockId=" + stockId + ", exchange=" + exchange + ", stockCode=" + stockCode + ", stockName=" + stockName + ", marketValue=" + marketValue + ", circulationMarketValue=" + circulationMarketValue + ", lastDate="
+               + lastDate + ", lastClose=" + lastClose + ", created=" + created + ", updated=" + updated + ", exrights=" + exrights + ", stockDailys=" + stockDailys + ", hasException=" + hasException + ", dailySize=" + dailySize + "]";
+    }
 
 }
