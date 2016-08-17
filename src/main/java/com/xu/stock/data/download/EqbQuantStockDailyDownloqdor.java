@@ -1,7 +1,6 @@
 package com.xu.stock.data.download;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -193,7 +192,7 @@ public class EqbQuantStockDailyDownloqdor {
 
 		for (Stock stock : stocks) {// 取每支股
 			List<StockDaily> dailys = stockDailyService.getStockDaily(stock.getStockCode());
-			Collections.sort(dailys);
+            // Collections.sort(dailys);
 			for (int i = 0; i < dailys.size(); i++) {// 取每支股指数
 				if (i == 0) {
 					continue;

@@ -94,4 +94,6 @@ public interface IStockDailyDao {
 
     public void countDailyMa(StockDaily daily, int i);
 
+    public void updateStockDaily(List<StockDaily> dailys);
+
 }

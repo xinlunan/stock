@@ -7,7 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.winit.framework.dao.impl.BaseDao;
-import com.xu.stock.analyse.dao.IStockSimulateTradeDao;
+import com.xu.stock.analyse.dao.IStockTradeDao;
 import com.xu.stock.analyse.model.StockTrade;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.TradeType;
@@ -26,18 +26,19 @@ import com.xu.stock.analyse.service.StockAnalyseConstants.TradeType;
  * 
  * @since 1.
  */
-@Repository("stockSimulateTradeDao")
-public class StockSimulateTradeDao extends BaseDao<StockTrade> implements IStockSimulateTradeDao {
+@Repository("stockTradeDao")
+public class StockTradeDao extends BaseDao<StockTrade> implements IStockTradeDao {
 
-	public final String SQL_GET_STOCK_TRADES = getNameSpace() + "getStockSimulateTrades";
-	public final String SQL_GET_BUY_STOCK_TRADE = getNameSpace() + "getBuyStockSimulateTrade";
-	public final String SQL_GET_SELL_STOCK_TRADE = getNameSpace() + "getSellStockSimulateTrade";
-	public final String SQL_INSERT_STOCK_TRADE = getNameSpace() + "insertStockSimulateTrade";
-	public final String SQL_GET_BUY_STOCK_TRADES = getNameSpace() + "getBuyStockSimulateTrades";
+    public final String SQL_GET_STOCK_TRADES     = getNameSpace() + "getStockTrades";
+    public final String SQL_GET_BUY_STOCK_TRADE  = getNameSpace() + "getBuyStockTrade";
+    public final String SQL_GET_SELL_STOCK_TRADE = getNameSpace() + "getSellStockTrade";
+    public final String SQL_INSERT_STOCK_TRADE   = getNameSpace() + "insertStockTrade";
+    public final String SQL_GET_BUY_STOCK_TRADES = getNameSpace() + "getBuyStockTrades";
 
-	public Integer saveStockSimulateTrades(List<StockTrade> stockSimulateTrades) {
+    @Override
+    public Integer saveStockTrades(List<StockTrade> stockTrades) {
 		Integer result = 0;
-		for (StockTrade trade : stockSimulateTrades) {
+        for (StockTrade trade : stockTrades) {
 			if (!existTrade(trade)) {
 				getSqlSession().insert(SQL_INSERT_STOCK_TRADE, trade);
 			}
@@ -45,7 +46,8 @@ public class StockSimulateTradeDao extends BaseDao<StockTrade> implements IStock
 		return result;
 	}
 
-	public boolean existTrade(StockTrade trade) {
+	@Override
+    public boolean existTrade(StockTrade trade) {
 		StockTrade oldTrade;
 		if (TradeType.BUY.equals(trade.getTradeType())) {
 			oldTrade = getSqlSession().selectOne(SQL_GET_BUY_STOCK_TRADE, trade);
@@ -58,13 +60,15 @@ public class StockSimulateTradeDao extends BaseDao<StockTrade> implements IStock
 		return false;
 	}
 
-	public List<StockTrade> getStockSimulateTrades(String stockCode) {
+    @Override
+    public List<StockTrade> getStockTrades(String stockCode) {
 		Map<String, Object> paras = new HashMap<String, Object>();
 		paras.put("stockCode", stockCode);
 		return getSqlSession().selectList(SQL_GET_STOCK_TRADES, paras);
 	}
 
-	public List<StockTrade> getBuyTrades(StrategyType strategy, String stockCode) {
+	@Override
+    public List<StockTrade> getBuyTrades(StrategyType strategy, String stockCode) {
 		Map<String, Object> paras = new HashMap<String, Object>();
 		paras.put("stockCode", stockCode);
 		paras.put("strategy", strategy.toString());

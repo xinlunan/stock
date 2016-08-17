@@ -160,12 +160,12 @@ public class SohuStockDailyDownloador {
 
                         stockDaily.setAmount(amount);
                         stockDaily.setVolume(volume);
-                        stockDaily.setAsset(null);// TODO
+                        stockDaily.setMarketValue(null);// TODO
 
                         dailys.add(stockDaily);
 
                         stock.setLastClose(stockDaily.getClose());
-                        stock.setAsset(stockDaily.getAsset());
+                        stock.setMarketValue(stockDaily.getMarketValue());
                         stock.setExrights(stockDaily.getExrights());
                     }
                 }

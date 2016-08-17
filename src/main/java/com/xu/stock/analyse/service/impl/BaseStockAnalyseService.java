@@ -10,9 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import com.xu.stock.analyse.dao.IStockAnalyseRecordDao;
 import com.xu.stock.analyse.dao.IStockAnalyseStrategyDao;
-import com.xu.stock.analyse.dao.IStockSimulateTradeDao;
+import com.xu.stock.analyse.dao.IStockTradeDao;
 import com.xu.stock.analyse.model.StockAnalyseStrategy;
-import com.xu.stock.analyse.model.StockTrade;
 import com.xu.stock.analyse.service.IStockAnalyseService;
 import com.xu.stock.data.model.StockDaily;
 import com.xu.stock.data.service.IStockService;
@@ -44,7 +43,7 @@ public abstract class BaseStockAnalyseService implements IStockAnalyseService {
 	@Resource
 	protected IStockAnalyseStrategyDao stockAnalyseStrategyDao;
 	@Resource
-	protected IStockSimulateTradeDao stockSimulateTradeDao;
+    protected IStockTradeDao           stockTradeDao;
 	@Resource
 	protected IStockAnalyseRecordDao stockAnalyseRecordDao;
 
@@ -59,11 +58,7 @@ public abstract class BaseStockAnalyseService implements IStockAnalyseService {
 			// 构建分析器
 			setAnalyseStrategy(analyseStrategy);
 
-			// 分析可购买点
-			List<StockTrade> trades = doAnalyse(dailys);
-
-			// 保存购买点
-            // stockSimulateTradeDao.saveStockSimulateTrades(trades);
+            doAnalyse(dailys);
 		}
 
 	}
@@ -74,7 +69,7 @@ public abstract class BaseStockAnalyseService implements IStockAnalyseService {
 	 * @param dailys
 	 * @return
 	 */
-	public abstract List<StockTrade> doAnalyse(List<StockDaily> dailys);
+    public abstract void doAnalyse(List<StockDaily> dailys);
 
 	/**
 	 * 设置分析策略版本

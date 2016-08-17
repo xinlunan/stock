@@ -76,7 +76,7 @@ public class StockDailyDownloadWorker extends Thread {
 	private void downloadStockDaily(Stock stock) {
         log.info("下载数据:" + stock.getStockCode());
 
-        Stock stockData = SinaStockDailyDownloador.download(stock);
+        Stock stockData = NeteaseStockDailyDownloador.download(stock);
 
 		stockService.saveStockData(stockData);
 

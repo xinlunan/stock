@@ -7,7 +7,8 @@
 		<id property="exchange" column="exchange"></id>
 		<id property="stockCode" column="stock_code"></id>
 		<id property="stockName" column="stock_name"></id>
-		<id property="asset" column="asset"></id>
+		<id property="marketValue" column="market_value"></id>
+		<id property="circulationMarketValue" column="circulation_market_value"></id>
 		<id property="lastDate" column="last_date"></id>
 		<id property="lastClose" column="last_close"></id>
 		<id property="exrights" column="exrights"></id>
@@ -16,7 +17,7 @@
 	</resultMap>
 	
 	<sql id="columns">
-		exchange, stock_code, stock_name, asset, last_date, last_close, exrights, created, updated
+		exchange, stock_code, stock_name, market_value, circulation_market_value, last_date, last_close, exrights, created, updated
 	</sql>
 
 	<select id="getStock" resultMap="Stock">
@@ -50,12 +51,12 @@
 
 	<insert id="insertStock" flushCache="true">
 		INSERT INTO t_stock (<include refid="columns" />)
-		VALUES (#{exchange},#{stockCode},#{stockName},#{asset},#{lastDate},#{lastClose},1,sysdate(),sysdate());
+		VALUES (#{exchange},#{stockCode},#{stockName},#{marketValue},#{circulationMarketValue},#{lastDate},#{lastClose},1,sysdate(),sysdate());
 	</insert>
 	
 	<update id="updateStock" flushCache="true" useGeneratedKeys="true" keyProperty="stockId">
 		UPDATE t_stock 
-		SET stock_name = #{stockName} ,asset = #{asset} , last_date = #{lastDate}, last_close = #{lastClose}, exrights = #{exrights}, updated=sysdate()
+		SET stock_name = #{stockName} ,market_value=#{marketValue},circulation_market_value=#{circulationMarketValue}, last_date = #{lastDate}, last_close = #{lastClose}, exrights = #{exrights}, updated=sysdate()
 		WHERE stock_id = #{stockId} ;
 	</update>
 

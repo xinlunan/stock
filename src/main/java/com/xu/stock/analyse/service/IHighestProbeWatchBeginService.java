@@ -17,7 +17,7 @@ import com.xu.stock.data.model.StockDaily;
  * 
  * @since 1.
  */
-public interface IStockWatchBeginService {
+public interface IHighestProbeWatchBeginService {
 
     /**
      * 根据最高点找出可能试探突破点的日期

@@ -20,7 +20,7 @@ import com.xu.stock.analyse.dao.IStockTradeBuyDao;
 import com.xu.stock.analyse.dao.IStockWatchBeginDao;
 import com.xu.stock.analyse.model.StockTradeBuy;
 import com.xu.stock.analyse.model.StockWatchBegin;
-import com.xu.stock.analyse.service.IStockTradeBuyService;
+import com.xu.stock.analyse.service.IHighestProbeBuyService;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StockTradeBuyAnalyseType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StockTradeBuyStatus;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
@@ -45,8 +45,8 @@ import com.xu.util.DateUtil;
  * @since 1.
  */
 @SuppressWarnings("restriction")
-@Service("stockTradeBuyService")
-public class StockTradeBuyService implements IStockTradeBuyService {
+@Service("highestProbeBuyService")
+public class HighestProbeBuyService implements IHighestProbeBuyService {
 
     protected Logger            log = LoggerFactory.getLogger(this.getClass());
 

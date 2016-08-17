@@ -37,6 +37,7 @@ public class StockDailyDao extends BaseDao<StockDaily> implements IStockDailyDao
     public final String SQL_GET_STOCK_INDEXS              = getNameSpace() + "getStockDailys";
     public final String SQL_INSERT_STOCK_INDEX            = getNameSpace() + "insertStockDaily";
     public final String SQL_UPDATE_STOCK_INDEX            = getNameSpace() + "updateStockDaily";
+    public final String SQL_BATCH_UPDATE_STOCK_INDEX      = getNameSpace() + "batchUpdateStockDaily";
     public final String SQL_DELETE_STOCK_INDEX            = getNameSpace() + "deleteStockDaily";
 
     @Override
@@ -87,6 +88,13 @@ public class StockDailyDao extends BaseDao<StockDaily> implements IStockDailyDao
     }
 
     @Override
+    public void updateStockDaily(List<StockDaily> dailys) {
+        if (!dailys.isEmpty()) {
+            getSqlSession().update(SQL_BATCH_UPDATE_STOCK_INDEX, dailys);
+        }
+    }
+
+    @Override
     public void deleteStockDaily(String stockCode, Date date) {
         Map<String, Object> paras = new HashMap<String, Object>();
         paras.put("stockCode", stockCode);
@@ -117,5 +125,6 @@ public class StockDailyDao extends BaseDao<StockDaily> implements IStockDailyDao
         paras.put("size", size);
         getSqlSession().update(SQL_GET_UPDATE_DAILY_MA, paras);
     }
+
 
 }

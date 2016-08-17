@@ -16,7 +16,7 @@ import com.xu.stock.data.model.StockDaily;
  * 
  * @since 1.
  */
-public interface IStockTradeSellService {
+public interface IHighestProbeSellService {
 
     /**
      * 分析卖出信息

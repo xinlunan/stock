@@ -11,6 +11,25 @@ public interface StockApiConstants {
      * @version
      * 
      * <pre>
+     * Author   Version     Date        Changes
+     * lunan.xu     1.0         2016年3月12日  Created
+     * </pre>
+     * 
+     * @since 1.
+     */
+    public interface Netease {
+
+        /** 网易获取股票指数API地址 */
+        // http://quotes.money.163.com/service/chddata.html?code=1000001&start=20050104&end=20990101&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP
+        public static final String API_URL_GET_STOCK_INDEX = "http://quotes.money.163.com/service/chddata.html?code=1#{stockCode}&start=#{start}&end=20990101&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP";
+    }
+
+    /**
+     * 新浪股票信息
+     * 
+     * @version
+     * 
+     * <pre>
      * Author	Version		Date		Changes
      * lunan.xu 	1.0  		2016年3月12日 	Created
      * </pre>

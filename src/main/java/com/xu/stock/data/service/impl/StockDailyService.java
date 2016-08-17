@@ -33,11 +33,13 @@ public abstract class StockDailyService implements IStockDailyService {
 	@Resource
 	private IStockDailyDao stockDailyDao;
 
-	public List<StockDaily> getStockDaily(String stockCode) {
+	@Override
+    public List<StockDaily> getStockDaily(String stockCode) {
 		return stockDailyDao.getRightStockDailys(stockCode);
 	}
 
-	public void repairStockDaily(StockDaily daily, List<StockDaily> repairIndexs) {
+	@Override
+    public void repairStockDaily(StockDaily daily, List<StockDaily> repairIndexs) {
 		if (repairIndexs.size() > 0) {
 			StockDaily lastIdex = stockDailyDao.getLastStockDaily(repairIndexs.get(0).getStockCode(),
 					repairIndexs.get(0).getDate());
@@ -59,8 +61,6 @@ public abstract class StockDailyService implements IStockDailyService {
 				stockDaily.setLowGap(stockDaily.getLow().subtract(stockDaily.getLastClose()));
 				BigDecimal lowGapRate = stockDaily.getLowGap().multiply(BD_100).divide(stockDaily.getLastClose(), 2, BigDecimal.ROUND_HALF_UP);
 				stockDaily.setLowGapRate(lowGapRate);
-				Long asset = null;
-				stockDaily.setAsset(asset);
 
 				if (i == repairIndexs.size() - 1) {
 					daily.setLastClose(stockDaily.getClose());
@@ -73,7 +73,6 @@ public abstract class StockDailyService implements IStockDailyService {
 					daily.setLowGap(daily.getLow().subtract(daily.getLastClose()));
 					lowGapRate = daily.getLowGap().multiply(BD_100).divide(stockDaily.getLastClose(), 2, BigDecimal.ROUND_HALF_UP);
 					daily.setLowGapRate(lowGapRate);
-					daily.setAsset(asset);
 				}
 			}
 		}

@@ -8,30 +8,29 @@ import com.xu.stock.analyse.service.IStockAnalyseService;
 import com.xu.stock.data.controller.StockDailyController;
 
 /**
- * 股票分析控制层
+ * 股票分析控制层 <Change to the actual description of this class>
  * 
- * @version Revision History
+ * @version
  * 
- *          <pre>
- * Author     Version       Date        Changes
- * lunan.xu    1.0           2015-5-29     Created
- * 
- *          </pre>
+ * <pre>
+ * Author	Version		Date		Changes
+ * lunan.xu 	1.0  		2016年8月5日 	Created
+ * </pre>
  * 
  * @since 1.
  */
 @SuppressWarnings("restriction")
-@Service("highestProbeAnalyseController")
-public class HighestProbeAnalyseController extends BaseStockAnalyseController {
+@Service("volumeRatioAnalyseController")
+public class VolumeRatioAnalyseController extends BaseStockAnalyseController {
 
 	@Resource
-    private IStockAnalyseService highestProbeAnalyseService;
+    private IStockAnalyseService volumeRatioAnalyseService;
     @Resource
     private StockDailyController stockDailyController;
 
 	@Override
 	public IStockAnalyseService getStockAnalyseService() {
-        return highestProbeAnalyseService;
+        return volumeRatioAnalyseService;
     }
 
     public void execute() {

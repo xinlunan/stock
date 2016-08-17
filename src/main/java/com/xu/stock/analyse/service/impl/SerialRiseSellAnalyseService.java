@@ -42,14 +42,14 @@ public class SerialRiseSellAnalyseService extends BaseStockAnalyseService {
 	}
 
 	@Override
-	public List<StockTrade> doAnalyse(List<StockDaily> dailys) {
+    public void doAnalyse(List<StockDaily> dailys) {
 		log.info("analyse stock code:" + dailys.get(0).getStockCode());
 
 		// 获取买入点
-		List<StockTrade> buys = stockSimulateTradeDao.getBuyTrades(StrategyType.SERIAL_RISE_BUY, dailys.get(0).getStockCode());
+        List<StockTrade> buys = stockTradeDao.getBuyTrades(StrategyType.SERIAL_RISE_BUY, dailys.get(0).getStockCode());
 
 		// 分析卖出点
-		return analyseSellPoints(dailys, buys);
+        analyseSellPoints(dailys, buys);
 	}
 
 	/**

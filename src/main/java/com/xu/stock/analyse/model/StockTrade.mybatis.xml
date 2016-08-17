@@ -40,31 +40,31 @@
 		trade_type,trade_nature,strategy,version,parameters,created,updated
 	</sql>
 
-	<select id="getStockSimulateTrades" resultMap="StockTrade">
+	<select id="getStockTrades" resultMap="StockTrade">
 		SELECT trade_id,<include refid="columns" />
 		FROM t_stock_trade
 		WHERE stock_code=#{stockCode};
 	</select>
 
-	<select id="getBuyStockSimulateTrade" resultMap="StockTrade">
+	<select id="getBuyStockTrade" resultMap="StockTrade">
 		SELECT trade_id,<include refid="columns" />
 		FROM t_stock_trade
 		WHERE stock_code=#{stockCode} and trade_type=#{tradeType} and version=#{version} and buy_date=#{buyDate};
 	</select>
 	
-	<select id="getSellStockSimulateTrade" resultMap="StockTrade">
+	<select id="getSellStockTrade" resultMap="StockTrade">
 		SELECT trade_id,<include refid="columns" />
 		FROM t_stock_trade
 		WHERE stock_code=#{stockCode} and trade_type=#{tradeType} and version=#{version} and sell_date=#{sellDate};
 	</select>
 	
-	<select id="getBuyStockSimulateTrades" resultMap="StockTrade">
+	<select id="getBuyStockTrades" resultMap="StockTrade">
 		SELECT trade_id,<include refid="columns" />
 		fROM t_stock_trade
 		WHERE strategy=#{strategy} and stock_code=#{stockCode} and trade_type='BUY' ;
 	</select>
 
-	<insert id="insertStockSimulateTrade" flushCache="true">
+	<insert id="insertStockTrade" flushCache="true">
 		INSERT INTO t_stock_trade (<include refid="columns" />)
 		VALUES (
 			#{stockCode},#{stockName},

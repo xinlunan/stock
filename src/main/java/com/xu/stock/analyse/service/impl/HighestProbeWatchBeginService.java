@@ -16,7 +16,7 @@ import com.xu.stock.analyse.dao.IStockHighestDao;
 import com.xu.stock.analyse.dao.IStockWatchBeginDao;
 import com.xu.stock.analyse.model.StockHighest;
 import com.xu.stock.analyse.model.StockWatchBegin;
-import com.xu.stock.analyse.service.IStockWatchBeginService;
+import com.xu.stock.analyse.service.IHighestProbeWatchBeginService;
 import com.xu.stock.analyse.service.StockAnalyseConstants.HighestAnalyseStatus;
 import com.xu.stock.analyse.service.StockAnalyseConstants.StrategyType;
 import com.xu.stock.analyse.service.StockAnalyseConstants.WatchBeginStatus;
@@ -37,8 +37,8 @@ import com.xu.util.DateUtil;
  * @since 1.
  */
 @SuppressWarnings("restriction")
-@Service("stockWatchBeginService")
-public class StockWatchBeginService implements IStockWatchBeginService {
+@Service("highestProbeWatchBeginService")
+public class HighestProbeWatchBeginService implements IHighestProbeWatchBeginService {
 
     protected Logger               log    = LoggerFactory.getLogger(this.getClass());
     public static final BigDecimal BD_100 = BigDecimal.valueOf(100);

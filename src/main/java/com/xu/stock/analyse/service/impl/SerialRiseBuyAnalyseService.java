@@ -41,14 +41,14 @@ public class SerialRiseBuyAnalyseService extends BaseStockAnalyseService {
 	}
 
 	@Override
-	public List<StockTrade> doAnalyse(List<StockDaily> dailys) {
+    public void doAnalyse(List<StockDaily> dailys) {
 		log.info("analyse stock code:" + dailys.get(0).getStockCode());
 
 		// 找出当前股票的连接增长的日期
 		List<StockDaily> buyDailyPoints = scanRisePoints(dailys);
 
 		// 得到购入时间点
-		return buildStockSimulateTrades(buyDailyPoints);
+        buildStockTrades(buyDailyPoints);
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class SerialRiseBuyAnalyseService extends BaseStockAnalyseService {
 	 * @param buyPoints
 	 * @return
 	 */
-	protected List<StockTrade> buildStockSimulateTrades(List<StockDaily> buyPoints) {
+    protected List<StockTrade> buildStockTrades(List<StockDaily> buyPoints) {
 		List<StockTrade> trades = new ArrayList<StockTrade>();
 		for (StockDaily stockDaily : buyPoints) {
 			StockTrade trade = new StockTrade();
@@ -140,10 +140,6 @@ public class SerialRiseBuyAnalyseService extends BaseStockAnalyseService {
 
 		return true;
 	}
-
-
-
-
 
 	@Override
 	public List<StockAnalyseStrategy> getAnalyseStrategys() {

@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.xu.stock.analyse.service.IStockTradeBuyService;
+import com.xu.stock.analyse.service.IHighestProbeBuyService;
 
 /**
  * 股票分析控制层
@@ -24,9 +24,9 @@ import com.xu.stock.analyse.service.IStockTradeBuyService;
 public class StockAnalyseResultMailController {
 
     @Resource
-    IStockTradeBuyService stockTradeBuyService;
+    IHighestProbeBuyService highestProbeBuyService;
     public void execute() {
-        stockTradeBuyService.sendStockAnalyseResultMail();
+        highestProbeBuyService.sendStockAnalyseResultMail();
     }
 
 }

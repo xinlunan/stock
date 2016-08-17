@@ -17,7 +17,7 @@ import com.xu.stock.data.model.StockDaily;
  * 
  * @since 1.
  */
-public interface IStockHighestService {
+public interface IHighestProbeHighestPointService {
 
     /**
      * 统计历史最高点
