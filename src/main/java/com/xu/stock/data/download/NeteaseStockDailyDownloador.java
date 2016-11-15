@@ -117,8 +117,9 @@ public class NeteaseStockDailyDownloador {
 
     private static String buileNeteaseDailyUrl(Stock stock) {
         String url = StockApiConstants.Netease.API_URL_GET_STOCK_INDEX;
+        String prefix = stock.getStockCode().startsWith("6") ? "0" : "1";
         String start = DateUtil.date2String(DateDiffUtil.getNextWorkDate(stock.getLastDate())).replaceAll("-", "");
-        url = url.replace("#{stockCode}", stock.getStockCode()).replace("#{start}", start);
+        url = url.replace("#{prefix}", prefix).replace("#{stockCode}", stock.getStockCode()).replace("#{start}", start);
         return url;
     }
 
