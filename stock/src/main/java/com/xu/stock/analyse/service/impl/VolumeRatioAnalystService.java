@@ -31,7 +31,7 @@ import com.xu.util.DateUtil;
  * 
  * @since 1.
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings({ "restriction", "unused", "hiding" })
 @Service("volumeRatioAnalyseService")
 public class VolumeRatioAnalystService extends BaseStockAnalyseService {
 
@@ -76,19 +76,57 @@ public class VolumeRatioAnalystService extends BaseStockAnalyseService {
      */
     protected boolean isBuyDaily(List<StockDaily> dailys, int index) {
         StockDaily daily = dailys.get(index);
-        if (daily.getVolumeRatio().compareTo(BigDecimal.valueOf(Integer.valueOf(5))) >= 0) {
-            // if (daily.getMa5().compareTo(daily.getMa10()) > 0 &&
-            // daily.getMa10().compareTo(daily.getMa20()) > 0) {
-            if (daily.getMa5().compareTo(daily.getMa10()) > 0 && daily.getMa10().compareTo(daily.getMa20()) > 0) {
-                for (int i = index - 1; i < index; i++) {
+        // 流通股本、量比、换手率、收阳、现价
+        if (daily.getCirculationMarketValue() < 10000000000l && daily.getClose().doubleValue() < 25 && daily.getVolumeRatio().doubleValue() > 3 && daily.getTurnoverRate().doubleValue() > 8 && daily.getCloseGapRate().doubleValue() > 0
+            && daily.getCloseGapRate().doubleValue() < 9.9) {
+            // 找双底
+            StockDaily before100 = dailys.get(index - 100);
+            StockDaily before1 = dailys.get(index - 1);
+            if (before100.getMa60().doubleValue() > before1.getMa60().doubleValue()) {// 大趋势下跌
+                StockDaily _60lowestDaily = dailys.get(index - 60);
+                for (int i = index - 60; i < index; i++) {// 60天内最低点找出来
                     StockDaily lastDaily = dailys.get(i);
-                    if (lastDaily.getMa5().compareTo(lastDaily.getMa10()) < 0 && lastDaily.getMa10().compareTo(lastDaily.getMa20()) < 0) {
-                        return false;
+                    if (_60lowestDaily.getClose().multiply(_60lowestDaily.getExrights()).doubleValue() > lastDaily.getClose().multiply(lastDaily.getExrights()).doubleValue()) {
+                        _60lowestDaily = lastDaily;
                     }
                 }
+                Integer _60lowestIndex = StockAnalyseUtil.dailyIndex(dailys, _60lowestDaily.getDate());
+                if (_60lowestIndex < index - 20) {// 最低点在20天以前
+                    StockDaily _20lowestDaily = dailys.get(index - 20);// 20天内最低点
+                    for (int i = index - 20; i < index; i++) {// 60天内最低点找出来
+                        StockDaily lastDaily = dailys.get(i);
+                        if (_20lowestDaily.getClose().multiply(_20lowestDaily.getExrights()).doubleValue() > lastDaily.getClose().multiply(lastDaily.getExrights()).doubleValue()) {
+                            _20lowestDaily = lastDaily;
+                        }
+                    }
+                    Integer _20lowestIndex = StockAnalyseUtil.dailyIndex(dailys, _20lowestDaily.getDate());
+                    if (_20lowestIndex > index - 10) {
+                        if (_20lowestDaily.getClose().multiply(_20lowestDaily.getExrights()).multiply(BD_100).divide(_60lowestDaily.getClose().multiply(_60lowestDaily.getExrights()), 4, BigDecimal.ROUND_HALF_UP).doubleValue() < 105) {
+                            BigDecimal sumBefor60 = BigDecimal.ZERO;
+                            BigDecimal sum60 = BigDecimal.ZERO;
+                            BigDecimal sum20 = BigDecimal.ZERO;
+                            for (int j = index - 90; j < index - 70; j++) {
+                                StockDaily lastDaily = dailys.get(j);
+                                sumBefor60 = sumBefor60.add(lastDaily.getTurnoverRate());
+                            }
+                            for (int j = _60lowestIndex - 5; j < _60lowestIndex + 5; j++) {
+                                StockDaily lastDaily = dailys.get(j);
+                                sum60 = sum60.add(lastDaily.getTurnoverRate());
+                            }
+                            for (int j = _20lowestIndex - 4; j <= _20lowestIndex; j++) {
+                                StockDaily lastDaily = dailys.get(j);
+                                sum20 = sum20.add(lastDaily.getTurnoverRate());
+                            }
+                            Double avgBefor60 = sumBefor60.divide(BigDecimal.valueOf(20), 4, BigDecimal.ROUND_HALF_UP).doubleValue();
+                            Double avg60 = sum60.divide(BigDecimal.valueOf(10), 4, BigDecimal.ROUND_HALF_UP).doubleValue();
+                            Double avg20 = sum20.divide(BigDecimal.valueOf(5), 4, BigDecimal.ROUND_HALF_UP).doubleValue();
+                            if (avgBefor60 > avg60 && avgBefor60 > avg20) {
+                            }
+                        }
+                    }
+                    return true;
+                }
             }
-            return true;
-            // }
         }
         return false;
     }
@@ -97,9 +135,11 @@ public class VolumeRatioAnalystService extends BaseStockAnalyseService {
         int endIndex = dailys.size();
 
         List<StockDaily> buyPoints = new ArrayList<StockDaily>();
-        for (int index = 60; index < endIndex; index++) {
-            if (isBuyDaily(dailys, index)) {
-                buyPoints.add(dailys.get(index));
+        if (dailys.size() > 100) {
+            for (int index = 100; index < endIndex; index++) {
+                if (isBuyDaily(dailys, index)) {
+                    buyPoints.add(dailys.get(index));
+                }
             }
         }
 

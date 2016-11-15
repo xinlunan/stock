@@ -21,7 +21,7 @@ public interface StockApiConstants {
 
         /** 网易获取股票指数API地址 */
         // http://quotes.money.163.com/service/chddata.html?code=1000001&start=20050104&end=20990101&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP
-        public static final String API_URL_GET_STOCK_INDEX = "http://quotes.money.163.com/service/chddata.html?code=1#{stockCode}&start=#{start}&end=20990101&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP";
+        public static final String API_URL_GET_STOCK_INDEX = "http://quotes.money.163.com/service/chddata.html?code=#{prefix}#{stockCode}&start=#{start}&end=20990101&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP";
     }
 
     /**
